@@ -1,0 +1,198 @@
+\documentclass[a4paper]{article}
+
+
+\ifx\fiverm\undefined
+  \newfont\fiverm{cmr5}
+\fi 
+\input pictex
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url, fullpage, hyperref}
+\usepackage{enumitem}
+
+\newcommand{\realR}{\mathbb{R}}
+
+\title{Syllabus of Complex Analysis I}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{minipage}[t]{0.5\linewidth}
+  \begin{itemize}[leftmargin=*]
+  \item Lecture time: Tuesday, Thursday 10:00--12:00
+  \item Lecture venue: LT21 (Tuesday), LT31 (Thursday)
+  \item Tutorial time: Wednesday 12:00--13:00, Monday 17:00--18:00, Tuesday 15:00--16:00
+  \item Tutorial room: S17-0405 (Wednesday and Monday), S17-0611 (Tuesday)
+  \end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.4\linewidth}
+  \begin{itemize}
+  \item Lecturer and tutor: Dr Wang Dong
+  \item Office: Block S17, Room 06--20
+  \item Tel: 6516\ 2746
+  \item Email: \href{mailto:matwd@nus.edu.sg}{\nolinkurl{matwd@nus.edu.sg}}
+  \end{itemize}
+\end{minipage}
+
+\begin{itemize}
+\item Prerequsite: (MA1104 or MA2104 or MA1507) and (MA3110 or MA3110S)
+  
+\item Course description:
+  
+  This module is a first course on the analysis of one complex variable. In this module, students will learn the basic theory and techniques of complex analysis as well as some of its applications.
+  
+  Target students are mathematics undergraduate students in the Faculty of Science.
+
+  Major topics: complex numbers, analytic functions, Cauchy-Riemann equations, harmonic functions, elementary functions, contour integrals, Cauchy-Goursat Theorem, Cauchy integral formulas, Taylor series, Laurent series, residues and poles, applications to computation of improper
+integrals.
+  
+\item References:
+  \begin{itemize}
+  \item 
+    J.~Brown and R.~Churchill, \emph{Complex Variables and it Applications}, 9th edition, McGraw Hill.
+    
+    (This is the main textbook, and we will cover most of Chapters 1-7.  List of supplementary exercises will be taken from the book, and students are strongly advised to buy it.)
+  \item 
+    L.~V.~Ahlfors, \emph{Complex Analysis}, 3rd edition, McGraw Hill.
+
+    (This is a classic text by one of the leading experts. Beautifully written although it is generally considered difficult by undergraduates.)
+  \item
+    E.~B.~Saff and A.~D.~Snider, \emph{Fundamentals of complex analysis for Mathematics, Science and Engineering}, Prentice Hall.
+    
+    (Relatively easy to read, written mostly for an engineering audience.)
+  \end{itemize}
+\item Assessment:
+  Assessment of students will be based on
+  \begin{itemize}
+  \item
+    One final examination (November), two hours long - 65\% (closed book exam with one help sheet).
+  \item 
+    One mid-term test (date to be decided) - 20\% (closed book test with one help sheet).
+  \item 
+    Four sets of (marked) homework - 10\%.
+  \item 
+    Tutorial attendence - 4\%.
+  \item
+    In-class quizzes - 1\%.
+  \end{itemize}
+\item
+  IVLE course website:
+
+  IVLE contains course materials (Lecture Notes, Tutorial question sheets, Homework sheets), announcements,  discussion forum.
+
+  Course materials are downloadable in the Workbin/Files at the IVLE course website. You should visit IVLE regularly for updates.
+\end{itemize}
+
+\end{document}
+
+\section*{Introduction}
+
+In Calculus/Analysis, we studied:
+\begin{itemize}
+\item 
+  Real numbers: $x \in \realR$.
+
+\item 
+  Real-valued functions of a real variable $x$:
+  \begin{equation*}
+    f(x): \realR \to \realR,
+  \end{equation*}
+  e.g., $f(x) = x^2 + 1$.
+
+\item 
+Differentiation:
+\begin{equation*}
+  \beginpicture
+  % \setcoordinatesystem units <0.06in,0.01in>
+  \setcoordinatesystem units <0.08in,0.014in>
+  \setplotarea x from -5 to 30, y from -10 to 120
+  \arrow <6pt> [.16,.6] from -10 0 to 28 0
+  \arrow <6pt> [.16,.6] from 0 -10 to 0 120
+  \put {\small $x$}[lb] <0mm,-0.5mm> at 29 0
+  \put {\small $y$}[cb] <0mm,0.5mm> at 0 123
+  \put {\small $x_o$}[ct] <0mm,-0.5mm> at 16 -3
+  \setquadratic
+  \plot 1 30 16 60 25 110 /
+  \setlinear
+  \plot 8  34 16 60  24  86 /
+  \put {$\bullet$} at 16 60
+  \setdashes<2pt>
+  \plot 16 0 16 60 /
+  \endpicture
+\end{equation*}
+
+\item 
+  Integration: e.g., $\int_1^2 f(x) dx$.
+  \begin{equation*}
+    \beginpicture
+    \setcoordinatesystem units <0.30in,0.22in>
+    \setplotarea x from -3 to 12, y from -2 to 8
+    \setquadratic \plot 1 2 3 2.2 5 3.3 /
+    \plot 5 3.3 7 5.5 9 7 /
+    \setlinear
+    \arrow <6pt> [.16,.6] from -1 0 to 10.5 0
+    \arrow <6pt> [.16,.6] from 0 -1 to 0 8
+    \put { 0}[rt] <0mm,-1mm> at -0.2 0
+    \put {\small $x$}[lc] <0mm,-1mm> at 10.7 0.2
+    \put {\small $y$}[cb] <1mm,0mm> at 0 8.4
+    \put {\small $1$}[lc] <0mm,-1mm> at 3 -0.3
+    \put {\small $2$}[lc] <0mm,-1mm> at 7 -0.3
+    \put {\small $y=f(x)$}[cb]
+    <1mm,0mm> at 8 7.3
+    \setdashes<1.5pt>\plot 3 0 3 2.2 /
+    \plot 7 0 7 5.5 /
+    \endpicture
+  \end{equation*}
+\end{itemize}
+
+
+In Complex Analysis, we study
+
+\begin{itemize}
+\item 
+  Complex numbers: $~z=x+iy \in\mathbb  C$, with $x,y\in\mathbb  R, \quad i=\sqrt{-1}$.
+
+\item 
+  Complex-valued functions of a complex variable $z$:
+  \begin{equation*}
+    f(z):\mathbb  C\rightarrow \mathbb C, 
+  \end{equation*}
+  e.g., $f(z)=z^2-1+i$.
+
+\item 
+  Differentiation:  We only consider ``analytic functions'' like polynomials, trignometric functions, etc, but not functions like $g(z) = z\bar{z}$.
+
+\item 
+  Integration: We only consider the integration of ``analytic functions'', and essentially we only consider the integral over a curve: $\int_C f(x) dx$, where $C$ is a curve from one point on the complex plane to another point.
+  
+  Thus in general, we will NOT (be able to) define definite integrals $\int_{z_1}^{z_2}f(z) dz$.
+\end{itemize}
+
+Complex analysis has widespread applications in:
+
+\begin{itemize}
+\item 
+  Physics (electrostatics, heat flow, fluid mechanics);
+
+\item 
+  Engineering (aerodynamics, aircraft design);
+
+\item 
+  Other branches of mathematics such as:
+  \begin{itemize}
+  \item 
+    Computing certain improper integrals, e.g.
+    \begin{equation*}
+      \int_{-\infty}^\infty\dfrac{\cos 3x}{x^2+2x+2} dx=   
+    \end{equation*}
+    
+  \item 
+    The Fundamental Theorem of Algebra: Every polynomial of degree $n\geq 1$ has at least one (complex) root.
+  \end{itemize}
+\end{itemize}
+\end{document}
+
+
+

@@ -1,0 +1,123 @@
+\documentclass[12pt, letter]{article}
+
+\setlength{\textheight}{8.8528in}
+\setlength{\textwidth}{6.75in}
+\setlength{\oddsidemargin}{-0.125in}
+
+\addtolength{\voffset}{-1in}
+\setlength{\parskip}{1.5ex}
+\usepackage{amsmath, amsfonts, fancyhdr, afterpage, lastpage, etaremune, hyperref, url}
+\usepackage[inline]{enumitem}
+\hypersetup{linkcolor = black}
+
+\def\name{Dong Wang}
+\hypersetup{
+  colorlinks = true,
+  urlcolor = black,
+  pdfauthor = {\name},
+  pdfkeywords = {random matrix theory, integrable system, probability},
+  pdftitle = {\name: Publication List},
+  pdfsubject = {Publication List},
+  pdfpagemode = UseNone
+}
+
+\begin{document}
+
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0pt} 
+
+\pagestyle{fancy}
+\renewcommand{\headheight}{40pt}
+\lhead{\Large Dong Wang}
+\rhead{\small matwd@nus.edu.sg \\ http://www.math.nus.edu.sg/$\sim$matwd}
+%\rhead{\thepage}
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0pt} 
+%\fancyfoot[C]{\footnotesize \textcolor{gray}{http://www.umich.edu/$\sim$dowang}} 
+
+%\pagestyle{myheadings}
+%\markboth{Sundar Iyer}{Sundar Iyer}
+
+\pagestyle{fancy}
+\afterpage{\lhead{Dong Wang}}
+\afterpage{\chead{Publication List}}
+\afterpage{\rhead{\thepage/\pageref{LastPage}}}
+\afterpage{\lfoot{}}
+\afterpage{\cfoot{}}
+\afterpage{\rfoot{}}
+
+\begin{center}
+\vspace*{2ex}
+{\large \bf PUBLICATION LIST}\\
+\vspace*{4ex}
+\end{center}
+
+\section*{In Preparation}
+
+\begin{itemize}
+\item
+  Dong Wang, The largest eigenvalue of real symmetric, Hermitian and Hermitian self-dual random matrix models with rank one external source, part II.
+\end{itemize}
+
+\section*{Papers and Preprints}
+
+\begin{etaremune}
+\item
+  Dang-Zheng Liu, Dong Wang and Yanhui Wang, \href{https://arxiv.org/abs/1810.00433}{Lyapunov exponent, universality and phase transition for products of random matrices}, \url{https://arxiv.org/abs/1810.00433}.
+\item
+  Karl Liechty and Dong Wang, \href{https://arxiv.org/abs/1706.06653}{Asymptotics of free fermions in a quadratic well at finite temperature and the Moshe-Neuberger-Shapiro random matrix model}, \url{https://arxiv.org/abs/1706.06653}.
+\item
+  Eunghyun Lee and Dong Wang, \href{https://arxiv.org/abs/1703.08839}{Distributions of a particle's position and their asymptotics in the $q$-deformed totally asymmetric zero range process with site dependent jumping rates}, \url{https://arxiv.org/abs/1703.08839}, to appear in \textit{Stochastic Process.\ Appl.}.
+\item
+  Karl Liechty and Dong Wang, \href{http://arxiv.org/abs/1608.08712}{Nonintersecting Brownian bridges between reflecting or absorbing walls}, \href{https://doi.org/10.1016/j.aim.2016.10.024}{\textit{Adv.\ Math.}, 309 (2017), 155--208}.
+\item
+  Tom Claeys, Arno B.~J.~Kuijlaars, Karl Liechty and Dong Wang, \href{http://arxiv.org/abs/1608.05870}{Propagation of singular behavior for Gaussian perturbations of random matrices}, \href{https://doi.org/10.1007/s00220-018-3195-8}{\textit{Comm.\ Math.\ Phys.}, 362 (2018), no.\ 1, 1--54}.
+\item
+  Karl Liechty and Dong Wang, \href{http://arxiv.org/abs/1601.01603}{Two Lax systems for the Painlev\'{e} II equation, and two related kernels in random matrix theory}, \href{https://doi.org/10.1137/16M1056080}{\textit{SIAM J.\ Math.\ Anal.}, 48 (2016), no.\ 5, 3618--3666}.
+\item
+  Dong Wang and David Waugh, \href{http://arxiv.org/abs/1512.01612}{The transition probability of the $q$-TAZRP ($q$-Bosons) with inhomogeneous jump rates}, \href{https://doi.org/10.3842/SIGMA.2016.037}{\textit{SIGMA} 12 (2016), 036, 16 pages, Contribution to the special issue on Asymptotics and Universality in Random Matrices, Random Growth Processes, Integrable Systems and Statistics in honor of Percy Deift and Craig Tracy.}
+\item 
+  Tom Claeys, Arno B.~J.~Kuijlaars and Dong Wang, \href{http://arxiv.org/abs/1505.00610}{Correlation kernels for sums and products of random matrices}, \href{https://doi.org/10.1142/S2010326315500173}{\textit{Random Matrices Theory Appl.}, 4 (2015), no.\ 4, 1550017, 31pp}.
+\item
+  Peter J.~Forrester and Dong Wang, \href{http://arxiv.org/abs/1502.07147}{Muttalib--Borodin ensembles in random matrix theory --- realisations and correlation functions}, \href{https://doi.org/10.1214/17-EJP62}{\textit{Electron. J. Probab.}, 22 (2017), paper no.\ 54, 43pp}.
+\item
+  Dang-Zheng Liu, Dong Wang and Lun Zhang, \href{http://arxiv.org/abs/1412.6777}{Bulk and soft-edge universality for singular values of products of Ginibre random matrices}, \href{https://doi.org/10.1214/15-AIHP696}{\textit{Ann. Inst. Henri Poincar\'e Probab. Stat.}, 52 (2016), no.\ 4, 1734--1762}.
+\item
+  Ivan Corwin, Zhipeng Liu and Dong Wang, \href{http://arxiv.org/abs/1412.5087}{Fluctuations of TASEP and LPP with general initial data}, \href{https://doi.org/10.1214/15-AAP1139}{\textit{Ann.\ Appl.\ Probab.}, 26 (2016), no.\ 4, 2030--2082}.
+\item
+  Karl Liechty and Dong Wang, \href{http://arxiv.org/abs/1312.7390}{Nonintersecting Brownian motions on the unit circle}, \href{https://doi.org/10.1214/14-AOP998}{\textit{Ann.\ Probab.}, 44 (2016), no.\ 2, 1134--1211}.
+\item 
+  Mark Adler, Pierre van Moerbeke and Dong Wang,
+  \href{http://arxiv.org/abs/1301.7017}{Random matrix minor processes related to percolation theory}, \href{https://doi.org/10.1142/S2010326313500081}{\textit{Random Matrices Theory Appl.}, 2 (2014), no.\ 4, 135008, 72pp}.
+\item 
+  Tom Claeys and Dong Wang,
+  \href{http://arxiv.org/abs/1212.3768}{Random matrices with equispaced external source}, \href{https://doi.org/10.1007/s00220-014-1988-y}{\textit{Comm.\ Math.\ Phys.}, 328 (2014), no.\ 3, 1023--1077}.
+\item Jinho Baik and Dong Wang,
+  \href{http://arxiv.org/abs/1207.0389}{On a relationship between high rank cases and rank one cases of Hermitian random matrix models with external source}, \href{http://www.cambridge.org/asia/catalogue/catalogue.asp?isbn=9781107079922}{\textit{Random Matrix Theory, Interacting Particle Systems and Integrable Systems}, Edited by Percey Deift and Peter Forrester, MSRI Publications 65 (2014), Cambridge University Press, Cambridge, 25--38}.
+\item Jinho Baik and Dong Wang,
+  \href{http://arxiv.org/abs/1104.2915}{On the largest eigenvalue of a Hermitian random matrix model with spiked external source II. Higher rank case}, \href{https://doi.org/10.1093/imrn/rns136}{\textit{Int.\ Math.\ Res.\ Not.\ IMRN}, (2013) no.\ 14, 3304--3370}.
+\item Dong Wang,
+  \href{http://arxiv.org/abs/1012.4144}{The largest eigenvalue of real symmetric, Hermitian and Hermitian self-dual random matrix models with rank one external source, part I}, \href{https://doi.org/10.1007/s10955-012-0417-x}{\textit{J. Stat.\ Phys.}, 146 (2012) no.\ 4, 719--761}.
+\item Jinho Baik and  Dong Wang,
+  \href{http://arxiv.org/abs/1010.4604}{On the largest eigenvalue of a Hermitian random matrix model with spiked external source I. Rank 1 case}, \href{https://doi.org/10.1093/imrn/rnq257}{\textit{Int.\ Math.\ Res.\ Not.\ IMRN}, (2011) no.\ 22, 5164--5240}.
+\item Dong Wang,
+  \href{http://arxiv.org/abs/0810.0280}{Random matrices with external source and KP $\tau$ functions}, \href{https://doi.org/10.1063/1.3167802}{\textit{J.\ Math.\ Phys.}, 50 (2009), no.\ 7, 073506, 10pp}.
+\item Dong Wang,
+ \href{http://arxiv.org/abs/0711.2722}{The largest sample eigenvalue distribution in the rank 1 quaternionic spiked model of Wishart ensemble}, \href{https://doi.org/10.1214/08-AOP432}{\textit{Ann.\ Probab.}, 37 (2009), no.\ 4, 1273--1328}.
+\item Dong Wang,
+  \href{http://arxiv.org/abs/0711.3797}{A PDE for the multi-time joint probability of the Airy process}, \href{https://doi.org/10.1016/j.physd.2009.02.007}{\textit{Phys.\ D}, 238 (2009), no.\ 8, 819--833}.
+\end{etaremune}
+
+\section*{Thesis}
+
+\begin{itemize}
+\item
+  Spiked Models in Wishart Ensemble, Brandeis University, 2008.
+\end{itemize}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

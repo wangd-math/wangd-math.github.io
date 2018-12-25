@@ -1,0 +1,2094 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath,amsfonts,amsthm,fullpage,hyperref}
+\usepackage[inline]{enumitem}
+\usepackage{amsxtra}
+%\usepackage{mathabx}
+% \DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+% \DeclareFontShape{U}{mathx}{m}{n}{
+%       <5> <6> <7> <8> <9> <10>
+%       <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+%       mathx10
+%       }{}
+% \DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+% \DeclareMathAccent{\widecheck}{\mathalpha}{mathx}{"71}
+
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\realR}{\mathbb{R}}
+\newcommand{\natN}{\mathbb{N}}
+\newcommand{\ratQ}{\mathbb{Q}}
+\newcommand{\intZ}{\mathbb{Z}}
+\newcommand{\downto}{\downarrow}
+\newcommand{\upto}{\uparrow}
+\newcommand{\weakto}{\Rightarrow}
+\newcommand{\vagueto}{\stackrel{v}{\Rightarrow}}
+\newcommand{\imply}{\Rightarrow}
+\newcommand{\disteq}{\stackrel{d}{=}}
+\newcommand{\Caratheodory}{Carath\'{e}odory}
+\newcommand{\Holder}{H\"{o}lder}
+\newcommand{\lHopital}{l'H\^{o}pital}
+\newcommand{\as}{a.s.}
+\newcommand{\iid}{i.i.d.}
+
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\io}{i.o.}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\Poisson}{Poisson}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{expl}{Example}
+\newtheorem{rmk}{Remark}
+
+\begin{document}
+\section{Probability space and random variables}
+
+\label{sec:prob_space}
+
+As graduate level, we inevitably need to study probability based on measure theory. It obscures some intuitions in probability, but it also supplements our intuition, and in the end hopefully it will be our new intuition.
+
+Since measure theory by its own is a part of analysis, but not probability, we do not give proofs to measure theoretic results, and use the concepts without explanation if they are contained in standard textbooks, for example, the \textit{Real and Complex Analysis} by W.~Rudin. All the proofs of not so standard measure theoretic theorems are in our text book \emph{Probability: Theory and Examples} by R.~Durrett, unless otherwise stated.
+
+First we review the definition of a \emph{probability space}, which appears in undergraduate textbooks (like the \textit{Probability and Random Processes} by G.~Grimmett and D.~Stirzaker), without rigorous reference to measure space.
+
+First, the set of all possible outcomes of an experiment (not a mathematical term, but this is where the aximatic probability theory starts) is denoted by $\Omega$. It can be very small like $\{ \text{head}, \text{tail} \}$, so that no advanced measure theory is needed, while it can also be quite big like $\{ \text{all Brownian motion paths} \}$, so that you would be lost without the guide of measure theory.
+
+Some subsets of $\Omega$ are called \emph{events}. Note that not all subsets are events, especially if $\Omega$ is quite large. There are practical reasons for that (it is impossible to single out the outcome of an experiment exactly to be $1/2 = 0.50000000\dots$ centimetre). But for us, it is due to the requirement of mathematical consistence, as we will see later.
+
+We call the set of events $\F$, and require that it satisfies
+\begin{itemize}
+\item
+  $\emptyset \in \F$ and $\Omega \in \F$.
+\item
+  If $A \in \F$, then the complement $A^c \in \F$.
+\item
+  If $A_1, A_2, \dotsc, A_n, \dotsc \in F$, then $\bigcup^{\infty}_{n = 1} A_n \in \F$.
+\end{itemize}
+In measure theoretic language, it is equivalent to say that $\F$ is a \emph{$\sigma$-algebra} on $\Omega$.
+
+To define a probability space, we need to introduce the concept of probability for each event. Let $P$ be a function from $\F$ to $[0, 1]$, that satisfies
+\begin{itemize}
+\item
+  $P(\emptyset) = 0$ and $P(\Omega) = 1$.
+\item 
+  $P(A^c) = 1 - P(A)$,
+\item
+  If $A_1, A_2, \dotsc, A_n, \dotsc \in \F$ are disjoint to one another, then $P \left( \bigcup^{\infty}_{n = 1} A_i \right) = \sum^{\infty}_{n = 1} P(A_n)$.
+\end{itemize}
+The last condition is not very intuitive, and it is called the \emph{countably additive} property of $P$.
+
+Suppose $\Omega, \F, P$ are defined as above, we call the triple $(\Omega, \F, P)$ a probability space. In measure theoretic language, it is nothing but a positive measure space with total measure $1$. (A measure space is a triple $(X, \Sigma, \mu)$, where $X$ is a set, $\Sigma$ is a $\sigma$-algebra of the subsets of $X$, and $\mu$ is a function from $\Sigma$ to $\realR \cup \{ \pm \infty \}$, such that $\mu(\emptyset) = 0$ and for pairwise disjoint sets $E_1, \dotsc, E_n, \dotsc \in \Sigma$, $\mu \left(\bigcup^{\infty}_{n = 1} E_n \right) = \sum^{\infty}_{n = 1} \mu(E_n)$.)
+
+We briefly discuss the idea that a $\sigma$-algebra $\mathcal{S}$ on $X$ is \emph{generated} by a collection of subsets $S_{\alpha}$ of $\Omega$. $\mathcal{S}$ is defined as the smallest $\sigma$-algebra that contains all $S_{\alpha}$. This definition is not constructive, and the construction of $\mathcal{S}$ is not easy unless the collection of $S_{\alpha}$ is finite. If we start from the collection of open sets (assuming that $\Omega$ has a topological structure so that we can talk about the open sets there), then the generated $\sigma$-algebra is called the \emph{Borel $\sigma$-algebra}, consisting of the \emph{Borel sets}. We mostly encounter the Borel sets on the real line, where the open sets are unions of open intervals.
+
+Next we define random variables on a probability space $\Omega = (\Omega, \F, P)$.
+\begin{defn}
+  A random variable $X$ on $(\Omega, \F, P)$ is a mapping $\Omega \to \realR$ such that for each Borel set $B$ on $\realR$, $X^{-1}(B) \in \F$.
+\end{defn}
+It is not hard to see (exercise) that $\B$ is also generated by the sets $(-\infty, x]$ where $x \in \realR$. So a more practical definition of a random variable is
+\begin{defn}
+  A random variable $X$ on $(\Omega, \F, P)$ is a mapping $\Omega \to \realR$ such that for each semi-closed set $(-\infty, x]$, $X^{-1}(-\infty, x] \in \F$. Then the function $F(x) = P(X^{-1}(-\infty, x])$ is a function from $\realR$ to $[0, 1]$, and it is called the \emph{distribution function} of $X$.
+\end{defn}
+
+It is clear that for any random variable $X$, the distribution function $F$ is non-decreasing, because for $a < b$,
+\begin{equation*}
+  F(b) - F(a) = P(X^{-1}(-\infty, b]) - P(X^{-1}(-\infty, a]) = P(X^{-1}(a, b]) \geq 0.
+\end{equation*}
+Another simple property satisfied by a distribution function is $F(\infty) = \lim_{x \to \infty} F(x) = 1$ and $F(-\infty) = \lim_{x \to -\infty} F(x) = 0$. $F$ may not be a continuous function, but we can show that it is \emph{right-continuous}, that is, $\lim_{x \downto a} F(x) = F(a)$. This is because of the countably additive property of the measure. One consequence of the countable additivity is that of $A_1 \supseteq A_2 \supseteq \dotsb \supseteq  A_n \supseteq \dotsb$ and $\bigcap^{\infty}_{n = 1} A_n = \emptyset$, then $\lim_{n \to \infty} P(A_n) = 0$. (Exercise.) So if $x_1, x_2, \dotsc$ is a decreasing sequence whose limit is $a$, then the sequence $X^{-1}(a, x_n]$ are nested sets whose common intersection is $\emptyset$, so
+\begin{equation*}
+  \lim_{n \to \infty} F(x_n) - F(a) = \lim_{n \to \infty} P(X^{-1}(a, x_n]) = 0.
+\end{equation*}
+Thus we prove the right-continuity of $F(x)$. Actually the properties above characterize distribution functions.
+\begin{thm} \label{thm:existence_distribution_function}
+  If a function $F: \realR \to [0, 1]$ is non-decreasing, right-continuous, and $F(\infty) = 1$, $F(-\infty) = 0$, then it is a distribution function for a random variable.
+\end{thm}
+
+To prove this theorem, we need a technical result in measure theory, and we need to introduce some concepts.
+
+We say a collection of subsets $\mathcal{A}$ of $\Omega$ an \emph{algebra} if $A \in \mathcal{A} \imply A^c \in \mathcal{A}$ and $A, B \in \mathcal{A} \imply A \cup B \in \mathcal{A}$. It is obvious that a $\sigma$-algebra is an algebra, but not vice versa. Then let $\mu: \mathcal{A} \to [0, \infty)$ be a mapping. We say $\mu$ is a \emph{measure} on $\mathcal{A}$ if it satisfies
+\begin{enumerate}
+\item (finitely additive)
+  $\mu(\emptyset) = 0$, and for $A_1, \dotsc, A_n \in \mathcal{A}$, $\mu( A_1 \cup \dotsb \cup A_n) = \mu(A_1) + \dotsb + \mu(A_n)$.
+\item (countably additive)
+  For countably disjoint $A_1, A_2, \dotsc \in \mathcal{A}$, if $\bigcup^{\infty}_{n = 1} A_n \in \mathcal{A}$, then $\mu \left( \bigcup^{\infty}_{n = 1} A_n \right) = \sum^{\infty}_{n = 1} \mu(A_n)$.
+\end{enumerate}
+We say a measure $\mu$ on an algebra $\mathcal{A}$ is \emph{$\sigma$-finite} if there is a sequence of sets $A_n \in \mathcal{A}$ such that $\mu(A_n) < \infty$ for all $n$ and $\bigcup^{\infty}_{n = 1} = \Omega$, the whole set of the space. Then we have
+\begin{thm}[\Caratheodory\ extension]
+  Let $\mu$ be a $\sigma$-finite measure on an algebra $\mathcal{A}$. Then $\mu$ has a unique extension to the $\sigma$-algebra generated by $\mathcal{A}$.
+\end{thm}
+
+\begin{proof}[Proof of Theorem \ref{thm:existence_distribution_function}]
+  First we construct a measure space $(\Omega, \F, P)$ with $\Omega = \realR$, $\F = \B = \{ \text{Borel sets on $\realR$} \}$, and $P$ satisfies that for all $a < b$, $P(a, b] = F(b) - F(a)$. Then we define a random variable $X$ on this probability space such that $X(x) = x$. It is clear that $X$ is a well-defined random variable, and its distribution function is $F(x)$.
+
+  To justify our construction of the measure space, we need the \Caratheodory\ extension theorem. It is clear that the collection $\mathcal{A}$ of subsets of $\realR$ in the form of $(a_1, b_1] \cup (a_2, b_2] \cup \dotsb \cup (a_k, b_k]$ where $a_1 < b_1 < a_2 < b_2 < \dotsb < a_k < b_k$ is an algebra, and the function $P$ defined by
+  \begin{equation*}
+    P \Big( (a_1, b_1] \cup (a_2, b_2] \cup \dotsb \cup (a_k, b_k] \Big) = F(b_k) - F(a_k) + \dotsc + F(b_2) - F(a_2) + F(b_1) - F(a_1)
+  \end{equation*}
+  satisfies the finitely additive condition for a measure on $\mathcal{A}$. Since as an exercise we know that $\mathcal{A}$ generates the $\sigma$-algebra $\B$ of Borel sets on $\realR$, and it is also an easy exercise to show that $P$ satisfy the $\sigma$-finite condition, we can apply the \Caratheodory\ extension theorem to show that $P$ is a well-defined measure on $\B$ as long as we show that $P$ is countably additive, and then it is clear that $P$ is a probability measure.
+
+  Suppose $A_1, A_2, \dotsc \in \mathcal{A}$ are disjoint to each other and $\bigcup^{\infty}_{n = 1} A_n \in \mathcal{A}$. It is not hard to see that since $P$ is a non-negative function,
+  \begin{equation*}
+    \sum^{\infty}_{n = 1} P(A_n) \leq P \left( \bigcup^{\infty}_{n = 1} A_n \right).
+  \end{equation*}
+  Without loss of generality, we assume that $\bigcup^{\infty}_{n = 1} A_n = (a, b]$, and it suffices to show that for any $\epsilon > 0$, there is an $N$ such that
+  \begin{equation*}
+    \sum^N_{n = 1} P(A_n) > F(b) - F(a) - \epsilon.
+  \end{equation*}
+  By the right-continuous property of $F$, there is $a' > a$ such that $F(a') - F(a) < \epsilon/2$. Furthermore, for each $A_n = (a^{(n)}_1, b^{(n)}_1] \cup \dotsb \cup (a^{(n)}_{k_n}, b^{(n)}_{k_n}]$, we can choose an open set $B'_n = (a^{(n)}_1, b^{(n), '}_1) \cup \dotsb \cup (a^{(n)}_{k_n}, b^{(n), '}_{k_n})$ and $B_n = (a^{(n)}_1, b^{(n), '}_1] \cup \dotsb \cup (a^{(n)}_{k_n}, b^{(n), '}_{k_n}] \in \mathcal{A}$, such that $b^{(n), '}_i > b^{(n)}_i$ for all $i = 1, \dotsc, k_n$ and
+  \begin{equation*}
+    \begin{split}
+      P(B_n) = {}& F(b^{(n), '}_{k_n}) - F(a^{(n)}_{k_n}) + \dotsc + F(b^{(n), '}_1) - F(a^{(n)}_1) \\
+      < {}& F(b^{(n)}_{k_n}) - F(a^{(n)}_{k_n}) + \dotsc + F(b^{(n)}_1) - F(a^{(n)}_1) + \frac{\epsilon}{2^{2 + i}} \\
+      = {}& P(A_n) + \frac{\epsilon}{2^{2 + i}}.
+    \end{split}
+  \end{equation*}
+  Since $B'_n \supset A_n$ and $\{ A_n \}$ covers $(a, b]$, we have that $\{ B'_n \}$ covers $[a', b]$, and then by a compactness argument we have that a finite subset of $\{ B'_n \}$, say $\{ B'_1, \dotsc, B'_N \}$ without loss of generality, covers $[a', b]$. Then $\{ B_1, \dotsc, B_N \}$ covers $(a', b]$, and by the definition of $P$
+  \begin{equation*}
+    P(B_1) + P(B_2) + \dotsb + P(B_N) \geq F(b) - F(a'),
+  \end{equation*}
+  which implies that
+  \begin{equation*}
+    P(A_1) + P(A_2) + \dotsb + P(A_N) + \left( \frac{1}{2} - \frac{1}{2^{2 + N}} \right) \epsilon \geq F(b) - F(a) - \frac{\epsilon}{2},
+  \end{equation*}
+  and we obtain the desired result.
+\end{proof}
+
+By the method of the proof, if we take $F(x) = x$, then we construct the \emph{Lebesgue measure} on $\realR$ where the measure of an interval is its length. Although it is not a probability measure, its importance is obvious. We denote it by $\lambda$, and when we write the integration with $dx$ without specification, it is with respect to the Lebesgue measure.
+
+We remark that if the distribution function $F(x)$ is differentiable almost everywhere and there is an integrable function $f(x)$, which is called the \emph{density function}, such that $\int^x_{-\infty} f(t) dt = F(x)$, then the construction of the probability measure $P$ is quite straightforward:
+\begin{equation*}
+  P(B) = \int_B f(x) dx, \quad \text{for all Borel set $B$},
+\end{equation*}
+and usually we call it a continuous distribution. If $F(x)$ is a piecewise constant function with the change from $0$ to $1$ purely by jumps at countable points, then the construction of the probability measure $P$ is also simple. For example, if
+\begin{equation*}
+  F(x) =
+  \begin{cases}
+    0 & x < 0, \\
+    \frac{1}{2} & 0 \leq x < 1, \\
+    1 & x \geq 1,
+  \end{cases}
+\end{equation*}
+then it defines the Bernoulli distribution on two values $0$ and $1$, and a random variable with this distribution attains either value with half probability. This is an example of discrete distribution, where $0$ and $1$ are called \emph{point masses} or \emph{atoms} of the probability measure. Note that there are more subtle cases, like the distribution function given by the Cantor set as follows. Recall that if we express the real numbers in $[0, 1]$ by ternary expansion, and keep all the real numbers that allow an ternary expansion with all digits $0$ or $2$, then we have the Cantor set. (For example, $1/3 = (0.1)_3$, but it is can also be written as $(0.02222 \dots)_3$, so it is in the Cantor set, but $1/2$ can only be written as $(0.1111 \dots)_3$, so it is not in the Cantor set.) Then for any real number in the Cantor set, we define for any number in the Cantor set
+\begin{equation*}
+  F \left( \frac{a_1}{3} + \frac{a_2}{9} + \frac{a_3}{27} + \dotsb \right) = \frac{1}{2} \left( \frac{a_1}{2} + \frac{a_2}{4} + \frac{a_3}{8} + \dotsb \right), \quad a_k = 0 \text{ or } 2,
+\end{equation*}
+for $x < 0$ define $F(x) = 0$, and for $x \geq 0$ not in the Cantor set
+\begin{equation*}
+  F(x) = \max_{t < x, \text{ and $t$ is in the Cantor set}} F(t).
+\end{equation*}
+Then it is not very hard to check that $F(x)$ is right-continuous and is a well defined distribution function. But it is not a continuous distribution since there is no well-defined density function whose integral is $F(x)$, and it is not a discrete distribution since there is no point mass where the distribution function has a jump.
+
+By the Lebesgue decomposition theorem and Radom-Nikodym theorem, we do not need to consider distribution functions more exotic than the Cantor distribution. On the real line and the Borel sets, we call a $\sigma$-finite measure $\mu$ \emph{absolutely continuous} to the Lebesgue measure, if there is a Lebesgue measurable function $f \geq 0$ such that $\mu(E) = \int_E f dx$ for all $E \in \B$. We say a measure $\nu$ is \emph{singular} with respect to the Lebesgue measure, if there is a set $E \in \B$ such that $\nu(E) = 0$ while the Lebesgue measure of $A^c$ is $0$. In particular, we say a singular measure $\nu_1$ is \emph{atomic} if it is the sum of countable point masses: $\nu_1 = \sum c_n \delta_{a_n}$ where $a_n \in \realR$ and $c_n \geq 0$ with $\sum c_n = 1$. We say a singular measure $\mu_2$ is \emph{singular continuous} with respect to the Lebesgue measure, if it has no point mass, that is, $\mu_2(\{ a \}) = 0$ for all $a \in \realR$. Then we have that any probability measure can be written as $\alpha \nu + \beta_1 \nu_1 + \beta_2 \nu_2$, where $\mu$ is absolutely continuous, $\nu_1$ is atomic, and $\nu_2$ is singular continuous (with respect to the Lebesgue measure) and $\alpha, \beta_1, \beta_2 \geq 0$ with $\alpha + \beta_1 + \beta_2 = 1$.
+
+We finish the remark to Theorem \ref{thm:existence_distribution_function} and its proof by noting that random variables defined on different probability spaces can have identical distribution. For example, the Bernoulli distribution can be realised on $\realR$ with Borel sets and an atomic measure, and it can also simply be realised on the probability space $\Omega = \{0, 1\}$, with the $\sigma$-algebra $\{ \emptyset, \{ 0 \}, \{ 1 \}, \Omega \}$, and the probability measure $P(0) = P(1) = 1/2$, by the random variable $X: \{ 0, 1 \} \to \realR$ such that $X(0) = 0$ and $X(1) = 1$. If two random variables, on the same probability space or not, are \emph{equal in distribution}, we write
+\begin{equation*}
+  X \disteq Y.
+\end{equation*}
+
+In our module, we consider the collective property of many random variables on the same probability space, especially the sum of many \emph{independent} random variables. We say a set of random variables $\{ X_{\alpha} \}$ on a probability space $(\Omega, \F, P)$ are independent, if for any finitely many of them, say $A_1, \dotsc, A_n$, and any Borel sets $B_1, \dotsc, B_n$,
+\begin{equation*}
+  P \left( \bigcap^n_{i = 1} \{ X_i \in B_i \} \right) = \prod^n_{i = 1} P(X_i \in B_i),
+\end{equation*}
+where $\{ X \in B \}$ means the measurable set $X^{-1}(B)$. The properties of independent random variables will be discussed later. Now we consider a theoretical question: Do there exist independent random variables with given distributions?
+
+If we consider finitely many independent random variables, they can be constructed by the product of measure spaces.
+
+Suppose $(\Omega_1, \F_1, P_1), \dotsc, (\Omega_n, \F_n, P_n)$ are probability spaces, such that $X_1, \dotsc, X_n$ are random variables on them respectively, with distribution functions $F_1(x), \dotsc, F_n(x)$ respectively. Then consider the product measure space $\Omega = \{ (\omega_1, \dotsc, \omega_n) \} = \Omega_1 \times \dotsb \times \Omega_n$ with the product $\sigma$-algebra $\F$ that is generated by $\{ E_1 \times \dotsb \times E_n \}$ where $E_i \in \F_i$, and the product measure $P$ that is uniquely determined by
+\begin{equation*}
+  P(E_1 \times \dotsb \times E_n) = P(E_1) \times \dotsb \times P(E_n).  
+\end{equation*}
+We define random variables $Y_1, \dotsc, Y_n$ on $(\Omega, \F, P)$ such that
+\begin{equation*}
+  Y_i(\omega_1, \dotsc, \omega_n) = X_i(\omega_i).
+\end{equation*}
+It is easy to check that the distribution function for $Y_i$ is $F_i$, since, for example $i = 1$,
+\begin{equation*}
+  \begin{split}
+    P(Y_1 \in (a, b]) = {}& P( \{ X_1 \in (a, b] \} \times \Omega_2 \times \dotsb \times \Omega_n) = P_1(X_1 \in (a, b]) \times 1 \times \dotsb \times 1 \\
+    = {}& F_1(b) - F_1(a),
+  \end{split}
+\end{equation*}
+and they are independent.
+
+In later discussion, we often start with the phrase ``Suppose $X_1, X_2, \dotsc$ are a sequence of independent random variables \dots''. Is it possible to construct a probability space on which there are infinitely many independent random variables? The construction for the product of finitely many measure spaces cannot be naively used for infinite product. But in a special case, the construction is possible. To state the result, we define the set $\realR^{\natN}$ as
+\begin{equation*}
+  \realR^{\natN} = \{ \omega = (\omega_1, \omega_2, \dotsc) \mid \omega_i \in \realR \},
+\end{equation*}
+and then define the $\sigma$-algbra $\B^{\natN}$ that is generated by the so-called finite dimensional sets
+\begin{multline*}
+  \{ (\omega_1, \omega_2, \dotsc) \mid \text{there is $n \in \natN$ and $B_1, \dotsc, B_n$ are Borel sets on $\realR$} \\
+  \text{such that $\omega_1 \in B_1, \dotsc, \omega_n \in B_n$, while $\omega_{n + 1}, \omega_{n + 2}, \dotsc$ are arbitrary real numbers}. \}.
+\end{multline*}
+Note that $\B^{\natN}$ is the Borel $\sigma$-algebra on $\realR^{\natN}$ with respect to the product topology on $\realR^{\natN}$. Then we have the result as follows.
+\begin{thm}[Kolmogorov extension]
+  Suppose $(\realR^n, \B^n, \mu_n)$ are probability spaces, where $\B^n$ is the Borel $\sigma$-algebra on $\realR^n$, and $\mu_n$ are consistent, that is,
+  \begin{equation*}
+    \mu_{n + 1}((a_1, b_1] \times \dotsb \times (a_n, b_n] \times \realR) = \mu_n((a_1, b_1] \times \dotsb \times (a_n, b_n]),
+  \end{equation*}
+  Then there is a unique probability measure $P$ on $(\realR^{\natN}, \B^{\natN})$ with
+  \begin{equation*}
+    P(\{ \omega \mid \omega_1 \in (a_1, b_1], \dotsc, \omega_n \in (a_n, b_n] \}) = \mu_n((a_1, b_1] \times \dotsb \times (a_n, b_n]).
+  \end{equation*}
+\end{thm}
+
+Suppose $(\realR, \B, P_1), (\realR, \B, P_2), \dotsc$ are probability spaces, all defined on $\realR$ with the $\sigma$-algebra consisting of the Borel sets. Then the product space of the first $n$ of them is $(\realR^n, \B^n, \mu_n)$ where $\mu_n$ is characterised by
+\begin{equation*}
+  \mu_n((a_1, b_1] \times \dotsb \times (a_n, b_n]) = P_1(a_1, b_1) \times \dotsb \times P_n(a_n, b_n].
+\end{equation*}
+It is clear that these measure spaces satisfy the consistency condition in the Kolmogorov extension theorem, so there exists a probability measure space $(\realR^{\natN}, \B^{\natN}, P)$ as constructed in the theorem. Now suppose $X_n$ is a random variable on $(\realR, \B, P_n)$ with distribution function $F_n$, then the random variable $Y_n$ on $(\realR^{\natN}, \B^{\natN}, P)$, defined by $Y_n(\omega) = X_n(\omega_n)$, is a random variable with distribution function $F_n$. It is not hard to check that $Y_1, Y_2, \dotsc$ are independent.
+
+As the conclusion of this lecture, we are pleased with ourselves that the phrase ``Suppose $X_1, X_2, \dotsc$ are a sequence of independent random variables \dots'' is meaningful, in the sense that no matter what distributions $F_1, F_2, \dotsc$, we can canstruct a probability space on which there are random variables $X_1, X_2, \dotsc$ with the given distributions $F_i$, and they are independent.
+
+\pagebreak
+
+\section{Expectation and variance}
+
+(In this section and later, when we talk about a set of random variables, we assume that they are on the same probability space $(\Omega, \F, P)$, unless otherwise specified.)
+
+For a random variable, the most important quantity is its \emph{expectation}, also called \emph{mean} or \emph{average} in the everyday language, if it exists. Recall that a random variable $X$ is a measurable function on a probability space $(\Omega, \F, P)$. The expectation of the random variable is defined by the integral of the function:
+\begin{equation*}
+  E X = \int X dP = \int_{\Omega} X(\omega) dP(\omega),
+\end{equation*}
+if the measurable function is also integrable. (In a more analytic language, $X(\omega)$ is an $L^1$ function on the measure space.) Not all measurable funcitons are integrable. If $X$ is a non-negative random variable, its expectation either exists as a finite nonnegative number, or is $+\infty$. If $X$ is not non-negative, then $E X$ is well-defined as long as $E \lvert X \rvert < \infty$, otherwise $E X$ may not be well-defined, even if we allow $\pm \infty$. Thus for the existence conditions involving expectation, we often consider the non-negative case and the general case separately.
+
+The expectation satisfies some well known identities and inequalities for integrations:
+\begin{thm}
+  Suppose the expectations for random variables $X$ and $Y$ exist. Then
+  \begin{itemize}
+  \item
+    $E(X + Y) = EX + EY$,
+  \item
+    $E(aX + b) = aEX + b$, and
+  \item
+    if $X \geq Y$, that is, $X(\omega) \geq Y(\omega)$ for all $\omega \in \Omega$, then $EX \geq EY$.
+  \end{itemize}
+\end{thm}
+\begin{thm}[\Holder's inequality]
+  Suppose $p, q > 0$ and $1/p + 1/q = 1$, and random variables $X$ and $Y$ are $L^p$-integrable and $L^q$-integrable respectively, that is, $E \lvert X \rvert^p$ and $E \lvert Y \rvert^q$ exist. Then $E(XY)$ exists and
+  \begin{equation*}
+    E(\lvert XY \rvert) \leq \left( E\lvert X \rvert^p \right)^{\frac{1}{p}} \left( E\lvert Y \rvert^q \right)^{\frac{1}{q}}.
+  \end{equation*}
+\end{thm}
+
+(The $p = q = 2$ special case of \Holder's theorem, the Cauchy-Schwarz theorem, is most useful.)
+
+The following theorem is not in all real analysis textbooks, because it is valid only if the measure space is a probability space. But it is in Rudin's book and we omit the proof.
+\begin{thm}[Jensen's inequality]
+  Suppose function $\varphi: \realR \to \realR$ is convex, that is, for all $x < y \in \realR$ and $a \in (0, 1)$, $a\varphi(x) + (1 - a) \varphi(y) \geq \varphi(ax + (1 - a)y)$. Then
+  \begin{equation*}
+    E(\varphi(X)) \geq \varphi(EX),  
+  \end{equation*}
+  provided that both $EX$ and $E(\varphi(X))$ exist.
+\end{thm}
+The next theorem is not commonly seen in real analysis textbooks, so we include the proof. To sate the theorem, we first introduce a notation: For a random variable $X$ and a measurable set $A \in \F$,
+\begin{equation*}
+  E(X; A) = \int_A X dP.
+\end{equation*}
+\begin{thm}[Chebyshev's inequality]
+  Suppose $\varphi$ is a non-negative function on $\realR$, and $B \in \B$ is a Borel set on $\realR$, then
+  \begin{equation*}
+    \inf_{x \in B}(\varphi(x)) P(X \in B) \leq E(\varphi(X); X \in B) \leq E(\varphi(X)).
+  \end{equation*}
+\end{thm}
+\begin{proof}
+  The second inequality is a direct consequence of the non-negativity of $\varphi$:
+  \begin{equation*}
+    E(\varphi(X)) - E(\varphi(X); X \in B) = \int_{\Omega \setminus X^{-1}(B)} \varphi(X) dP \geq 0.
+  \end{equation*}
+  For the first inequality, we note that for all $\omega$ such that $X(\omega) \in B$, $\varphi(\omega) \geq \inf_{x \in B}(\varphi(x))$, so
+  \begin{equation*}
+    \begin{split}
+      E(\varphi(X); X \in B) = {}& \int_{X^{-1}(B)} \varphi(X(\omega)) dP(\omega) \geq \int_{X^{-1}(B)} \inf_{x \in B}(\varphi(x)) dP(\omega) \\
+      = {}& \inf_{x \in B}(\varphi(x)) \int_{X^{-1}(B)} 1 dP = \inf_{x \in B}(\varphi(x)) P(X \in B).
+    \end{split}
+  \end{equation*}
+\end{proof}
+
+Since the expectation of a random variable is an integral, the convergence theorems we have learnt in real analysis can be used. We recall the most well known ones:
+\begin{lem}[Fatou]
+  If $X_n \geq 0$, then
+  \begin{equation*}
+    \inf_{n \to \infty} EX_n \geq E \left( \liminf_{n \to \infty} X_n \right).
+  \end{equation*}
+\end{lem}
+\begin{thm}[monotone convergence]
+  If $X_1, X_2, \dotsc$ are non-negative random variables such that $X_n \upto X$, that is, $X_1(\omega) \leq X_2(\omega) \leq \dotsb$ for all $\omega \in \Omega$, and $X_n \to X$ a.s., then $EX_n \upto EX$. (Here $EX$ and $EX_n$ are allowed to be $+\infty$.)
+\end{thm}
+\begin{thm}[dominated convergence]
+  If $X_n \to X$ a.s., $\lvert X \rvert \leq Y$ for all $n$ and $EY < +\infty$, then $EX_n$ and $EX$ exist and $EX_n \to EX$.
+\end{thm}
+\begin{thm}
+  Suppose $X_n \to X$ a.s. Let $g, h$ be continuous functions on $\realR$ such that
+  \begin{itemize}
+  \item
+    $g(x) \geq 0$ for all $x$ and $g(x) > 0$ for large enough $x$,
+  \item
+    $\lvert h(x) \rvert / g(x) \to 0$ as $\lvert x \rvert \to 0$, and
+  \item
+    $E(g(X_n)) \leq K < \infty$ for all $n$.
+  \end{itemize}
+  Then $E(h(X_n)) \to E(h(X))$.
+\end{thm}
+\begin{proof}
+  We use the method of truncation, which we will use again several times in this module. Let $M$ be a large enough real number, such that $g(x) > 0$ for all $\lvert x \rvert \geq M$, and $M$ satisfies some other conditions to be specified later. For $X_n$ and $X$, we denote (the random variable $Y$ stands for either $X_n$ or $X$)
+  \begin{equation*}
+    Y^{(M)}(\omega) =
+    \begin{cases}
+      Y(\omega) & \text{if $\lvert Y(\omega) \rvert \leq M$}, \\
+      0 & \text{otherwise}.
+    \end{cases}
+  \end{equation*}
+  Then we have $X^{(M)}_n \to X^{(M)}$ a.s.\ as long as $P(\lvert X \rvert = M) = 0$. Since there can be at most countably many $x \in \realR$ such that $P(\lvert X \rvert = x) > 0)$, it is easy to choose $M$ to satisfy this condition. Using the dominated convergence theorem and that $\lvert X_n \rvert \leq \sup_{\lvert X \vert \leq M} h(x)$, we have
+  \begin{equation*}
+    E h(X^{(M)}_n) \to E h(X^{(M)}).
+  \end{equation*}
+
+  Next, we have
+  \begin{equation*}
+    \begin{split}
+      \lvert E h(X_n) - E h(X^{(M)}_n) \rvert = {}& \left\lvert \int_{\lvert x \rvert > M} h(X_n) dP \right\rvert \leq \int_{\lvert x \rvert > M} \lvert h(X_n) \rvert dP \\
+      \leq {}& \epsilon_M \int_{\lvert X \rvert > M} g(X_n) dP \leq \epsilon_M \int_{\Omega} g(X_n) dP \\
+      = {}& E g(X_n) \leq \epsilon_M K.
+    \end{split}
+  \end{equation*}
+  On the other hand, using the argument as above together with the Fatou lemma, we have
+  \begin{equation*}
+    \lvert E h(X) - E h(X^{(M)}) \rvert \leq \epsilon_M E g(X) = \epsilon_M E \left( \liminf_{n \to \infty} g(X_n) \right) \leq \epsilon_M \liminf_{n \to \infty} E(g(X_n)) \leq \epsilon_M K.
+  \end{equation*}
+  Combining the limit identity and the two inequalities above, we have
+  \begin{equation*}
+    \begin{split}
+      \limsup_{n \to \infty} \lvert E h(X_n) - E h(X) \rvert \leq {}& \limsup_{n \to \infty} \lvert E h(X^{(M)}_n) - E h(X^{(M)}) \rvert \\
+      & + \limsup_{n \to \infty} \lvert E h(X_n) - E h(X^{(M)}_n) \rvert \\
+      & + \limsup_{n \to \infty} \lvert E h(X) - E h(X^{(M)}) \rvert \\
+      \leq {}& 2\epsilon_M K.
+    \end{split}
+  \end{equation*}
+  Since the right-hand side can be arbitrarily small, we prove that $\lim_{n \to \infty} \lvert E h(X_n) - E h(X) \rvert = 0$.
+\end{proof}
+
+After the discussion of the theoretical properties of expectation, we turn to the computation of expectation, if the distribution of the random variable is known. The next theorem shows that the integral on the (possibly very large) probability space can be transformed into an integral on the real line.
+
+For a random variable $X$, we call a measure $\mu$ defined on $(\realR, \B)$ as its \emph{distribution}, if  for any Borel set $B \in \B$, $P(X \in B) = \mu(B)$. Recall that in Section \ref{sec:prob_space}, we defined the distribution function $F(x)$ for a random variable $X$. It is clear that given $\mu$, $F$ is determined by $\mu$ simply as $F(b) - F(a) = \mu(a, b]$, while we proved that given any distribution function $F$, the distribution $\mu$ can be constructed by \Caratheodory\ extension theorem. Hence we have
+\begin{thm} \label{thm:expectation_evaluation}
+  Let $f$ be a measurable function from $(\realR, \B)$ to $(\realR, \B)$. Under the condition either
+  \begin{enumerate*}[label=(\alph*)]
+  \item
+    $f \geq 0$, or
+  \item
+   $E \lvert f(X) \rvert < \infty$, 
+ \end{enumerate*}
+ we have
+ \begin{equation*}
+   E f(X) = \int_{\Omega} f(X) dP = \int_{\realR} f(y) \mu(dy).
+ \end{equation*}
+\end{thm}
+The proof of the theorem is measure theoretic, and we give the idea of the proof. You can fill in the detail. First, if $f$ is an indicator function such that $f(x) = 1$ if $x \in B$ and $f(x) = 0$ if $x \in B^c$, then the right-hand side is simply $\mu(B)$ and the left-hand side is $P(X \in B)$ that is equal to $\mu(B)$ by the definition of distribution. Next, if $f$ is a simple function, that is, a linear combination of indicator functions, the identity holds due to linearity. The next step is to use a sequence of simple function functions to approximate a non-negative function, and prove the theorem in the case $f \geq 0$. The last step is to consider $f_+$ and $f_-$ separately and prove the theorem for signed function $f$ under the condition that $E \lvert f(X) \rvert < \infty$. Note that the 4-step routine: indicator function --- simple function --- nonnegative function --- general signed function is a standard trick for measure-theoretic proofs.
+
+If the distribution $\mu$ is absolutely continuous with respect to the Lesbegue measure, the integral with respect to $\mu(dy)$ can be done easily. If $\mu$ is a discrete measure, $X$ is a a discrete random variable, and you know how to deal with it. (Examples are random variables normal distribution and Poisson distribution. Please compute $E(X^k)$ with $X$ having these distributions.) Now we consider another example.
+
+\begin{expl}
+  Let $X$ be a random variable with the \emph{Cantor distribution} that is defined by the Cantor set in Section \ref{sec:prob_space}. Compute $E X$ and $E X^2$.
+\end{expl}
+
+First we compute $E X$. By definition, $\mu(a, b] = F(b) - F(a)$, where $F((0.a_1 a_2 \dots)_3) = (0.\frac{a_1}{2} \frac{a_2}{2} \dots)_2$ if all $a_1, a_2, \dotsc$ are all $0$ or $2$. Also we have that $\mu(-\infty, 0] = 0$ and $\mu(1, \infty) = 0$. So
+\begin{equation*}
+  E X = \int_{\realR} y \mu(dy) = \int^1_0 y \mu(dy).
+\end{equation*}
+Now we divide $(0, 1]$ into $3^n$ equal intervals: $I_k = ((k - 1)/3^n, k/3^n]$, where $k = 1, \dotsc, 3^n$. Then
+\begin{equation*}
+  \sum^{3^n}_{k = 1} \frac{k - 1}{3^n} \mu(I_k) \leq E X \leq \sum^{3^n}_{k = 1} \frac{k}{3^n} \mu(I_k).
+\end{equation*}
+We have that $\mu(I_k) = 1/2^n$ if $(k - 1)/3^n = (0.a_1 a_2 \dots a_n)_3$ if $a_1, \dotsc, a_n$ are $0$ or $2$, and $\mu(I_k) = 1$ otherwise. Then the inequality above can be simplified as
+\begin{multline*}
+  \sum_{a_1 = 0, 2} \sum_{a_2 = 0, 2} \dotsb \sum_{a_n = 0, 2} \left( \frac{a_1}{3} + \frac{a_2}{9} + \dotsb + \frac{a_n}{3^n} \right) \frac{1}{2^n} \leq E X \\
+  \leq \sum_{a_1 = 0, 2} \sum_{a_2 = 0, 2} \dotsb \sum_{a_n = 0, 2} \left( \frac{a_1}{3} + \frac{a_2}{9} + \dotsb + \frac{a_n}{3^n} + \frac{1}{3^n} \right) \frac{1}{2^n}.
+\end{multline*}
+Taking the limit $n \to \infty$, we derive that $E X = 1/2$. Similarly, we have
+\begin{multline*}
+  \sum_{a_1 = 0, 2} \sum_{a_2 = 0, 2} \dotsb \sum_{a_n = 0, 2} \left( \frac{a_1}{3} + \frac{a_2}{9} + \dotsb + \frac{a_n}{3^n} \right)^2 \frac{1}{2^n} \leq E X^2 \\
+  \leq \sum_{a_1 = 0, 2} \sum_{a_2 = 0, 2} \dotsb \sum_{a_n = 0, 2} \left( \frac{a_1}{3} + \frac{a_2}{9} + \dotsb + \frac{a_n}{3^n} + \frac{1}{3^n} \right)^2 \frac{1}{2^n},
+\end{multline*}
+and derive that $E X^2 = 3/32$ by letting $n \to \infty$. (Please check it.)
+
+The expectation of $X^k$ of random variable $X$, if exists, is called the \emph{$k$-th monent} of $X$, and is important, especially for $k = 1$ (the expectation, usually denoted by $\mu$) and $k = 2$. We then define the \emph{variance} of random variable $X$ by
+\begin{equation*}
+  \var(X) = E (X - \mu)^2 = E X^2 - 2\mu E X + \mu^2 = E X^2 - \mu^2.
+\end{equation*}
+The variance has the property that it is invariant if the random variable is added by a constant, and it changes quadratically if the random variable is multiplied by a constant. To be precise,
+\begin{equation*}
+  \begin{split}
+    \var(aX + b) = {}& E (aX + b)^2 - (E (aX + b))^2 = E (a^2 X^2 + 2ab X + b^2) - (a E X + b)^2 \\
+    = {}& a^2 E X^2 + 2ab\mu + b^2 = a^2 \mu^2 = 2ab\mu - b^2 \\
+    = {}& a^2 (E X^2 - \mu^2) = a^2 \var(X).
+  \end{split}
+\end{equation*}
+So the variance is not a linear functional on $X$, and generally we cannot expect that $\var(X + Y) = \var(X) + \var(Y)$. However, if $X$ and $Y$ are independent, we have this identity. To prove it rigorously, we need to learn more properties of independence.
+
+Let $X_1, \dotsc, X_n$ be random variables. They together form a \emph{random vector} $(X_1, \dotsc, X_n)$ that is a mapping from $(\Omega, \F)$ to $(\realR^n, \B_n)$ such that the inverse of $B \in \B_n$ is a measurable set in $\F$. (Think why?) We call a probability measure $\mu$ on $(\realR^n, \B_n)$ a \emph{distribution} for $(X_1, \dotsc, X_n)$ if $P((X_1, \dotsc, X_n) \in B) = \mu(B)$. (So the distribution for a single random variable is a special case.) For any random vector, the distribution exists and is a probability measure. To see it, we note that $\mu$ is the \emph{induced measure} from the measure $P$ on $(\Omega, \F, P)$ by the measurable mapping $f$.
+
+\begin{thm} \label{thm:distribution_for_indept_RV}
+  Suppose $X_1, \dotsc, X_n$ are independent random variables and $X_i$ has distribution $\mu_i$. Then $(X_1, \dotsc, X_n)$ has distribution $\mu_1 \times \mu_2 \times \dotsb \times \mu_n$, the product measure of $\mu_1, \dotsc, \mu_n$ on $(\realR^n, \B_n)$.
+\end{thm}
+
+For the proof of the theorem, we need to introduce some more notations and concepts. We call a collection $\mathcal{A}$ of subsets of $\Omega$ a \emph{$\pi$-system}, if it is closed under intersection, that is, if $A, B \in \mathcal{A}$, then $A \cap B \in \mathcal{A}$.
+
+Then we have the measure-theoretic result
+\begin{thm} \label{thm:pi-system_identical_measures}
+  Let $P$ be a $\pi$-system. If $\nu_1$ and $\nu_2$ are measures that agree on $P$ and there is a sequence $A_n \in P$ with $A_n \upto \Omega$ and $\nu_i(A_n) < \infty$, then $\nu_1$ and $\nu_2$ agree on $\sigma(P)$.
+\end{thm}
+The proof of this theorem is given in [Durrett, Theorem A.1.5]. It depends on the $\pi - \lambda$ theorem, which we do not introduce in this module.
+
+Now we can continue the proof to Theorem \ref{thm:distribution_for_indept_RV}.
+\begin{proof}[Proof to Theorem \ref{thm:distribution_for_indept_RV}]
+  We want to show that for any $B \in \B_n$, $P((X_1, \dotsc, X_n) \in B) = \mu_1 \times \mu_2 \times \dotsb \times \mu_n(B)$. In the special case that $B = B_1 \times \dotsb \times B_n$ where $B_1, \dotsc, B_n$ are Borel sets on $\realR$, we have by the independence
+  \begin{equation*}
+    \begin{split}
+      P((X_1, \dotsc, X_n) \in B_1 \times \dotsb \times B_n) = {}& P(X_1 \in B_1, \dotsc, X_n \in B_n) \\
+      = {}& P(X_1 \in B_1) \times \dotsb \times P(X_n \in B_n) \\
+      = {}& \mu_1(B_1) \times \dotsb \times \mu_n(B_n) \\
+      = {}& \mu_1 \times \dotsb \times \mu_n(B_1 \times \dotsb \times B_n).
+    \end{split}
+  \end{equation*}
+  Now we note that the collection of the ``cube-like'' subsets of $\realR^n$, $\{ B_1 \times \dotsb \times B_n \}$, is a $\pi$-system. To see it, we note that $(A_1 \times \dotsb \times A_n) \cap (B_1 \times \dotsb \times B_n) = (A_1 \cap B_1) \times \dotsb \times (A_n \cap B_n)$. Since both the distribution for $(X_1, \dotsc, X_n)$ and the product measure $\mu_1 \times \dotsb \times \mu_n$ are probability measures on $(\realR^n, \B_n)$, and they agree on the $\pi$-system $\{ B_1 \times \dotsb \times B_n \}$, we derive by Theorem \ref{thm:pi-system_identical_measures}, they agree on $\sigma(\{ B_1 \times \dotsb \times B_n \}) = B_n$, and they are the same.
+\end{proof}
+
+Similar to the expectation formula in Theorem \ref{thm:expectation_evaluation}, we have the following result.
+\begin{thm} \label{thm:expectation_several_RV}
+  Suppose $X_1, \dotsc, X_n$ are random variables, and the distribution for the random vector $(X_1, \dotsc, X_n)$ is $\mu$. If $f: (\realR^n, \B_n) \to (\realR, \B)$ is a measurable mapping, then under the condition either
+  \begin{enumerate*}[label=(\alph*)]
+  \item
+    $f \geq 0$, or
+  \item
+   $E \lvert f(X_1, \dotsc, X_n) \rvert < \infty$, 
+ \end{enumerate*}
+ we have
+ \begin{equation*}
+   E f(X) = \int_{\Omega} f(X_1, \dotsc, X_n) dP = \int_{\realR^n} f(y) \mu(dy).
+ \end{equation*}
+\end{thm}
+The proof is the same as the one-dimensional case and we omit it. In the special case that $X_1$ and $X_2$ are independent, with distributions $\mu_1$ and $\mu_2$ respectively, we have
+\begin{equation*}
+  E(f(X_1, X_2)) = \iint f(y_1, y_2) \mu_1 \times \mu_2(dy)
+\end{equation*}
+(if either of the two conditions in Theorem \ref{thm:expectation_several_RV} is satisfied). We can use Fubini's theorem to compute it. Recall:
+\begin{thm}[Fubini]
+  If $(\Omega_1, \F_1, \mu_1)$ and $(\Omega_2, \F_2, \mu_2)$ are two measure spaces, $\Omega = \Omega_1 \times \Omega_2$ is the product set, $\F = \F_1 \times \F_2$ is the product $\sigma$-algebra, and $\mu = \mu_1 \times \mu_2$ is the product measure. Suppose $h: \Omega \to \realR$ is a measurable function from $(\Omega, \F)$ to $(\realR, \B)$. Under the condition either
+  \begin{enumerate*}[label=(\alph*)]
+  \item
+    $h \geq 0$, or
+  \item
+   $\int \lvert h \rvert d\mu < \infty$, 
+ \end{enumerate*}
+ we have that
+ \begin{equation*}
+   \int_{\Omega_1} \left( \int_{\Omega_2} f(x, y) \mu_2(dy) \right) \mu_1(dx) = \int_{\Omega} f d\mu = \int_{\Omega_2} \left( \int_{\Omega_1} f(x, y) \mu_1(dx) \right) \mu_2(dy).
+ \end{equation*}
+\end{thm}
+Now suppose the independent random variables $X_1$ and $X_2$ are both non-negative. Then $X_1 X_2 = \lvert X_1 X_2 \rvert$, and we have ($\mu_1, \mu_2$ are distributions for $X_1, X_2$ respectively)
+\begin{equation*}
+  \begin{split}
+    E(X_1 X_2) = E(\lvert X_1 X_2 \rvert) = {}& \int_{\realR^2} \lvert y_1 y_2 \rvert \mu_1 \times \mu_2(dy) = \int_{\realR} \left( \int_{\realR} \lvert y_1 y_2 \rvert \mu_1(dy_1) \right) \mu_2(dy_2) \\
+    = {}& \left( \int_{\realR} \lvert y_1 \rvert \mu_1(dy_1) \right) \left( \int_{\realR} \lvert y_2 \rvert \mu_2(dy_2) \right) \\
+    = {}& E \lvert X_1 \rvert E \lvert X_2 \rvert = E X_1 E X_2.
+  \end{split}
+\end{equation*}
+On the other hand, if $X_1$ and $X_2$ satisfy $E \lvert X_1 \rvert < \infty$, $E \lvert X_2 \rvert X_2 < \infty$, then we have $E \lvert X_1 X_2 \rvert = E( \lvert X_1 \rvert \lvert X_2 \rvert) = E \lvert X_1 \rvert E \lvert X_2 \rvert < \infty$. Then the condition $\int \lvert h \rvert d\mu < \infty$ for Fubini's theorem is satisfied, where $h = y_1 y_2$ and $\mu = \mu_1 \times \mu_2$, and we still have the result
+\begin{equation*}
+  E(X_1 X_2) = \int_{\realR^2} y_1 y_2 \mu_1 \times \mu_2(dy) = \left( \int_{\realR} \lvert y_1 \rvert \mu_1(dy_1) \right) \left( \int_{\realR} \lvert y_2 \rvert \mu_2(dy_2) \right) = E X_1 E X_2.
+\end{equation*}
+The final result in this section is:
+\begin{thm}
+  Suppose random variables $X_1, \dotsc, X_n$ are independent. Under the condition either
+  \begin{enumerate*}[label=(\alph*)]
+  \item
+    $X_i \geq 0$, or
+  \item
+   $E \lvert X_i \rvert < \infty$, 
+ \end{enumerate*}
+ for all $i = 1, \dotsc, n$, then $\var(X_1 + \dotsb + X_n) = \var(X_1) + \dotsb + \var(X_n)$.
+\end{thm}
+\begin{proof}
+  Under either condition,
+  \begin{equation*}
+    E(X_1 + \dotsb + X_n)^2 = \sum^n_{i = 1} E X^2_i + 2 \sum_{1 \leq i < j \leq n} E X_i X_j = \sum^n_{i = 1} E X^2_i + 2 \sum_{1 \leq i < j \leq n} E X_i EX_j.
+  \end{equation*}
+  Then it is easy to derive the formula for $\var(X_1 + \dotsb + X_n)$.
+\end{proof}
+
+\pagebreak
+
+\section{More on independence, and weak laws of large numbers}
+
+For the independence of random variables, we still do not have an effective way to check if a collection of random variables are independent. The definition of independence of random variables involves arbitrary Borel sets, and it is not practical. Even for theoretical questions, the definition may not be directly applicable. For example, if we know that $X_1, X_2, X_3$ are independent, are the two random variables $X_1$ and $X_2X_3$ independent? It should be true, but if we want to verify it by definition, the condition $X_2X_3 \in B$ cannot be simply expressed by conditions like $X_2 \in B'$ and $X_3 \in B''$. To solve the question, as usual we need to introduce more concepts and notations.
+
+\begin{defn}
+  We say events $A_1, A_2, \dotsc, A_n$ are independent if for any $m_1, \dotsc, m_k \in \{ 1, 2, \dotsc, n \}$, $P(A_{m_1} \cap \dotsb \cap A_{m_k}) = P(A_{m_1}) \dotsb P(A_{m_k})$.
+\end{defn}
+\begin{defn}
+  Let $\mathcal{A}_1, \dotsc, \mathcal{A}_n$ be subsets of $\F$ on the probability space $(\Omega, \F, P)$. We say $\mathcal{A}_1, \dotsc, \mathcal{A}_n$ are independent if for any $A_i \in \mathcal{A}_i$, $A_1, \dotsc, A_n$ are independent.
+\end{defn}
+A random variable $X$ defines a $\sigma$-algebra $\sigma(X)$, which consists of sets $\{ X^{-1}(B) \mid B \in \B(\realR) \}$. It is clear that $X_1, \dotsc, X_n$ are independent if and only if the $\sigma$-algebras $\sigma(X_1), \dotsc, \sigma(X_n)$ are independent. Then the following theorem can reduce our task of checking independence of $\sigma$-algebras.
+\begin{thm} \label{thm:pi_sys_indept}
+  Suppose $\mathcal{A}_1, \dotsc, \mathcal{A}_n$ are independent subsets of $\F$, and each $\mathcal{A}_i$ is a $\pi$-system. Then $\sigma(\mathcal{A}_1), \dotsc, \sigma(\mathcal{A}_n)$ are independent.
+\end{thm}
+The proof of the theorem requires the ``$\pi-\lambda$ theorem'' and you can find the proof, together with the proof of the $\pi-\lambda$ theorem, in our textbook. Here we note an important case: The semi-infinite sets $(-\infty, a]$ form a $\pi$-system, and they generate the Borel $\sigma$-algebra on $\realR$. Then for any random variable $X$, the sets $\{ X \leq a \} = \{ \omega \mid X(\omega) \leq a \}$ form a $\pi$-system and they generate the $\sigma$-algebra $\sigma(X)$. Hence we have the consequence of last theorem:
+\begin{cor}
+  $X_1, \dotsc, X_n$ are indepdent if and only if for all $m_1, \dotsc, m_k \in \{ 1, 2, \dotsc, n \}$ and $x_{m_1}, \dotsc, x_{m_k}$, $P(X_{m_1} \leq x_{m_1}, \dotsc, \linebreak[1] X_{m_k} \leq x_{m_k}) = \prod^k_{i = 1} P(X_{m_i} \leq x_{m_i})$.
+\end{cor}
+
+Now we can go back to the question that how to show $X_1$ and $X_2X_3$ are independent, given that $X_1, X_2, X_3$ are independent. We need to show that $\sigma(X_1)$ and $\sigma(X_2 X_3)$ are independent. To describe $\sigma(X_2 X_3)$, we introduce the mapping $f: \Omega \to \realR^2$ by $f(\omega) = (X_2(\omega), X_3(\omega))$, and the mapping $g: \realR^2 \to \realR$ by $g(x, y) = xy$. Then $\sigma(X_2 X_3) = \{ (g \circ f)^{-1}(B) \mid B \in \B(\realR) \}$, and it is generated by $\{ (g \circ f)^{-1} (-\infty, a] \} = \{ f^{-1}(A_a) \}$, where $A_a = \{ (x, y) \mid xy \leq a \}$. It is clear that $A_a \in \B(\realR^2)$, and then $\sigma(X_2 X_3) \subseteq \mathcal{A} = \{ f^{-1}(B) \mid B \in \B(\realR^2) \}$. Then it suffices to show that $\sigma(X_1)$ and $\mathcal{A}$ are independent. Since $\B(\realR^2)$ is generated by $\{ (-\infty, x_2] \times (-\infty, x_3] \}$, $\mathcal{A}$ is generated by $\{ f^{-1}(-\infty, x_2] \times (-\infty, x_3] \} = \{ X_2 \leq x_2 \} \cap \{ X_3 \leq x_3 \}$. Since $\sigma(X_1)$ is generated by $\{ X_1 \leq x_1 \}$, we need only to check that
+\begin{equation*}
+  P \left( \{ X_1 \leq x_1 \} \cap \left( \{ X_2 \leq x_2 \} \cap \{ X_3 \leq x_3 \} \right) \right) = P(X_1 \leq x_1) P(X_2 \leq x_2, X_3 \leq x_3),
+\end{equation*}
+and this is a direct consequence of the independence of $X_1, X_2, X_3$. 
+
+The argument above can be generalised to prove the following result:
+\begin{cor}
+  If for $1 \leq i \leq n$, $1 \leq j \leq m(i)$, $X_{i, j}$ are independent, and $f_i: \realR^{m(i)} \to \realR$ are measuable, then $f_i(X_{i, 1}, \dotsc, X_{i, m(i)})$ are independent.
+\end{cor}
+We prove the special case with $n = 2$, $m(1) = 1$, $m(2) = 2$, $f_1(x) = x$ and $f_2(x, y) = xy$ above, and leave the proof for the general case to you.
+
+Now we generalise a result in last section:
+\begin{cor}
+  Suppose random variables $X_1, \dotsc, X_n$ are either all non-negative or $E \lvert X_i \rvert < \infty$ for all $i = 1, \dotsc, n$. Then
+  \begin{equation*}
+    E(X_1 \dotsm X_n) = E(X_1) \dotsm E(X_n).
+  \end{equation*}
+\end{cor}
+\begin{proof}
+  The $n = 2$ case is already proved. If $n > 2$, we use induction, and denote $Y = X_1 \dotsm X_{n - 1}$. We have that $Y$ and $X_n$ are independent. If all $X_i \geq 0$, then $Y \geq 0$. If all $E \lvert X_i \rvert < \infty$, then by the induction hypothesis, $E \lvert Y \rvert = E (\lvert X_1 \rvert \dotsm \lvert X_{n - 1} \rvert) = E \lvert X_1 \rvert \dotsm E \lvert X_{n - 1} \rvert < \infty$. Thus in either case,
+  \begin{equation*}
+    E(X_1 \dotsm X_n) = E(Y X_n) = EY EX_n = EX_1 \dotsm EX_{n - 1} E X_n,
+  \end{equation*}
+  and finish the proof.
+\end{proof}
+
+Now we start to introduce the first of the two most important topics in this module: the Law of Large Numbers (LLN), (while the other is the Central Limit Theorem, (CLT)). Basically, a law of large numbers is that a sequence of random variables $\{ Y_n \}$ converge to a fixed number. The problem is: In what sense do we talk about the convergence? Recall that a random variable is a function on the probability space. In calculus we learn the pointwise convergence and the uniform convergence, and they are not equivalent. In the further study of real analysis we learn about the $L^1$ convergence and $L^2$ convergence (for $L^1$/$L^2$ integrable functions), and the weak* convergence (if we view the space of integrable functions as a Banach/Hilbert space). First we consider weak laws of large numbers, which involve some weak form of convergence, in contrast to the strong laws of large numbers to be introduced later.
+
+\begin{thm} \label{thm:L^2_weak_LLN}
+  Let $X_1, X_2, \dotsc$ be independent random variables with $E X_i = \mu$ and $\var(X_i) \leq C < \infty$. If $S_n = X_1 + X_2 + \dotsb + X_n$, then $S_n/n \to \mu$ in $L^2$.
+\end{thm}
+\begin{proof}
+  We need to show that
+  \begin{equation*}
+    \lim_{n \to \infty} \int \left( \frac{S_n}{n} - \mu \right)^2 dP = \lim_{n \to \infty} E \left( \frac{S_n}{n} - \mu \right)^2 = 0.
+  \end{equation*}
+  Noting that $E(S_n/n) = n^{-1} E(X_1 + \dotsb + X_n) = n^{-1} (E(X_1) + \dotsb + E(X_n)) = \mu$, we only need to show that $\lim_{n \to \infty} \var(S_n/n) \to 0$. Using the independence of $X_1, X_2, \dotsc$, we have
+  \begin{equation*}
+    \lim_{n \to \infty} \var \left( \frac{S_n}{n} \right) = \lim_{n \to \infty} \frac{S_n}{n^2} = \lim_{n \to \infty} \frac{\var(X_2) + \dotsb + \var(X_n)}{n^2} \leq \lim_{n \to \infty} \frac{nC}{n^2} = 0,
+  \end{equation*}
+  and finish the proof.
+\end{proof}
+\begin{rmk}
+  Here we only need the consequence of the independence of $X_1, X_2, \dotsc$ that $\var(X_1 + \dotsc + X_n) = \var(X_1) + \dotsb + \var(X_n)$, and this kind of identities hold as long as $E(X_i X_j) = E(X_i)E(X_j)$ for all $i \neq j$, which is the \emph{uncorrelation} of $X_1, X_2, \dotsc$. So Theorem \ref{thm:L^2_weak_LLN} holds if the independence condition is replaced by the weaker condition that $X_1, X_2, \dotsc$ are uncorrelated. 
+\end{rmk}
+\begin{rmk}
+  Theorem \ref{thm:L^2_weak_LLN}, and other laws of large numbers, are mostly applied in the setting that $X_1, X_2, \dotsc$ are ``independent and identically distributed'' (\iid\ for short).
+\end{rmk}
+
+The $L^2$ convergence is not the commonly used convergence in probability theory, since it does not sound ``probabilistic''. One important convergence is the convergence in probability, as defined below:
+\begin{defn}
+  We say a sequence of random variables $\{ Y_n \}$ converges to $Y$ in probability if for all $\epsilon > 0$, $P(\lvert Y_n - Y \rvert > \epsilon) \to 0$ as $n \to \infty$.
+\end{defn}
+A simple result is
+\begin{lem} \label{lem:Lp_conv_conv_in_probab}
+  If $p > 0$ and $E \lvert Y_n \rvert^p \to 0$, then $Y_n \to 0$ in probability.
+\end{lem}
+\begin{proof}
+  Given any $\epsilon, \delta > 0$, there is $N$ such that for all $n > N$,
+  \begin{equation*}
+    \int \lvert Y_n \rvert^p dP < \delta \epsilon^p.
+  \end{equation*}
+  Then for $n > N$, $P(\lvert Y_n \lvert > \epsilon) < \delta$. Thus we prove the lemma.
+\end{proof}
+\begin{rmk}
+  This lemma is a consequence of the Chebyshev inequality. 
+\end{rmk}
+Then as a direct consequence of Lemma \ref{lem:Lp_conv_conv_in_probab} with $p = 2$, we have that Theorem \ref{thm:L^2_weak_LLN} implies
+\begin{thm}
+  Let $X_1, X_2, \dotsc$ satisfy the conditions in Theorem \ref{thm:L^2_weak_LLN}, and $\mu$ and $S_n$ be defined as in Theorem \ref{thm:L^2_weak_LLN}. Then $S_n/n \to \mu$ in probability.
+\end{thm}
+
+It turns out that for the average of \iid\ random variables to converge to their expectation in probability, the requirement that the variance is finite is unnecessary. We have the following result:
+\begin{thm} \label{thm:convenient_weak_LLN}
+  Let $X_1, X_2, \dotsc$ be \iid\ with $E \lvert X_i \rvert < \infty$ and $E X_i = \mu$. Let $S_n = X_1 + \dotsb + X_n$. Then $S_n/n \to \mu$ in probability.
+\end{thm}
+The proof of this theorem is more involved, and we need to establish some technical lemmas.
+\begin{lem} \label{lem:LLN_array}
+  For each $n$, let $X_{n, 1}, \dotsc, X_{n, n}$ be independent random variables. Let $b_n > 0$ be positive numbers with $b_n \to \infty$ as $n \to \infty$, and let $\bar{X}_{n, k} = X_{n, k} 1_{\lvert X_{n, k} \rvert \leq b_n}$, that is,
+  \begin{equation*}
+    \bar{X}_{n, k}(\omega) =
+    \begin{cases}
+      X_{n, k}(\omega) & \text{if $\lvert X_{n, k}(\omega) \rvert \leq b_n$}, \\
+      0 & \text{otherwise}.
+    \end{cases}
+  \end{equation*}
+  Suppose that as $n \to \infty$,
+  \begin{equation*}
+    \sum^n_{k = 1} P \left( \lvert X_{n, k} \rvert > b_n \right) \to 0, \quad \text{and} \quad \frac{1}{b^2_n} \sum^n_{k = 1} E \bar{X}^2_{n, k} \to 0.
+  \end{equation*}
+  If we let $S_n = X_{n, 1} + \dotsb + X_{n, n}$ and $a_n = \sum^n_{k = 1} E \bar{X}_{n, k}$, then $(S_n - a_n)/b_n \to 0$ in probability.
+\end{lem}
+Before giving the proof to Lemma \ref{lem:LLN_array}, we state a lemma that is similar to Lemma \ref{lem:Lp_conv_conv_in_probab}, whose proof is left to you.
+\begin{lem} \label{lem:LLN_technical}
+  Let $S_1, S_2, \dotsc$ be random variables such that $E S_n = \mu_n$ and $\var(S_n) = \sigma^2_n$. Suppose $\{ b_n \}$ are positive numbers and $\sigma^2_n/b^2_n \to 0$ as $n \to \infty$, then $(S_n - \mu_n)/b_n \to 0$ in probability.
+\end{lem}
+\begin{proof}[Proof of Lemma \ref{lem:LLN_array}]
+  First consider $\bar{S}_n = \bar{X}_{n, 1} + \dotsb + \bar{X}_{n, n}$ instead of $S_n$. $\bar{S}_n$ has the advantage that its variance is finite. Furthermore,
+  \begin{equation*}
+    \var(\bar{S}_n) = \sum^n_{k = 1} var(\bar{X}_{n, k}) \leq \sum^n_{k = 1} E \lvert \bar{X}_{n, k} \rvert^2.
+  \end{equation*}
+  (Here we use that $\bar{X}_{n, 1}, \dotsc, \bar{X}_{n, n}$ are independent. Why?) Thus by Lemma \ref{lem:LLN_technical}, we have that $(\bar{S}_n - a_n)/b_n \to 0$ in probability, or equivalently, for any $\epsilon, \delta > 0$, there is $N$ such that for all $n > N$, $P(\lvert (\bar{S}_n - a_n)/b_n \rvert > \epsilon) < \delta$.
+
+  Next we use the property that $X_{n, k}$ and $\bar{X}_{n, k}$ are similar. We have that for any $\delta' > 0$, there is $N'$ such that for all $n > N'$,
+  \begin{equation*}
+    P(S_n \neq \bar{S_n}) \leq \sum^n_{k = 1} P(X_{n, k} \neq \bar{X}_{n, k}) = \sum^n_{k = 1} P( \lvert X_{n, k} \rvert > b_n) < \delta'.
+  \end{equation*}
+  Therefore for $n > \max(N, N')$, $P(\lvert (S_n - a_n)/b_n \rvert > \epsilon) \leq P(\lvert (\bar{S}_n - a_n)/b_n \rvert > \epsilon) + P(S_n \neq \bar{S}_n) < \delta + \delta'$, and we prove the lemma.
+\end{proof}
+The lemma above for arrays of random variables imply the following result for a sequence of random variables, and it is called the weak law of large numbers.
+\begin{thm}[Weak law of large numbers] \label{thm:weak_LLN}
+  Let $X_1, X_2, \dotsc$ be \iid\ with
+  \begin{equation*}
+    x P(\lvert X_i \rvert > x) \to 0, \quad \text{as $x \to \infty$}.
+  \end{equation*}
+  Let $S_n = X_1 + \dotsb + X_n$ and let $\mu_n = E(X_1 1_{\lvert X_1 \rvert \leq n})$. Then $S_n/n - \mu_n \to 0$ in probability.
+\end{thm}
+\begin{proof}
+  We use the result of Lemma \ref{lem:LLN_array}. Let $X_{n, k} = X_k$ and $b_n = n$. Then
+  \begin{equation*}
+    \lim_{n \to \infty} \sum^n_{k = 1} P(\lvert X_{n, k} > b_n) = \lim_{n \to \infty} \sum^n_{k = 1} P(\lvert X_k \rvert > n) = \lim_{n \to \infty} n P(\lvert X_1 \rvert > n) = 0.
+  \end{equation*}
+  On the other hand,
+  \begin{equation*}
+    \lim_{n \to \infty} \frac{1}{b^2_n} \sum^n_{k = 1} E \bar{X}^2_{n, k} = \lim_{n \to \infty} \frac{1}{n^2} \sum^n_{k = 1} E(X_k 1_{\lvert X_k \rvert \leq n})^2 = \lim_{n \to \infty} \frac{1}{n} E(X_1 1_{\lvert X_1 \lvert \leq n})^2.
+  \end{equation*}
+  We denote $\lvert X_1 \rvert 1_{\lvert X_1 \rvert \leq n} = Y_n$. Then
+  \begin{equation*}
+    \begin{split}
+      E(Y^2_n) = {}& \int_{\Omega} Y^2_n dP = \int_{\Omega} \left( \int^{Y_n}_0 2y dy \right) dP = \int_{\Omega} \left( \int^{\infty}_0 2y 1_{Y_n > y} dy \right) dP \\
+      = {}& \int^{\infty}_0 \left( \int_{\Omega} 2y 1_{Y_n > y} dP \right) dy = \int^{\infty}_0 2y \left( \int_{\Omega} 1_{Y_n > y} dP \right) dy \\
+      = {}& \int^{\infty}_0 2y P(Y_n > y) dy.
+    \end{split}
+  \end{equation*}
+  Using that $0 \leq Y_n \leq n$ and for all $y \in [0, n]$, $P(Y_n > y) \leq P(\lvert X_1 \rvert > y)$, we have
+  \begin{equation*}
+    \frac{1}{n} E(Y^2) \leq \int^n_0 2y P(\lvert X_1 \rvert > y) dy = 2 \int^1_0 nx P(\lvert X_1 \rvert > nx) dx.
+  \end{equation*}
+  Since for all $x > 0$, $nx P(\lvert X_1 \rvert > nx) \to 0$, we have (exercise: justify the argument)
+  \begin{equation*}
+    \lim_{n \to \infty} \frac{1}{b^2_n} \sum^n_{k = 1} E \bar{X}^2_{n, k} = \lim_{n \to \infty} \frac{1}{n} E(Y^2) = 0.
+  \end{equation*}
+  Thus Lemma \ref{lem:LLN_array} yields the theorem.
+\end{proof}
+
+An intermediate step in the proof can ge generalised to the following result:
+\begin{lem}
+  If $Y \geq 0$ and $p > 0$, then $E(Y^p) = \int^{\infty}_0 p y^{p - 1} P(Y > y) dy$.
+\end{lem}
+The proof is left as an exercise.
+
+At last, we can prove Theorem \ref{thm:convenient_weak_LLN}, the practically most convenient form of the weak law of large numbers.
+\begin{proof}[Proof of Theorem \ref{thm:convenient_weak_LLN}]
+  Since $E \lvert X_1 \rvert < \infty$, by the dominanted convergence  theorem, we have
+  \begin{equation*}
+    \lim_{x \to \infty} xP(\lvert X_1 \rvert > x) = 0 \quad \text{and} \quad \lim_{n \to \infty} E(X_1 1_{\lvert X_1 \rvert \leq n}) = E X_1.
+  \end{equation*}
+  Hence Theorem \ref{thm:weak_LLN} implies Theorem \ref{thm:convenient_weak_LLN}.
+\end{proof}
+
+\pagebreak
+
+\section{Borel-Cantelli lemmas and strong law of large numbers}
+
+In this section we introduce the \emph{strong} laws of large numbers, that is, the convergence of the average of random variables to their expectation, \emph{almost surely}. Recall that we say a sequence of random variables $\{ X_n \}$ converges to $X$ \as\ if for all $\omega \in \Omega \setminus E$, $X_n(\omega) \to X(\omega)$ as $n \to \infty$, where $E \in \F$ and $P(E) = 0$. We call this kind of laws of large strong, because the almost sure convergence implies the convergence in probability, but the converse is not true. To see it, suppose $X_n \to X$ \as\, we define the random variable $Y_n = \sup_{k \geq n} \lvert X_k - X \rvert$. They are non-negative and decreases as $n$ increases. Thus $E Y_n$ are non-negative and decreasing. Furthermore, we have $\liminf_{n \to \infty} Y_n = 0$ \as. By Fatou's lemma,
+\begin{equation*}
+  \liminf_{n \to \infty} E Y_n \leq E \left( \liminf_{n \to \infty} Y_n \right) = 0.
+\end{equation*}
+So for any $\epsilon, \delta > 0$, there is $N$ such that for all $n > N$, $E \lvert X_n - X \rvert \leq E Y_n < \epsilon \delta$, and then $P(\lvert X_n - X \rvert > \epsilon) < \delta$.
+
+On the other hand, we have examples that $X_n \to X$ in probability but not almost surely. To construct an example, we define random variables $\{ X_{2, 1}, X_{2, 2}, X_{4, 1}, X_{4, 2}, X_{4, 3}, \linebreak[4] X_{4, 4}, X_{8, 1}, \dotsc, X_{8, 8}, X_{16, 1}, \dotsc \}$ on the probability space $([0, 1], \B, \lambda)$, where $\lambda$ is the Lebesgue measure, such that
+\begin{equation*}
+  X_{2^n, k}(\omega) =
+  \begin{cases}
+    1 & \text{if $(k - 1)/2^n \leq \omega \leq k/2^n$}, \\
+    0 & \text{otherwise}.
+  \end{cases}
+\end{equation*}
+Then the sequence converges to $0$ in probability, but does not converge to any limit almost surely.
+
+The tool to prove strong laws of large numbers is the Borel-Cantelli lemma, and the second Borel-Cantelli lemma. They are about the probability that infinitely many events occurs, given the probability of each event. To be precise, we consider a sequence of events $A_1, A_2, \dotsc \in \F$ on the probability space $(\Omega, \F, P)$. Then the event $\{ \text{at least one $A_n$ occurs} \}$ is simply $A_1 \cup A_2 \cup \dotsb$, the event $\{ \text{at least $k$ of $A_n$ occur} \}$ is $\bigcup^{\infty}_{n_1 = 1} \bigcup^{\infty}_{n_2 = n_1 + 1} \dotsb \bigcup^{\infty}_{n_k = n_{k - 1} + 1} (A_{n_1} \cap A_{n_2} \cap \dotsb \cap A_{n_k}$,  and the event $\{ \text{at least infinitely many}$ $\text{ $A_n$ occur} \}$ is
+\begin{equation*}
+  \limsup_{n \to \infty} A_n = \bigcap^{\infty}_{n = 1} \left( \bigcup^{\infty}_{k = n} A_k \right),
+\end{equation*}
+and we denote it as $A_n \io$ where $\io$ means ``infinitely often''.
+\begin{lem}[Borel-Cantelli]
+  If $\sum^{\infty}_{n = 1} P(A_n) < \infty$, then $P(A_n \io) = 0$.
+\end{lem}
+The intuitive interpretation of of this lemma is simple. Think each $A_n$ as a partial cover of $\Omega$. If the total area of the covers is finite, then the area of the region that is covered infinitely many times has to be zero. 
+\begin{proof}
+  To show that $P(A_n \io) = P(\limsup_{n \to \infty} A_n = 0$, it suffices to show that for all $\epsilon > 0$, there is $N$ such that $P(\bigcup^{\infty}_{n = N} A_n) < \epsilon$. Since $P(\bigcup^{\infty}_{n = N} A_n) \leq \sum^{\infty}_{n = N} P(A_n)$, we can take $N$ to be large enough such that $\sum^{\infty}_{n = N} P(A_n) < \epsilon$, and it is clear that such $N$ exists.
+\end{proof}
+
+The Borel-Cantelli theorem implies that if a sequence of random variables converges in probability, then there is a subsequence that converges almost surely. Actually we have a stronger result:
+\begin{thm} \label{thm:conv_ae_conv_in_prob}
+  The sequence of random variables $X_n \to X$ in probability, if and only if for any subsequence $X_{n(m)}$, there is a further subsequence $X_{n(m_k)}$ that converges almost surely to $X$.
+\end{thm}
+\begin{proof}
+  First suppose $X_n \to X$ in probability. Without loss of generality, we assume that $\{ X_{(n(m)} \} = \{ X_n \}$, and it suffices to show that there is a subsequence $X_{n_k}$ that converges to $X$ \as. We choose $X_{n_k}$ such that
+  \begin{equation*}
+    P \left( \lvert X_{n_k} - X \rvert > \frac{1}{k} \right) < \frac{1}{2^k}.
+  \end{equation*}
+  Denoting $A_k = \{ \lvert X_{n_k} - X \rvert > 1/k \}$, we have that $\sum^{\infty}_{k = 1} P(A_k) < 1$, and then $P(A_k \io) = 0$ by the Borel-Cantelli lemma. For all $\omega \notin A_k \io$, we have that there is $N$ such that $\omega \notin A_k$ for all $k > N$, that is, $\lvert X_{n_k}(\omega) - X(\omega) \rvert \leq 1/k$ for all $k > N$, and then $X_{n_k}(\omega) \to X(\omega)$. Thus we prove that $X_{n_k} \to X$ \as.
+
+  On the other hand, if $\{ X_n \}$ does not converge to $X$, then there exist $\epsilon, \delta > 0$ and a subsequence $\{ X_{n(m)} \}$ such that
+  \begin{equation*}
+    P \left( \lvert X_{n(m)} - X \rvert > \epsilon \right) > \delta \quad \text{for all $n(m)$}.
+  \end{equation*}
+  It is clear that any subsequence of $\{ X_{n(m)} \}$ does not converge to $X$ in probability. Suppose $\{ X_{n(m)} \}$ has a subsequence that converges to $X$ \as, then the subsequence also converge to $X$ in probability, and it is a contradiction. Thus we finish the proof.
+\end{proof}
+
+Theorem \ref{thm:conv_ae_conv_in_prob} connects the two kinds of convergence. As an application, we consider the convergence of $\{ f(X_n) \}$, where $\{ X_n \}$ converges and $f$ is a continuous function. In the setting of almost sure convergence, it is straightforward. $X_n(\omega) \to X(\omega)$ implies that $f(X_n(\omega)) \to f(X(\omega))$, so if $X_n \to X$ \as, then $f(X_n) \to f(X)$ \as. Furthermore, if $f$ is bounded, that is, $\lvert f(x) \rvert < M$ for all $x \in \realR$, then by the dominated convergence theorem, since $\lvert f(X_n) \rvert < M$, we have $E f(X_n) \to E f(X)$. The following corollary show that the results above are also valid if the convergence is in probability.
+\begin{cor}
+  If $f$ is a continuous function and $X_n \to X$ in probability, then $f(X_n) \to f(X)$ in probability. In addition, if $f$ is bounded, then $E f(X_n) \to E f(X)$.
+\end{cor}
+\begin{proof}
+  Suppose $X_n \to X$ in probability, then using Theorem \ref{thm:conv_ae_conv_in_prob}, we have that any subsequence $\{ X_{n(m)} \}$ has a further subsequence $\{ X_{n(m_k)} \}$ that converges \as\ to $X$. Thus any subsequence $\{ f(X_{n(m)}) \}$ has a further subsequence $\{ f(X_{n(m_k)}) \}$ that converges \as\ to $f(X)$. Using Theorem \ref{thm:conv_ae_conv_in_prob} conversely, we have that the sequence $\{ f(X_n) \}$ converges to $f(X)$ in probability.
+
+  To prove the remaining part of the theorem, we note that for any subsequence $\{ E f(X_{n(m)}) \}$ of $\{ E f(X_n) \}$, it has a further subsequence $\{ E f(X_{n(m_k)}) \}$ that converges to $E f(X)$, since we can take the further subsequence $f(X_{n(m_k)})$ to converge \as to $f(X)$. Hence we finish the proof by the simple fact: If any subsequence of $\{ x_n \} \subseteq \realR$ has a further subsequence that converges to $x$, then $x_n \to x$.
+\end{proof}
+
+The converse of the Borel-Cantelli lemma is not true, and it is an exercise for you to find a counterexample. However, with the independence of events, we have the following result.
+\begin{lem}[Second Borel-Cantelli]
+  If the events $A_n$ are independent, then $\sum^{\infty}_{n = 1} P(A_n) = \infty$ implies that $P(A_n \io) = 1$.
+\end{lem}
+\begin{proof}
+  It suffices to show that for all $n$, $P(\bigcup^{\infty}_{k = n} A_k) = 1$, or equivalently, $P(\bigcap^{\infty}_{k = n} A^c_k) = 0$. Since $A_n, A_{n + 1}, \dotsc$ are independent, $A^c_n, A^c_{n + 1}, \dotsc$ are also independent, and for any $N \geq n$, we have
+  \begin{equation*}
+    \begin{split}
+      P \left( \bigcap^{\infty}_{k = n} A^c_k \right) \leq {}& P \left( \bigcap^N_{k = n} A^c_k \right) = \prod^N_{k = n} P(A^c_k) = \exp \left( \sum^N_{k = n} \log(1 - P(A_k)) \right) \\
+      \leq {}& \exp \left( -\sum^N_{k = n} P(A_k) \right).
+    \end{split}
+  \end{equation*}
+  Here we use the inequality that $\log(1 - x) \leq -x$ for all $x \in [0, 1]$. Since for any $\epsilon > 0$, we can let $N$ large enough such that $\sum^N_{k = n} P(A_k) > -\log \epsilon$, we can make the right-hand side of the inequality above less than $\epsilon$, and have $P(\bigcap^{\infty}_{k = n} A^c_k) < \epsilon$. Since $\epsilon$ is arbitrary, we derive that $P(\bigcap^{\infty}_{k = n} A^c_k) = 0$ and finish the proof.
+\end{proof}
+
+An application of the second Borel-Cantelli lemma is the following negative result for the strong law of large numbers.
+\begin{thm} \label{thm:converse_SLLN}
+  If $X_1, X_2, \dotsc$ are \iid\ with $E \lvert X_i \rvert = \infty$, then $P( \lvert X_n \rvert \geq n \io) = 1$. So if $S_n = X_1 + \dotsb + X_n$, then $P(\lim_{n \to \infty} S_n/n \text{ exists } \in (-\infty, \infty)) = 0$.
+\end{thm}
+\begin{proof}
+  Let $\mu$ be the distribution of $X_1$. Then $E \lvert X_1 \rvert = \int \lvert x \rvert \mu(dx)$ and $P(\lvert X_n \rvert \geq n) = P(\lvert X_1 \rvert \geq n) = \int 1_{\lvert x \rvert \geq n} \mu(dx)$. We have
+  \begin{equation*}
+    P(\lvert X_1 \rvert \geq 1) + P(\lvert X_2 \rvert \geq 2) + \dotsb = \int f(x) \mu(dx), \quad \text{where $f(x) = k$ for all $k \leq \lvert x \rvert < k + 1$}.
+  \end{equation*}
+  It is clear that
+  \begin{equation*}
+    \int f(x) \mu(dx) \leq \int \lvert x \rvert \mu(dx) \leq \int (f(x) + 1) \mu(dx) = \int f(x) \mu(dx) + 1,
+  \end{equation*}
+  and so $P(\lvert X_1 \rvert \geq 1) + P(\lvert X_2 \rvert \geq 2) + \dotsb = \infty$. Using the second Borel-Cantelli lemma, we have that $P( \lvert X_n \rvert \geq n \io) = 1$.
+
+  Next, denote the set $A_k \subseteq \Omega$ as the set $\{ \omega \mid \lim_{n \to \infty} S_n(\omega)/n \text{ exists } \in [-k, k] \}$. We can check that $A_k \in \F$. Below we show that $A_k \subseteq \Omega \setminus \{ \lvert X_n \rvert \geq n \io \}$, and so $P(A_k) = 0$. Hence we derive that $P(\lim_{n \to \infty} S_n/n \text{ exists } \in (-\infty, \infty)) = P(A_1 \cup A_2 \cup \dotsb) = 0$.
+
+  Suppose $\omega \in A_k$. Then there exists $c \in [-k, k]$ and $N$ such that for all $n > N$,
+  \begin{equation*}
+    \left( c - \frac{1}{3} \right) n < S_n(\omega) = X_1(\omega) + \dotsb + X_n(\omega) < \left( c + \frac{1}{3} \right) n.
+  \end{equation*}
+  We have
+  \begin{equation*}
+    \begin{split}
+      \lvert X_{n + 1}(\omega) \rvert = {}& \lvert S_{n + 1}(\omega) - S_n(\omega) \rvert < \left( c + \frac{1}{3} \right) (n + 1) - \left( c - \frac{1}{3} \right) n = \frac{2}{3} n + c + \frac{1}{3} \\
+      \leq {}& \frac{2}{3} n + k + \frac{1}{3}.
+    \end{split}
+  \end{equation*}
+  Suppose without loss of generality that $N > 3k$, then $\lvert X_{n + 1}(\omega) \rvert < n + 1$ for all $n > N$, which means that $\omega \notin \{ \lvert X_n \rvert \geq n \io \}$.
+\end{proof}
+
+The theorem above implies that the condition $E \lvert X_i \rvert < \infty$ is necessary for a reasonable strong law of large numbers, in contrast to the weak law of large numbers where we only require $nP(\lvert X_n \rvert \geq n) \to 0$ as $n \to \infty$ in Theorem \ref{thm:weak_LLN}. (To be fair, we need that $\mu_n$ converges to a limit in Theorem \ref{thm:weak_LLN} to make the result comparable to Theorem \ref{thm:converse_SLLN}. But $nP(\lvert X_n \rvert \geq n) \to 0$ together with the convergence of $\{ \mu_n \}$ is still weaker than $E \lvert X_i \rvert < \infty$.
+
+Finally we give the proof of the strong law of large numbers, which is slightly stronger than the converse of Theorem \ref{thm:converse_SLLN}.
+
+\begin{thm} \label{thm:Strong_LLN}
+  Let $X_1, X_2, \dotsc$ be pairwise independent identically distributed random variables with $E \lvert X_i \rvert < \infty$. Let $E X_i = \mu$ and $S_n = X_1 + \dotsb + X_n$. Then $S_n/n \to \mu$ \as\ as $n \to \infty$.
+\end{thm}
+Before giving the proof to Theorem \ref{thm:Strong_LLN}, we remark that the \emph{pairwise} independence of random variables $X_1, X_2, \dotsc$ means that any pair of random variables $X_i, X_j$ are independent, but the independence of three or more random variables may fail. So this condition is weaker than the independence of $\{ X_n \}$.
+
+The basic idea of the proof of Theorem \ref{thm:Strong_LLN} is again the truncation.
+\begin{lem} \label{lem:truncation_SLLN}
+  Let $Y_k = X_k 1_{\lvert X_k \rvert \leq k}$ and $T_n = Y_1 + \dotsc + Y_n$. Then Theorem \ref{thm:Strong_LLN} is equivalent to that $T_n/n \to \mu$ \as.
+\end{lem}
+\begin{proof}
+  If we can show that $X_k = Y_k$ almost surely for all large enough $k$, then almost surely $(S_n/n - T_n/n) \to 0$, and the equivalence is proved. Next, $X_k(\omega) = Y_k(\omega)$ for all large enough $k$ if and only if $\omega \in \Omega \setminus \{ \lvert X_k \rvert > k \io \}$. By the assumption that $E \lvert X_i \rvert < \infty$, we can show that $P(\lvert X_1 \rvert > 1) + P(\lvert X_2 \rvert > 2) + \dotsb < \infty$, see the proof of Theorem \ref{thm:converse_SLLN}. Thus the applicaiton of the Borel-Cantelli lemma implies that $P\{ \lvert X_k \rvert > k \io \} = 0$ and we finish the proof.
+\end{proof}
+
+Below we prove that $T_n/n \to \mu$ \as. First we derive a technical lemma.
+\begin{lem}
+  For the random variables $Y_k$ defined in Lemma \ref{lem:truncation_SLLN}, we have
+  \begin{equation*}
+    \sum^{\infty}_{k = 1} \frac{1}{k^2} E Y^2_k < \infty.
+  \end{equation*}
+\end{lem}
+\begin{proof}
+  Let $\mu$ be the distribution of $X_1$. Then
+  \begin{equation*}
+    E Y^2_k = \int x^2 1_{\lvert x \rvert \leq k} \mu(dx), \quad \text{and} \quad  E Y^2_1 + E Y^2_2 + \dotsb = \int x^2 g(x) \mu(dx), 
+  \end{equation*}
+  where
+  \begin{equation*}
+    g(x) =
+    \begin{cases}
+      \sum^{\infty}_{n = k + 1} \frac{1}{n^2} & \text{for $\lvert x \rvert \in (k, k + 1]$}, \\
+      \sum^{\infty}_{n = 1} \frac{1}{n^2} = \frac{\pi^2}{6} < 1.645 & \text{for $x \in [-1, 1]$}.
+    \end{cases}
+  \end{equation*}
+  Note that for $\lvert x \rvert > 1$,
+  \begin{equation*}
+    g(x) = g(\lvert x \rvert) < \int^{\infty}_{\lvert x \rvert} \frac{1}{t^2} dt = \frac{1}{\lvert x \rvert},
+  \end{equation*}
+  and then
+  \begin{equation*}
+    \begin{split}
+      \int x^2 g(x) \mu(dx) = {}& \int^1_{-1} x^2 g(x) \mu(dx) + \int_{\realR \setminus [-1, 1]} x^2 g(x) \mu(dx) \\
+      \leq {}& \int^1_{-1} \frac{\pi^2}{6} \mu(dx) + \int_{\realR \setminus [-1, 1]} \lvert x \rvert \mu(dx) \\
+      \leq {}& 1.645 + E \lvert X_1 \rvert < \infty.
+    \end{split}
+  \end{equation*}
+\end{proof}
+
+The next lemma is left as an exercise.
+\begin{lem}
+  If $X'_n \to \mu'$ \as, and $X''_n \to \mu''$ \as, then $\{ X_n = X'_n \pm X''_n \}$ converges to $\mu = \mu' \pm \mu''$ \as.
+\end{lem}
+We are going to use the lemma above in the special case that $X_n = X^+_n - X^-_n$, where $X^{\pm}_n$ is the positive/negative part of $X_n$. If $E \lvert X_i \rvert < \infty$, then $E X^+ < \infty$ and $E X^- < \infty$. Thus we only need to prove Theorem \ref{thm:Strong_LLN} in the case that $X_n$ are non-negative.
+
+\begin{proof}[Proof of Theorem \ref{thm:Strong_LLN}]
+  First we show that a subsequence of $\{ T_n \}$ converges to $\mu$ \as. Let $\alpha > 1$, and define $k(n) = [\alpha^n]$. We take the subsequence as $\{ T_{k(n)} \}$.
+
+  For all $\epsilon > 0$, we have
+  \begin{equation*}
+    \begin{split}
+      P \left( \left\lvert \frac{T_{k(n)}}{k(n)} - E \frac{T_{k(n)}}{k(n)} \right\rvert > \epsilon \right) \leq {}& \epsilon^{-2} E \left( \frac{T_{k(n)}}{k(n)} - E \frac{T_{k(n)}}{k(n)} \right)^2 = \frac{\epsilon^{-2}}{k(n)^2} \var(T_{k(n)}) \\
+      = {}& \frac{\epsilon^{-2}}{k(n)^2} \sum^{k(n)}_{m = 1} \var(Y_m).
+    \end{split}
+  \end{equation*}
+  Here we use Chebyshev's inequality and that $Y_1, \dotsc, Y_m$ are pairwise independent. Then
+  \begin{equation*}
+    \begin{split}
+      \sum^{\infty}_{n = 1} P \left( \left\lvert \frac{T_{k(n)}}{k(n)} - E \frac{T_{k(n)}}{k(n)} \right\rvert > \epsilon \right) = {}& \epsilon^{-2} \sum^{\infty}_{n = 1} \frac{1}{k(n)^2} \sum^{k(n)}_{m = 1} \var(Y_m) \\
+      = {}& \epsilon^{-2} \sum^{\infty}_{m = 1} \var(Y_m) \sum_{n: k(n) \geq m} \frac{1}{k(n)^2}.
+    \end{split}
+  \end{equation*}
+  Using the inequality (exercise)
+  \begin{equation*}
+    \sum_{n: \alpha^n \geq m} \frac{1}{[\alpha^n]^2} \leq \frac{4}{(1 - \alpha^{-2}) m^2},
+  \end{equation*}
+  we have
+  \begin{equation*}
+    \sum^{\infty}_{n = 1} P \left( \left\lvert \frac{T_{k(n)}}{k(n)} - E \frac{T_{k(n)}}{k(n)} \right\rvert > \epsilon \right) \leq \frac{4 \epsilon^{-2}}{(1 - \alpha^{-2})} \sum^{\infty}_{m = 1} E(Y^2_m) \frac{1}{m^2} < \infty.
+  \end{equation*}
+  Thus by the Borel-Cantelli lemma, $T_{k(n)}/k(n) - E (T_{k(n)}/k(n))$ converges to $0$ \as. Since $E Y_k \to \mu = E X_1$ by the dominated convergence theorem (also by the monotone convergence theorem, since we assume $X_1$ is non-negative,) we have $E (T_{k(n)}/k(n)) \to \mu$, and then we prove that the subsequence $\{ T_{k(n)} \}$ converges to $\mu$.
+
+  To extend the convergence from the subsequence to the whole sequence, we note that for $k(n) \leq m < k(n + 1)$, by the non-negativity of $Y_m$, we have
+  \begin{equation*}
+    \frac{k(n)}{k(n + 1)} \frac{T_{k(n)}}{k(n)} = \frac{T_{k(n)}}{k(n + 1)} \leq \frac{T_m}{m} \leq \frac{T_{k(n + 1)}}{k(n)} = \frac{k(n + 1)}{k(n)} \leq \frac{T_m}{m} \leq \frac{T_{k(n + 1)}}{k(n) + 1}.
+  \end{equation*}
+  Using the property that $k(n + 1)/k(n) \to \alpha$ as $n \to \infty$, we derive that
+  \begin{equation*}
+    \frac{1}{\alpha} \mu \leq \liminf_{m \to \infty} \frac{T_m}{m} \leq \limsup_{m \to \infty} \frac{T_m}{m} \leq \alpha \mu.
+  \end{equation*}
+  Since $\alpha > 1$ can be arbitrarily close to $1$, we derive the desired almost sure convergence for $T_m/m$.
+\end{proof}
+
+\pagebreak
+
+\section{Weak convergence}
+
+We have learnt the convergence in probability and the almost sure convergence. Although they are defined as $X_n \to X$ where $X$ is a random variable, in previous applications we took $X$ to be a constant number. The constant ``random'' variable is the only random variable that can be determined by its distribution function. Other random variables cannot. For example, in the simplest case that the probability space is $(\Omega = (\text{head}, \text{tail}), \F = \{ \emptyset, \Omega, \{ \text{head} \}, \{ \text{tail} \} \}, P(\text{head}) = P(\text{tail}) = 1/2)$, the random variables $X$ and $X'$, defined as
+\begin{equation*}
+  X(\omega) =
+  \begin{cases}
+    1 & \text{if $\omega =$ head}, \\
+    0 & \text{if $\omega =$ tail}, 
+  \end{cases}
+  \quad X'(\omega) =
+  \begin{cases}
+    0 & \text{if $\omega =$ head}, \\
+    1 & \text{if $\omega =$ tail}.
+  \end{cases}
+\end{equation*}
+Both have the distribution function
+\begin{equation*}
+  F(x) =
+  \begin{cases}
+    0 & \text{if $x < 0$}, \\
+    1/2 & \text{if $0 \leq x \leq 1$}, \\
+    1 & \text{if $x \geq 0$},
+  \end{cases}
+\end{equation*}
+and they are both Bernoulli random variables. Actually, in many cases we do not need the information of the random variable other than its distribution function. ($X$ and $X'$ are equally useful in practice.) Recall that for random variable whose distribution functions are exactly the same, like $X$ and $X'$ above, we say they are equal in distribution. But how to understand the statement that two random variables are approximately equal in distribution? More importantly, how to describe that a sequence of random variables $X_n$ converge to $X$ in distribution? One obvious way to describe the convergence in distribution is by the convergence of their distribution functions. As an example, we let $X_n$ be the random variables on the $\{ \text{head}, \text{tail} \}$ probability space just described, and let
+\begin{equation*}
+  X_n =
+  \begin{cases}
+    1 & \text{if $\omega = \text{head}$}, \\
+    1/n & \text{if $\omega = \text{tail}$}.
+  \end{cases}
+\end{equation*}
+Then $X_n$ converges to $X$ \as\ and then in probability. It would be unreasonable if $\{ X_n \}$ fails to converge to $X$ in probability. But the distribution function of $X_n$ is
+\begin{equation*}
+  F_n(x) =
+  \begin{cases}
+    0 & \text{if $x < 1/n$}, \\
+    1/2 & \text{if $1/n \leq x \leq 1$}, \\
+    1 & \text{if $x \geq 0$}.
+  \end{cases}
+\end{equation*}
+Although the graph of $F_n$ approaches that of $F$ in an obvious way, we have that if we measure the distance between $F_n$ and $F$ by the maximal norm,
+\begin{equation*}
+  \lVert F_n - F \rVert_{\infty} \geq \lvert F_n(0) - F(0) \rvert = 1/2.
+\end{equation*}
+So in this sense, $\{ F_n \}$ does not converge to $F$.
+
+\begin{defn} \label{defn:conv_in_distr}
+  A sequence of random variables $X_n$, whose distribution functions are $F_n$, converges to a random variable $X$, whose distribution function is $F$, if $F_n(x) \to F(x)$ at all continuous points of $F$. In this case, we also say the sequence of distirbution functions $\{ F_n \}$ converges to $F$.
+\end{defn}
+We denote $X_n \weakto X$ ($F_n \weakto F$ respectively) if $X_n \to X$ ($F_n \to F$ respectively) in distribution.
+
+The different between this definition and the heuristic understanding of the convergence in distribution is not as huge as it seems to be.
+\begin{lem} \label{lem:countable_discontinuity}
+  A non-decreasing function $f: \realR \to \realR$ can be discontinuous at countably many points at most.
+\end{lem}
+\begin{proof}
+  At any point $x$  that $f$ is not continuous, we have $a_x := \lim_{y \upto x} f(y) < \lim_{y \downto x} f(y) =: b_x$, and these intervals $(a_x, b_x)$ for all discontinuous points are disjoint. There can be at most countably many disjoint open intervals on the real line, since each such interval contains a rational number, and then the number of disjoint open intervals is no more than the number of rational numbers. Thus the number of discontinuous points of $f$ is at most countable.
+\end{proof}
+
+\begin{rmk}
+  The convergence in distribution is also called \emph{weak} convergence. The term weak has two meanings. One is intuitive: It is weaker than the convergence in probability, and then weaker than the almost sure convergence. The other meaning is that it is related to the weak* convergence in functional analysis. In the following theorem, if we interpret the bounded continuous functions as linear functionals, then the convergence of the sequence of random variables is the weak*  convergence in the Banach space that we have not defined yet.
+\end{rmk}
+\begin{thm}
+  If random variables $\{ X_n \}$ converge to $X$ in probability, then they converge to $X$ weakly.
+\end{thm}
+\begin{proof}
+  Let $F(x)$ be the distribution function of $X$, and $x$ be a continuous point of $F$, that is, for all $\epsilon > 0$, there is $\delta > 0$ such that $0 \leq F(x + \delta) - F(x) < \epsilon$ and $0 \leq F(x) - F(x - \delta) < \epsilon$. Then since $X_n \to X$ in probability, there exists $N$ such that for all $n > N$, $P(\lvert X_n - X \rvert > \delta) < \epsilon$. Then for $n > N$
+  \begin{equation*}
+    \begin{split}
+      \lvert F_n(x) - F(x) \rvert \leq {}& P(X_n \leq x, X > x) + P(X_n > x, X \leq x) \\
+      \leq {}& P(X_n \leq x, X > x + \delta) + P(x \leq X \leq x + \delta) \\
+      & + P(X_n > x, X \leq x - \delta) + P(x - \delta < X \leq x) \\
+      \leq {}& \epsilon + \epsilon + \epsilon + \epsilon = 4\epsilon,
+    \end{split}
+  \end{equation*}
+  and we prove the desired convergence.
+\end{proof}
+
+A direct consequence of this result is that if $\{ X_n \} \to X$ \as, then $X_n \weakto X$. We have the following result which is in a sense the converse of the statement above.
+\begin{thm} \label{thm:representation}
+  If distribution functions $F_n \weakto F_{\infty}$, then there are random variables $\{ X_n \}$ and $X_{\infty}$ with distribution functions $F_n$ and $F$, such that $X_n \to X$ \as.
+\end{thm}
+\begin{proof}
+  We construct $X_*$, $* = n$ or $\infty$, on the same probability space $(\Omega, \F, P)$ as follows. Let $\Omega = (0, 1)$, the interval on $\realR$, $\F = \text{Borel sets on $(0, 1)$}$, and $P = \lambda$, the Lebesgue measure. Let
+  \begin{equation*}
+    X_*(x) = \sup \{ y \mid F_*(y) < x \}.
+  \end{equation*}
+  So $X_*(x)$ is a non-decreasing function, and then it is a Lebesgue measurable function and a well-defined random variable. On the other hand,
+  \begin{equation*}
+    P(X_* \leq x) = \int^1_0 1_{X_*(t) \leq x} dt = \int^1_0 1_{\sup \{ y \mid F_*(y) < t \} \leq x} dt = \int^1_0 1_{F(x) \geq t} dt = F(x).
+  \end{equation*}
+  Note that in one step we used the argument ``If for all $y$ that $F_*(y) < t$ we have $y \leq x$, then $F_*(x) \geq t$'', and it is based on the right-continuity of $F_*$.
+
+  For any $t \in (0, 1)$, it is in one of the following three cases:
+  \begin{enumerate}
+  \item \label{enu:representation:Case_1}
+    There is a unique $x$ such that $F_{\infty}(x) = t$.
+  \item \label{enu:representation:Case_2}
+    $t$ is not in the range of $F_{\infty}$.
+  \item \label{enu:representation:Case_3}
+    There are $x_1 < x_2$ such that $F_{\infty}(x_1) = F_{\infty}(x_2) = t$.
+  \end{enumerate}
+
+  In Case \ref{enu:representation:Case_1}, we have $X_{\infty}(t) = \sup \{ y \mid F(y) < t \} = x$. Also we have that for any $\epsilon > 0$, there is $\delta > 0$ such that
+  \begin{equation*}
+    F_{\infty}(x + \epsilon) > F_{\infty}(x) + \delta = t + \delta, \quad F_{\infty}(x - \epsilon) < F_{\infty}(x) - \delta = t - \delta.
+  \end{equation*}
+  By Lemma \ref{lem:countable_discontinuity}, we have that there exist $x_1 \in (x - 2\epsilon, x - \epsilon)$ and $x_2 \in (x + \epsilon, x + 2\epsilon)$ such that $F_{\infty}$ is continuous at $x_1$ and $x_2$. Then by the convergence in probability, $F_n(x_1) \to F_{\infty}(x_1) < F_{\infty}(x) - \delta$ and $F_n(x_2) \to F_{\infty}(x_2) > F_{\infty}(x) + \delta$ as $n \to \infty$. We have that there exists $N$ such that for all $n > N$,
+  \begin{equation*}
+    F_n(x_1) \leq F_{\infty}(x) - \delta = t - \delta, \quad F_n(x_2) \geq F_{\infty}(x) + \delta = t + \delta.
+  \end{equation*}
+  Thus we have that for $n > N$
+  \begin{equation*}
+    X_n(t - \delta) \geq x_1 > x - \epsilon, \quad X_n(t + \delta) \leq x_2 < x + 2\epsilon,
+  \end{equation*}
+  which imply that $x - 2\epsilon < X_n(t) < x + 2\epsilon$. Since $\epsilon$ is arbitrary, we conclude that $X_n(t) \to X_{\infty}(t)$.
+
+  In Case \ref{enu:representation:Case_2}, let $x = \inf \{ y \mid F(y) \geq t \}$. By the right continuity of $F_{\infty}$, we have that $F(x) = t' > t$ and then $X_{\infty}(t) = x$. Again we have that for all $\epsilon > 0$, there is $\delta > 0$ such that $F(x + \epsilon) > t + \delta$ and $F(x - \epsilon) < t - \delta$. So we repeat the argument for Case \ref{enu:representation:Case_1} and derive that $X_n(t) \to X_{\infty}(t)$.
+
+  In Case \ref{enu:representation:Case_3}, we cannot show that $X_n(t) \to X(t)$. But in this case, $F_{\infty}(x)$ is a constant on the open interval $(x_1, x_2)$. Similar to the proof of Lemma \ref{lem:countable_discontinuity}, we can show that for a non-decreasing function $f$, the inverse image $f^{-1}(t)$ can contain an open interval for at most countably many $t$. Thus the set of $t$ in Case \ref{enu:representation:Case_3} is at most countable, and these $t$ does not affect the \as\ convergence of $\{ X_n \}$ to $X_{\infty}$.
+\end{proof}
+
+As an application of Theorem \ref{thm:representation}, we can prove the alternative characterization of weak convergence.
+\begin{thm} \label{thm:alt_weak_conv}
+  The sequence of random variables $X_n \weakto X_{\infty}$ if and only if for every bounded continuous function $g$, we have $E g(X_n) \to E g(X_{\infty})$.
+\end{thm}
+\begin{proof}
+  First we prove that the convergence in distribution implies the convergence of expectation of $g(X_n)$. Recall that $E g(X_n) = \int g(x) \mu_n(dx)$ where $\mu_n$ is the distribution of the random variable $X_n$, which is determined by the distribution function $F_n$ of $X_n$. So $E g(X_n)$ ($E g(X_{\infty}$ respectively) is determined by the distribution function $F_n$ ($F_{\infty}$ respectively). Therefore if $Y_n \disteq X_n$ and $Y_{\infty} \disteq X_{\infty}$, and we can show that $E g(Y_n) \to E g(Y_{\infty})$, it implies that $E g(X_n) \to E g(X_{\infty})$.
+
+  Hence we can take $Y_n$ and $Y_{\infty}$ on the same probability space and $Y_n \to Y_{\infty}$ \as, by Theorem \ref{thm:representation}. In this special case, the result is a direct consequence of dominated convergence theorem.
+
+  Now prove the other part of the theorem, that is, if $E g(X_n) \to E g(X_{\infty})$ for all bounded continuous $g$, then at any $x$ where $F_{\infty}$ is continuous, $F_n(x) \to F_{\infty}(x)$. Due to the continuity of $F_{\infty}$ at $x$, for all $\epsilon > 0$, there is $\delta > 0$ such that $F_{\infty}(x) - \epsilon < F_{\infty}(x - \delta) \leq F_{\infty}(x) \leq F_{\infty}(x + \delta) < F_{\infty}(x) + \epsilon$, or equivalently,
+  \begin{equation*}
+    F_{\infty}(x) - \epsilon < P(X_{\infty} \leq x - \delta) \leq P(X_{\infty} \leq x) \leq P(X_{\infty} \leq x + \delta) < F(x) + \epsilon.
+  \end{equation*}
+  Now consider the function $f_{\delta}$ and $g_{\delta}$ that are defined as
+  \begin{equation*}
+    f_{\delta}(t) =
+    \begin{cases}
+      1 & \text{if $t \leq x - \delta$}, \\
+      0 & \text{if $t \geq x$}, \\
+      \frac{t - (x - \delta)}{\delta} & \text{if $x - \delta < t < x$},
+    \end{cases}
+    \quad g_{\delta}(t) =
+    \begin{cases}
+      1 & \text{if $t \leq x$}, \\
+      0 & \text{if $t \geq x + \delta$}, \\
+      \frac{t - x}{\delta} & \text{if $x < t < x + \delta$}.
+    \end{cases}
+  \end{equation*}
+  The assumption of the theorem implies that
+  \begin{align*}
+    \limsup_{n \to \infty} F_n(x) = {}& \limsup_{n \to \infty} P(X_n \leq x) \geq \lim_{n \to \infty} E f_{\delta}(X_n) = E f_{\delta}(X_{\infty}) \geq P(X_{\infty} \leq x - \delta) > F(x) - \epsilon, \\
+    \liminf_{n \to \infty} F_n(x) = {}& \liminf_{n \to \infty} P(X_n \leq x) \leq \lim_{n \to \infty} E g_{\delta}(X_n) = E g_{\delta}(X_{\infty}) \leq P(X_{\infty} \leq x + \delta) > F(x) + \epsilon.
+  \end{align*}
+  By the arbitrariness of $\epsilon$, we obtain that $F_n(x) \to F_{\infty}(x)$.
+\end{proof}
+
+The following theorem is another application of Theorem \ref{thm:representation}. It is called ``continuous mapping'' theorem, since it shows that if $X_n \weakto X_{\infty}$ and $g$ is continuous, then $g(X_n) \weakto g(X_{\infty})$. The continuous mapping theorem has its counterparts with the ``convergence in distribution'' replace by ``convergence in probability'' and ``almost sure convergence''. The statements and proofs for the other two versions are left to you.
+\begin{thm}[Continuous mapping]
+  Let $g: \realR \to \realR$ be a measurable function and $D_g = \{ x \mid g \text{ is discontinuous at } x \}$. If $X_n \weakto X_{\infty}$ and $P(X_{\infty} \in D_g) = 0$, then $g(X_n) \weakto g(X_{\infty})$. If in addition $g$ is bounded, then $E g(X_n) \to E g(X_{\infty})$.
+\end{thm}
+\begin{proof}
+  Like in the proof of ``only if'' part of Theorem \ref{thm:alt_weak_conv}, without loss of generality we assume that $X_n \to X_{\infty}$ \as. We denote $E_1 = \{ \omega \mid X_n(\omega) \not\to X_{\infty}(\omega) \}$, and $E_2 = X^{-1}_{\infty}(D_g)$. Both $E_1$ and $E_2$ are of probability $0$, and if $\omega \in \Omega \setminus (E_1 \cup E_2)$, then $X_n(\omega) \to X_{\infty}(\omega)$, and by the continuity of $g$ at $X_{\infty}(\omega)$ we have $g(X_n(\omega)) \to g(X_{\infty}(\omega))$. Thus we show that almost surely (except for $E_1 \cup E_2$) $g(X_n) \to g(X_{\infty})$, and so $g(X_n) \weakto g(X_{\infty})$.
+
+  The other part of the theorem is straightforward and is left for you.
+\end{proof}
+
+Next we consider more equivalent forms of the weak convergence condition. They together are called the \emph{portmanteau} theorem.
+\begin{thm}[Portmanteau]
+  The following statements are equivalent:
+  \begin{enumerate}[label=(\alph*)]
+  \item \label{enu:portmanteau_1}
+    $X_n \weakto X_{\infty}$.
+  \item \label{enu:portmanteau_2}
+    For all open sets $G \subseteq \realR$, $\liminf_{n \to \infty} P(X_n \in G) \geq P(X_{\infty} \in G)$.
+  \item \label{enu:portmanteau_3}
+    For all closed sets $K \subseteq \realR$, $\limsup_{n \to \infty} P(X_n \in K) \leq P(X_{\infty} \in K)$.
+  \item \label{enu:portmanteau_4}
+    For all sets $A$ with $P(X_{\infty} \in \partial A) = 0$, $\lim_{n \to \infty} P(X_n \in A) = P(X_{\infty} \in A)$, where $\partial A = \bar{A} \setminus \interior A$, the sets of points that are in the closure of $A$ but not the interior of $A$.
+  \end{enumerate}
+\end{thm}
+\begin{proof} \
+  \paragraph{\ref{enu:portmanteau_1} $\Rightarrow$ \ref{enu:portmanteau_2}}
+  By the same reason as in the proof of Theorem \ref{thm:alt_weak_conv}, we assume that $X_n \to X_{\infty}$ \as\ without loss of generality. Consider the indicator functions
+  \begin{equation*}
+    f_*(\omega) = 1_{X_*(\omega) \in G}, \quad * = n \text{ or } \infty.
+  \end{equation*}
+  If $X_n(\omega) \to X_{\infty}(\omega)$ and $X_{\infty}(\omega) \in G$, then eventually $X_n(\omega) \in G$ and then $f_n(\omega) = f_{\infty}(\omega) = 1$ for large enough $n$. If $X_n(\omega) \to X_{\infty}(\omega)$ and $X_{\infty}(\omega) \notin G$, then we do not have $X_n(\omega) \to X_{\infty}(\omega)$ generally, but nevertheless $f_n(\omega) \geq f_{\infty}(\omega) = 0$ for all $n$. Hence we have $\liminf_{n \to \infty} f_n(\omega) \geq f_{\infty}(\omega)$ \as, since $X_n \to X_{\infty}$ \as. By Fatou's lemma,
+  \begin{equation*}
+    \begin{split}
+      \liminf_{n \to \infty} P(X_n \in G) = {}& \liminf_{n \to \infty} \int_{\Omega} f_n(\omega) dP(\omega) \geq \int_{\Omega} \liminf_{n \to \infty} f_n(\omega) dP(\omega) \\
+      \geq {}& \int_{\Omega} f_{\infty}(\omega) dP(\omega) = P(X_{\infty} \in G).
+    \end{split}
+  \end{equation*}
+  
+  \paragraph{\ref{enu:portmanteau_2} $\Leftarrow$ \ref{enu:portmanteau_3}}
+  Let $G = K^c$, and use that $P(X_* \in K) = 1 - P(X_* \in G)$ where $* = n$ or $\infty$.
+
+  \paragraph{\ref{enu:portmanteau_2} $+$ \ref{enu:portmanteau_3} $\Rightarrow$ \ref{enu:portmanteau_4}}
+  For any subset $A \subseteq \realR$, we have $\interior A \subseteq A \subseteq \bar{A}$, $\interior A$ is open, and $\bar{A}$ is closed. Then we have
+  \begin{equation*}
+   P(X_{\infty} \in \interior A) \leq \liminf_{n \to \infty}  P(X_n \in \interior A) \quad \text{and} \quad \limsup_{n \to \infty} P(X_n \in \bar{A}) \leq P(X_{\infty} \in \bar{A}).
+  \end{equation*}
+  The difference between $P(X_{\infty} \in \bar{A})$ and $P(X_{\infty} \in \interior A)$ is $P(X_{\infty} \in \partial A) = 0$, so we have $P(X_{\infty} \in \bar{A}) = P(X_{\infty} \in \interior A) = P(X_{\infty} \in A)$. Hence
+  \begin{multline*}
+      P(X_{\infty} \in  A) \leq \liminf_{n \to \infty}  P(X_n \in \interior A) \leq \liminf_{n \to \infty} P(X_n \in A) \\
+      \leq \limsup_{n \to \infty} P(X_n \in A) \leq \limsup_{n \to \infty} P(X_n \in \bar{A}) \leq P(X_{\infty} \in A),
+  \end{multline*}
+  and we have that $\lim_{n \to \infty} P(X_n \in A) = P(X_{\infty} \in A)$, the desired result.
+
+  \paragraph{\ref{enu:portmanteau_4} $\Rightarrow$ \ref{enu:portmanteau_1}}
+  
+  For any $x \in \realR$ such that $F_{\infty}$ is continuous at $x$, we take $A = (-\infty, x]$ and then $\partial A = \{ x \}$ and $P(X_{\infty} \in \partial A) = 0$. Thus we have $\lim_{n \to \infty} F_n(x) = \lim_{n \to \infty} P(X_n \in A) = P(X_{\infty} \in A) = F_{\infty}(x)$, and check that $X_n \weakto X_{\infty}$ by Definition \ref{defn:conv_in_distr}.
+\end{proof}
+
+The weak* topology has an important property, the Banach-Alouglu theorem, such that the closed ball of the dual space of a normed space is compact. If you find the terminologies in the statement above arcane, do not worry, we are not going to use it anywhere in our module, but state the following result in an intelligible way.
+\begin{thm}[Helly's selection] \label{thm:Helly}
+  For every sequence $F_n$ of distribution functions, there is a subsequence, and a right-continuous non-decreasing function $F$, so that at any point $x$ where $F$ is continuous, the value of the functions in the subsequence converges to $F(x)$.
+\end{thm}
+\begin{proof}
+  First we construct the subsequence and $F$, and then we prove that they satisfy the conditions. Let $\{ r_1, r_2, \dotsc \}$ be an ordering of all rational numbers.
+  \begin{enumerate}
+  \item
+    Let $\{ F_{n_1(1)}, F_{n_1(2)}, F_{n_1(3)}, \dotsc \}$ be the subsequence of the original sequence $\{ F_n \}$ such that $F_{n_1(k)}(r_1)$ converges, and denote the limit $f(r_1)$.
+  \item 
+    Let $\{ F_{n_2(1)}, F_{n_2(2)}, F_{n_2(3)}, \dotsc \}$ be the subsequence of the sequence $\{ F_{n_1(k)} \}$ such that $F_{n_2(k)}(r_2)$ converges, and denote the limit $f(r_2)$.
+  \item 
+    Let $\{ F_{n_3(1)}, F_{n_3(2)}, F_{n_3(3)}, \dotsc \}$ be the subsequence of the sequence $\{ F_{n_2(k)} \}$ such that $F_{n_3(k)}(r_3)$ converges, and denote the limit $f(r_3)$.
+  \item
+    \dots \dots \dots
+  \end{enumerate}
+  At last, we choose the ``diagonal'' subsequence $\{ F_{n_1(1)}, F_{n_2(2)}, \dotsc, F_{n_k(k)}, \dotsc \}$ as the desired subsequence. The limit function $F$ is constructed by $f$ as
+  \begin{equation*}
+    F(x) = \inf_{y \in \ratQ, y \geq x} f(y).
+  \end{equation*}
+  It is clear that for all $r_l$, $f(r_l) \in [0, 1]$, and as a mapping from $\ratQ$ to $[0, 1]$, $f$ is non-decreasing. So $F(x)$ is well-defined for all $x \in \realR$, and it is easy to check that $F$ is non-decreasing and right-continuous, and $F(y) = f(y)$ if $y \in \ratQ$.
+
+  Let $x$ be a continuity point of $F$. For any $\epsilon > 0$, there are $y_1, y_2 \in \ratQ$ such that $y_1 < x$, $y_2 > x$, and $F(y_1) > F(x) - \epsilon$, $F(y_2) < F(x) + \epsilon$. If $k$ is large enough, we have, by the convergence of $F_{n_k(k)}$ to $f$ at rational points, $F_{n_k(k)}(y_1) < F(x) - \epsilon$ and $F_{n_k(k)}(y_2) < F(x) + \epsilon$. Then
+  \begin{equation*}
+    F_{n_k(k)}(x) \in [F_{n_k(k)}(y_1), F_{n_k(k)}(y_2)] \subseteq (F(x) - \epsilon, F(x) + \epsilon).
+  \end{equation*}
+  By the arbitrariness of $\epsilon$, we prove that $F_{n_k(k)}(x) \to F(x)$ as $k \to \infty$.
+\end{proof}
+
+\begin{rmk}
+  As a caveat, we should stress that the limit function $F$ in Theorem \ref{thm:Helly} may not be a distribution function, since it may not satisfy $F(-\infty) = 0$ and $F(+\infty) = 1$. For an example, let $F_n(x) = 0$ for $x < n$ and $F_n(x) = 1$ for $x \geq n$. Then no matter what subsequence we choose, the limit function $F$ is always the constant function $F(x) = 0$. We call the convergence in the sense of Theorem \ref{thm:Helly} the \emph{vague} convergence, and write
+  \begin{equation*}
+    F_{n_k(k)} \vagueto F.
+  \end{equation*}
+\end{rmk}
+
+\begin{thm}
+  For a sequence of distribution functions $F_n$, every sub-sequential limit is the distribution function of a probability measure if and only if the sequence is \emph{tight}, that is, for all $\epsilon > 0$, there is an $M_{\epsilon} > 0$, such that $1 - F_n(M_{\epsilon}) < \epsilon$ and $F_n(-M_{\epsilon}) < \epsilon$ for all large enough $n$.
+\end{thm}
+\begin{proof}
+  If the tightness condition is satisfied, then for any $\epsilon > 0$, if a subsequence $F_{n_k} \vagueto F$, then $F_{n_k}(M_{\epsilon}) > 1 - \epsilon$ for all large enough $k$, and then for any point $x > M_{\epsilon}$ where $F$ is continuous, (by Lemma \ref{lem:countable_discontinuity}, such $x$ exists,) we have $F(x) = \lim_{k \to \infty} F_{n_k}(x) \geq \limsup_{k \to \infty} F_{n_k}(M_{\epsilon}) \geq 1 - \epsilon$, and so $F(+\infty) \geq F(x) > 1 - \epsilon$. By the arbitrariness of $\epsilon$, we conclude that $F(+\infty) = 1$. Similarly, $F(-\infty) = 0$.
+
+  On the other hand, if the tightness condition is not satisfied, without loss of generality, there are $\{ F_{n_k} \}$ and $\epsilon > 0$ such that $F_{n_k}(k) < 1 - \epsilon$ for all $k$. A subsequence of $\{ F_{n_k} \} \vagueto F$, and without loss of generality we assume that $F_{n_k} \vagueto F$. Then for any $x$ on which $F$ is continuous, we have $F(x) = \lim_{k \to \infty} F_{n_k}(x) \leq 1 - \epsilon$. By Lemma \ref{lem:countable_discontinuity}, such $x$ is almost everywhere, and so
+  \begin{equation*}
+    F(+\infty) = \limsup_{x \to \infty, F \text{ is continuous at } x} F(x) \leq 1 - \epsilon,
+  \end{equation*}
+  and this subsequence has a vague limit that is not a distribution function.
+\end{proof}
+
+In the end of this section, we remark that although we use the weak* convergence in functional analysis as an inspiration of the weak convergence in probability, we have not defined the exact relation between these two concepts, since we are not going to use this relation in future.
+
+\pagebreak
+
+\section{Characteristic functions}
+
+In analysis, a powerful tool is Fourier transform. If we want to consider the property of a function but cannot do it directly, a natural strategy is to consider its Fourier transform. For example, given two (square-integrable and continuous) functions $f$ and $g$, we want to compute the \emph{convolution}
+\begin{equation*}
+  f*g(x) = \int^{\infty}_{-\infty} f(y) g(x - y) dy.
+\end{equation*}
+Besides the direct computation, the most common method is to compute the Fourier transforms of $f$ and $g$
+\begin{equation*}
+  \check{f}(t) = \int^{\infty}_{-\infty} f(x) e^{itx} dx, \quad \check{g}(t) = \int^{\infty}_{-\infty} g(x) e^{itx} dx.
+\end{equation*}
+Then use the property that the Fourier transform of the convolution is the product of the Fourier transforms, that is,
+\begin{equation*}
+  (f*g)\spcheck(t) = \check{f}(t) \check{g}(t),
+\end{equation*}
+and take the inverse Fourier transform
+\begin{equation*}
+  f*g(x) = {(fg)\spcheck}\sphat = (\check{f} \check{g})\sphat = \frac{1}{2\pi} \int^{\infty}_{-\infty} \check{f}(t) \check{g}(t) e^{-itx} dt.
+\end{equation*}
+
+(Here the introduction to Fourier transform is flawed. Usually the transform $f \to \check{f}$ is called the \emph{inverse Fourier transform}, and the transform $f: \hat{f}$ is called the \emph{Fourier transform}. Our choice of the prefactors is also not the common one.)
+
+The Fourier transform is applied in probability theory under the name of characteristic function.
+\begin{defn}
+  Let $X$ be a random variable, we define its \emph{characteristic function} by
+  \begin{equation*}
+    \varphi(t) = E(e^{itX}) = E(\cos(tX)) + iE(\sin(tX)).
+  \end{equation*}
+\end{defn}
+Suppose the distribution of $X$ is $\mu$, which is a probability measure on $\realR$, then
+\begin{equation*}
+  \varphi(g) = \int e^{itx} \mu(dx).
+\end{equation*}
+Since the characteristic function of a random variable is expressed in its distribution, we can also say the characteristic function is associated to the distribution (function). If $X$ is a continuous random variable with density function $f(x)$, that is, $\mu(dx) = f(x) dx$, we have
+\begin{equation*}
+  \varphi(t) = \int^{\infty}_{-\infty} f(x) e^{itx} dx,
+\end{equation*}
+the (inverse) Fourier transform of $f$.
+
+Since $e^{itx}$ is a bounded function in $x$ if $t \in \realR$, we have that $\varphi(t)$ is well defined for all real $t$, and by definition
+\begin{equation*}
+  \varphi(0) = E(e^0) = 1, \quad and \quad \lvert \varphi(t) \rvert = \lvert E(e^{itX}) \rvert \leq E \lvert e^{itX} \rvert = E(1) = 1 \quad \text{for all $t$}.
+\end{equation*}
+Furthermore, we also have that $\varphi(t)$ is a uniformly continuous function in $t$, since
+\begin{equation*}
+  \lvert \varphi(t + \epsilon) - \varphi(t) \rvert = \lvert E(e^{i(t + \epsilon)X} - e^{itX}) \rvert \leq E \lvert e^{i(t + \epsilon)X} - e^{itX} \rvert = E \lvert (e^{i\epsilon X} - 1) e^{itX} \rvert = E \lvert e^{i\epsilon X} - 1 \rvert,
+\end{equation*}
+and as $\epsilon \downto 0$, $e^{i\epsilon X} - 1 \to 0$ \as, we derive that $E \lvert e^{i\epsilon X} - 1 \rvert \to 0$ as $\epsilon \downto 0$ by the dominated convergence theorem.
+
+Recall that in an exercise we derived that if independent random variables $X, Y$ have density functions $f, g$ respectively, then the density function of $X + Y$ is the convolution of $f$ and $g$. Inspired by the Fourier transform formula for convolutions, we can state, if not prove, the following result:
+\begin{thm}
+  If $X$ and $Y$ are independent and have characteristic functions $\varphi(t)$ and $\psi(t)$ respectively, then $X + Y$ has characteristic function $\varphi(t)\psi(t)$.
+\end{thm}
+\begin{proof}
+  By the independence,
+  \begin{equation*}
+    E(e^{it(X + Y)}) = E(e^{itX} e^{itY}) = E(e^{itX}) E(e^{itY}) = \varphi(t) \psi(t).
+  \end{equation*}
+\end{proof}
+
+One simple example of characteristic function is for a random variable $X$ in Bernoulli distribution, such that $P(X = 0) = P(X = 1) = 1/2$. Then $\varphi(t) = \frac{1}{2} e^{it \cdot 0} + \frac{1}{2} e^{it \cdot 1} = cos(t/2)e^{it/2}$. The most important example of characteristic function is for a random variable in normal distribution $N(\mu, \sigma^2)$, where $\mu$ is the expectation and $\sigma^2$ is the variance, so that the density function is
+\begin{equation*}
+  f(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x - \mu)^2}{2\sigma^2}}.
+\end{equation*}
+In the simplest case $\mu = 0$ and $\sigma^2 = 1$, we have
+\begin{equation*}
+  \varphi(t) = \frac{1}{\sqrt{2\pi}} \int^{\infty}_{-\infty} e^{-\frac{x^2}{2} + itx} dx = \frac{1}{\sqrt{2\pi}} \int^{\infty}_{-\infty} e^{-\frac{(x - it)^2}{2}} e^{-\frac{t^2}{2}} dx = e^{-\frac{t^2}{2}} \left( \frac{1}{\sqrt{2\pi}} \int^{\infty - it}_{-\infty - it} e^{-\frac{t^2}{2}} dz \right).
+\end{equation*}
+where the integral of $z$ is on a contour in the complex plane that is parallel to the real axis. It is a standard fact that the expression in the parenthesis is $1$ if $t = 0$. By a standard application of the residue theorem in complex analysis, the expression is independent of $t$. Thus we conclude that $\varphi(t) = e^{-t^2/2}$ in this case. In the general case, we can repeat the argument, but a faster way is to recorganise that if $X$ is in $N(0, 1)$ distribution, then $\sigma X + \mu$ is in $N(\mu, \sigma^2)$ distribution (exercise), and then use the following result
+\begin{equation*}
+  E(e^{it(aX + b)}) = e^{itb} E(e^{i(ta)X}).
+\end{equation*}
+Hence the characteristic function for $\sigma X + \mu$ is $e^{i\mu t} e^{-(\sigma t)^2/2} = \exp(-\frac{\sigma^2}{2} t^2 + i\mu t)$.
+
+Now let's consider the question: If we know the characteristic function, can we recover the distribution (function) of the random variable? If we know in advance that the density function exists, then the (inverse) Fourier transform gives the density function from the characteristic function. But we know that the density function only exists for continuous random variables. We have a more complete and more sophisticated result:
+\begin{thm} \label{thm:char_f_inversion}
+  Let $\varphi(t)$ be the characteristic function of a random variable whose distribution is $\mu$. Then for any $a < b$,
+  \begin{equation*}
+    \lim_{T \to \infty} \frac{1}{2\pi} \int^T_{-T} \frac{e^{-ita} - e^{-itb}}{it} \varphi(t) dt = \mu(a, b) + \frac{1}{2}\mu \{ a \} + \frac{1}{2}\mu \{ b \}.
+  \end{equation*}
+\end{thm}
+We note that the integral domain $[-T, T]$ cannot be replaced by $(-\infty, \infty)$ in general, otherwise the convergence is not guaranteed.
+\begin{proof}[Proof of Theorem \ref{thm:char_f_inversion}]
+  We denote
+  \begin{equation*}
+    I_T = \frac{1}{2\pi} \int^T_{-T} \frac{e^{-ita} - e^{-itb}}{it} \varphi(t) dt = \frac{1}{2\pi} \int^T_{-T} \left( \int^b_a e^{-ity} dy \right) \left( \int_{\realR} e^{itx} \mu(dx) \right) dt.
+  \end{equation*}
+  Since $\lvert e^{-ity} e^{itx} \rvert \leq 1$ and
+  \begin{equation*}
+    \int^T_{-T} \int^b_a \int_{\realR} 1 \mu(dx) \times dy \times dt = 2T(b - a) < \infty,
+  \end{equation*}
+  we can apply Fubini's theorem and write
+  \begin{equation*}
+    \begin{split}
+      I_T = {}& \int_{\realR} \mu(dx) \left( \frac{1}{2\pi} \int^b_a dy \int^T_{-T} dt e^{it(x - y)} \right) 
+      = \int_{\realR} \mu(dx) \int^b_a dy \frac{e^{iT(x - y)} - e^{-iT(x - y)}}{2\pi i(x - y)} \\
+      = {}& \int_{\realR} \mu(dx) \int^b_a dy \frac{\sin(T(x - y))}{\pi(x - y)} \\
+      = {}& \int_{\realR} \mu(dx) (R(T(x - a)) - R(T(x - b))),
+    \end{split}
+  \end{equation*}
+  where
+  \begin{equation*}
+    R(x) = \int^x_0 \frac{\sin s}{\pi s} ds.
+  \end{equation*}
+  It is a tricky result in calculus that
+  \begin{equation*}
+    \lim_{x \to \infty} R(x) = \int^{\infty}_0 \frac{\sin s}{\pi s} ds = \frac{1}{2}, \quad \lim_{x \to -\infty} R(x) = -\int^{\infty}_0 \frac{\sin s}{\pi s} ds = -\frac{1}{2}.
+  \end{equation*}
+  So as $T \to \infty$,
+  \begin{equation*}
+    \lim_{T \to \infty} R(T(x - a)) - R(T(x - b)) =
+    \begin{cases}
+      0 & \text{if $x < a$ or $x > b$}, \\
+      1 & \text{if $a < x < b$}, \\
+      \frac{1}{2} & \text{if $x = a$ or $x = b$}.
+    \end{cases}
+  \end{equation*}
+  On the other hand, it is not hard to see that there exists $C > 0$ such that $-C < R(x) < C$ for all $x$, and then $\lvert R(T(x - a)) - R(T(x - b)) \rvert < 2C$ for all $x, T$. Thus by the dominated convergence theorem,
+  \begin{equation*}
+    \lim_{T \to \infty} I_T = \int_{\realR} \mu(dx) (\chi_{a < x < b} + \frac{1}{2} \chi_{x = a} + \frac{1}{2} \chi_{x = b}) = \mu(a, b) + \frac{1}{2}\mu \{ a \} + \frac{1}{2}\mu \{ b \}.
+  \end{equation*}
+\end{proof}
+
+We remark again that the cumbersome notation $\lim_{T \to \infty} \int^T_{-T}$ cannot be replaced by $\int^{\infty}_{-\infty}$ in Theorem \ref{thm:char_f_inversion}. (Actually the former notation is the Cauchy principal value of that generalises the latter.) But if the characteristic function is integrable, that is, $\int^{\infty}_{-\infty} \lvert \varphi(t) \rvert dt < \infty$, then we can replace the Cauchy principal value simply by $\int^{\infty}_{-\infty}$. Furthermore, we have the following result.
+\begin{thm} \label{thm:char_func_inverse}
+  If $\int \lvert \varphi(t) \rvert dt < \infty$, then $\mu$ has bounded continuous density
+  \begin{equation*}
+    f(y) = \frac{1}{2\pi} \int^{\infty}_{-\infty} e^{-ity} \varphi(t) dy.
+  \end{equation*}
+\end{thm}
+\begin{proof}
+  First, $f(y)$ is well defined and bounded, since $\lvert e^{-ity} \varphi(t) \rvert = \lvert \varphi(t) \rvert$, and so $\lvert f(y) \rvert \leq \frac{1}{2\pi} \int \lvert \varphi(t) \rvert dt$. Next, $f(y)$ is continuous. To see it, we consider
+  \begin{equation*}
+    \lvert f(y + h) - f(y) \rvert = \frac{1}{2\pi} \left\lvert \int \left( e^{-it(y + h)} - e^{-ity} \right) \varphi(t) dt \right\rvert \leq \frac{1}{2\pi} \int \lvert 1 - e^{-ith} \rvert \lvert \varphi(t) \rvert dt.
+  \end{equation*}
+  As $h \to 0$, the factor $\lvert 1 - e^{-ith} \rvert \to 0$. Since the integrand on the right-hand side of the formula above is dominated by $\lvert \varphi(t) \rvert$, by the dominated convergence theorem, we have $\lvert f(y + h) - f(y) \rvert \to 0$ as $h \to 0$.
+
+  Next, we have that for all $a < b$
+  \begin{equation*}
+    \begin{split}
+      \mu(a, b) + \frac{1}{2} \mu \{ a \} + \frac{1}{2} \mu \{ b \} = {}& \frac{1}{2\pi} \lim_{T \to \infty} \int^T_{-T} \frac{e^{-ita} - e^{-itb}}{it} \varphi(t) dt \\
+      = {}& \frac{1}{2\pi} \int^{\infty}_{-\infty} \frac{e^{-ita} - e^{-itb}}{it} \varphi(t) dt \\
+      = {}& \frac{1}{2\pi} \int^{\infty}_{-\infty} \left( \int^b_a e^{-ity} dy \right) \varphi(t) dt \\
+      = {}& \int^b_a \left( \frac{1}{2\pi} \int^{\infty}_{-\infty} e^{-ity} \varphi(t) dt \right) dy \\
+      = {}& \int^b_a f(y) dy.
+    \end{split}
+  \end{equation*}
+  It is clear that $\mu$ has no pointmass and $f(y)$ is the density function of $\mu$.
+\end{proof}
+
+The next theorem shows that characteristic functions are useful tool to analyse weak convergence. Here and later, when we say the weak convergence of distributions, we mean the weak convergence of the corresponding distribution functions.
+\begin{thm} \label{thm:char_f_weak}
+  Let $\mu_1, \mu_2, \dotsc$ be distributions, and $\varphi_1(t), \varphi_2(t), \dotsc$ be characteristic functions associated to them.
+  \begin{enumerate}[label=(\alph*)]
+  \item \label{enu:thm:char_f_weak_a}
+    If $\mu_n \weakto \mu_{\infty}$ where $\mu_{\infty}$ is a distribution with characteristic function $\varphi_{\infty}(t)$, then $\varphi_n(t) \to \varphi_{\infty}(t)$ pointwise.
+  \item \label{enu:thm:char_f_weak_b}
+    If $\varphi_n(t) \to \varphi_{\infty}(t)$ pointwise, and the limit function $\varphi_{\infty}(t)$ is continuous at point $0$, then $\varphi_{\infty}(t)$ is the characteristic function for a distribution, say $\mu_{\infty}$, and $\mu_n \weakto \mu_{\infty}$.
+  \end{enumerate}
+\end{thm}
+\begin{proof}
+  Part \ref{enu:thm:char_f_weak_a} is a direct consequence of Theorem \ref{thm:alt_weak_conv} where the bounded continuous function is $e^{itx}$.
+
+  To prove part \ref{enu:thm:char_f_weak_b}, we denote the distribution function for $\mu_n$ by $F_n$. By Helly's selection theorem, we have that a subsequence $\{ F_{n_k} \}$ converges to a limit $F_{\infty}$ \emph{vaguely}. \emph{Suppose we have that the sequence $\{ F_n \}$ is tight.} Then $F_{\infty}$ is a distribution function, corresponding to a distribution $\mu_{\infty}$, and then $F_n \weakto F_{\infty}$, or equivalently, $\mu_n \weakto \mu_{\infty}$, and by part \ref{enu:thm:char_f_weak_a} we have that the characteristic function of $\mu_{\infty}$ is $\varphi_{\infty}(t)$. Although we have just proved the result for a subsequence $\{ \mu_{n_k} \}$, the result can be extended to the sequence $\{ m_n \}$. Suppose not, then there exists a bounded continuous function $f$ and another subsequence $\{ m_{m_k} \}$ such that
+  \begin{equation*}
+    \left\lvert \int f(x) m_{m_k}(dx) - \int f(x) m_{\infty}(dx) \right\rvert > \epsilon
+  \end{equation*}
+  for some $\epsilon > 0$. Using Helly's selection theorem and the tightness of $\{ F_n \}$, we have that a further subsequence $\{ m_{m_{k(l)}} \}$ converge weakly to $m'_{\infty} \neq m_{\infty}$. Then by part \ref{enu:thm:char_f_weak_a}, $\varphi_{m_{k(l)}}(t) \to \varphi'_{\infty}(t)$, the characteristic function of $m'_{\infty}$, and it is different from $\varphi_{\infty}(t)$. Then we derive a contradiction. 
+
+  Thus the remaining part of the proof is to show that $\{ F_n \}$ is tight, that is, for any $\epsilon > 0$, there is an $M$ such that $\mu_n(-M, M) > 1 - \epsilon$, or equivalently, $\mu_n(\realR \setminus (-M, M)) < \epsilon$ for all $\mu_n$. Actually we only need to prove it for large enough $n$.
+
+  Consider the integral
+  \begin{equation*}
+    I_n(M) = \int \left( 1 - \frac{\sin(M^{-1} x)}{M^{-1} x} \right) \mu_n(dx).
+  \end{equation*}
+  Since $1 - \sin(x)/x \geq 0$ for all $x$, and for $\lvert x \rvert \geq 1$, we have $1 - \sin(x)/x > c > 0$ where $c$ is a positive constant (say $1/10$), we derive the inequality
+  \begin{equation*}
+    I_n(M) \geq \int_{\realR \setminus (-M, M)} \left( 1 - \frac{\sin(M^{-1} x)}{M^{-1} x} \right) \mu_n(dx) > c \mu_n(\realR \setminus (-M, M)).
+  \end{equation*}
+  On the other hand,
+  \begin{equation*}
+    1 - \frac{\sin(M^{-1} x)}{M^{-1} x} = 1 - \frac{e^{iM^{-1} x} - e^{-iM^{-1} x}}{2iM^{-1} x} = 1 - \frac{M}{2} \int^{M^{-1}}_{-M^{-1}} e^{ixt} dt = \frac{M}{2} \int^{M^{-1}}_{-M^{-1}} (e^{ix \cdot 0} - e^{ixt}) dt,
+  \end{equation*}
+  and then by Fubini's theorem
+  \begin{equation*}
+    \begin{split}
+      I_n(M) = {}& \frac{M}{2} \int \mu_n(dx) \int^{M^{-1}}_{-M^{-1}} (e^{ix \cdot 0} - e^{ixt}) dt \\
+      = {}& \frac{M}{2} \int^{M^{-1}}_{-M^{-1}} \left( \int e^{ix \cdot 0} \mu_n(dx) - \int e^{ixt} \mu_n(dx) \right) dt \\
+      = {}& \frac{M}{2} \int^{M^{-1}}_{-M^{-1}} (\varphi_n(0) - \varphi_n(t)) dt.
+    \end{split}
+  \end{equation*}
+  Since we assume that $\varphi_{\infty}(t)$ is continuous at $0$, for large enough $M$, we have
+  \begin{equation*}
+    \frac{M}{2} \int^{M^{-1}}_{-M^{-1}} (\varphi_{\infty}(0) - \varphi_{\infty}(t)) dt < c^{-1} \epsilon.
+  \end{equation*}
+  Then using the pointwise convergence of $\{ \varphi_n(t)$ to $\varphi_{\infty}(t)$ and the dominated convergence theorem, for the same $M$, if $n$ is large enough,
+  \begin{equation*}
+    I_n(M) = \frac{M}{2} \int^{M^{-1}}_{-M^{-1}} (\varphi_n(0) - \varphi_n(t)) dt < c^{-1} \epsilon,
+  \end{equation*}
+  and we conclude that $\mu_n(\realR \setminus (-M, M)) < \epsilon$ for such $M$ if $n$ is large enough. Thus we prove the tightness.
+\end{proof}
+
+Characteristic functions are handy tools to analyse moments of random variables. Formally,
+\begin{equation*}
+  \varphi(t) = \int e^{itx} \mu(dx) = \int \sum^{\infty}_{k = 0} \frac{t^k}{k!} x^k \mu(dx) = \sum^{\infty}_{k = 0} \frac{t^k}{k!} \int x^k \mu(dx) = 1 + it EX - \frac{t^2}{2} EX^2 + \dotsb.
+\end{equation*}
+But this is only a formal argument. One problem is the change of order of the infinite sum and integral, which keeps pestering us since we began studying calculus. Another trouble is that $EX^k$ may not always exist. So the following result is non-trivial:
+\begin{thm} \label{thm:char_f_2nd_moment}
+  If $E X^2 < \infty$, then the characteristic function $\varphi(t)$ for $X$ satisfies
+  \begin{equation*}
+    \lim_{t \to 0} \frac{1}{t^2} \left( \varphi(t) - \left( 1 + it EX - \frac{t^2}{2} EX^2 \right) \right) = 0.
+  \end{equation*}
+  or in other words, $\varphi(t) = 1 + it EX - (t^2/2) EX^2 + o(t^2)$.
+\end{thm}
+\begin{proof}
+  We need to estimate
+  \begin{equation*}
+    \begin{split}
+      \frac{1}{t^2} \left\lvert \varphi(t) - \left( 1 + it EX - \frac{t^2}{2} EX^2 \right) \right\rvert = {}& \frac{1}{t^2} \left\lvert \int \left( e^{itx} - \left( 1 + itx + \frac{(itx)^2}{2} \right) \right) \mu(dx) \right\rvert \\
+      \leq {}& \int \frac{1}{t^2} \lvert R(tx) \rvert \mu(dx),
+    \end{split}
+  \end{equation*}
+  where $R(y)$ is the remainder term of the second order Taylor expansion for the function $e^{iy}$ at $0$. By \lHopital's rule, $t^{-2} R(tx) \to 0$ as $t \to 0$ for all $x$. So if we can show that there exists an integrable function that dominates $t^{-2} R(tx)$ for all $t$, then the proof is done by the dominated convergence theorem. Actually we can take the desired integrable function as $x^2$. The integrability of $x^2$ is equivalent to $E X^2 = \int x^2 \mu(dx) < \infty$, and the dominance is the consequence of the following lemma.
+\end{proof}
+\begin{lem} \label{lem:remainder_quadratic_bound}
+  For all $y \in \realR$, $\lvert R(y) \rvert \leq y^2$.
+\end{lem}
+\begin{proof}
+  First, for $\lvert y \rvert \geq 4$, we have
+  \begin{equation*}
+    \lvert R(y) \rvert = \left\lvert e^{iy} - \left( 1 + iy + \frac{(iy)^2}{2} \right) \right\rvert \leq \lvert e^{iy} \rvert + 1 + \lvert y \rvert + \frac{y^2}{2} = 2 + y + \frac{y^2}{2} \leq \frac{y^2}{8} + \frac{y^2}{4} + \frac{y^2}{2} \leq y^2.
+  \end{equation*}
+  Next, for $\lvert y \rvert < 4$, we recall that the remainder term in Taylor expansion $R(y)$ has the integral form
+  \begin{equation*}
+    \lvert R(y) \rvert = \left\lvert \int^y_0 \frac{(e^{it})'''}{2!} (y - t)^2 dt \right\rvert \leq \pm \int^y_0 \frac{1}{2} (y - t)^2 dt = \frac{\lvert y \rvert^3}{6} \leq y^2,
+  \end{equation*}
+  where $\pm$ is the sign of $y$. Hence we prove the lemma.
+\end{proof}
+The converse to Theorem \ref{thm:char_f_2nd_moment} is also true in a certain form. To be precise, we have the following theorem:
+\begin{thm}
+  For a random variable $X$, $E X^2 < \infty$ under the condition on its characteristic function $\varphi(t)$:
+  \begin{equation*}
+    \liminf_{h \downto 0} \frac{1}{h^2} (2 - \varphi(h) - \varphi(-h)) < +\infty.
+  \end{equation*}
+\end{thm}
+\begin{proof}
+  Noting that
+  \begin{equation*}
+    \frac{1}{h^2} (2 - \varphi(h) - \varphi(-h)) = \int \frac{1}{h^2}(2 - e^{ihx} - e^{-ihx}) \mu(dx) = \int \frac{2 - 2\cos(hx)}{h^2} \mu(dx),
+  \end{equation*}
+  and that $h^{-2}(2 - 2\cos(hx))$ is non-negative and $h^{-2}(2 - 2\cos(hx)) \to x^2$ as $h \downto 0$, we have by Fatou's lemma
+  \begin{equation*}
+    E X^2 = \int x^2 \mu(dx) \leq \liminf_{h \downto 0} \int \frac{2 - 2\cos(hx)}{h^2} \mu(dx) = \liminf_{h \downto 0} \frac{1}{h^2} (2 - \varphi(h) - \varphi(-h)) < +\infty,
+  \end{equation*}
+  and prove the theorem.
+\end{proof}
+
+\pagebreak
+
+\section{Central limit theorems}
+
+The hard work on characteristic functions is rewarded when we find that the proof of the celebrated central limit theorem is an easy application of the properties of the characteristic functions.
+\begin{thm}
+  Let $X_1, X_2, \dotsc$ be \iid\ with $E X_i = \mu$ and $\var(X_i) = \sigma^2 \in (0, \infty)$. If $S_n = X_1 + \dotsb + X_n$, then
+  \begin{equation*}
+    \frac{S_n - n\mu}{\sigma n^{1/2}} \weakto \chi,
+  \end{equation*}
+  where $\chi$ has the standard normal distribution $N(0, 1)$.
+\end{thm}
+\begin{proof}
+  By Theorem \ref{thm:char_f_weak}, we only need to show that the characteristic function of $(S_n - n\mu)/(\sigma n^{1/2})$, which we denoted as $\varphi_n(t)$, converges pointwise at $e^{-t^2/2}$, the characteristic function of $\chi$. We denote $Y_n = X_n - \mu$, which are \iid\ random variables, and denote their common characteristic function by $\varphi(t)$. Then
+  \begin{equation*}
+    \begin{split}
+      \varphi_n(t) = {}& E \left( \exp \left( it \frac{S_n - n\mu}{\sigma n^{1/2}} \right) \right) = E \left( \prod^n_{k = 1} \exp \left( it \frac{Y_k}{\sigma n^{1/2}} \right) \right) = \prod^n_{k = 1} E \left( \exp \left( it \frac{Y_k}{\sigma n^{1/2}} \right) \right) \\
+      = {}& \varphi \left( \frac{t}{\sigma n^{1/2}} \right)^n.
+    \end{split}
+  \end{equation*}
+  Since $Y_i$ has the first moment $0$ and second moment $\sigma^2$, we have, by Theorem \ref{thm:char_f_2nd_moment},
+  \begin{equation*}
+    \varphi \left( \frac{t}{\sigma n^{1/2}} \right) = 1 - \frac{E Y^2}{2} \left( \frac{t}{\sigma n^{1/2}} \right)^2 + o \left( \left( \frac{t}{\sigma n^{1/2}} \right)^2 \right) = 1 - \frac{t^2}{2n} + o(n^{-1}).
+  \end{equation*}
+  It is a basic fact in calculus that as $x \to +\infty$, $(1 + x^{-1})^x \to e$, and so for any fixed $t$, as $n \to \infty$, $(1 - t^2/(2n))^n \to e^{-t^2/2}$. The $o(n^{-1})$ term in the formula above can be ignored. For any $\epsilon > 0$, we have $\lvert o(n^{-1}) \rvert < \epsilon/n$ for large enough $n$, and then
+  \begin{align*}
+    \limsup_{n \to \infty} \left( 1 - \frac{t^2}{2n} + o(n^{-1}) \right)^n \leq {}& \limsup_{n \to \infty} \left( 1 - \left( \frac{t^2}{2} + \epsilon \right) \frac{1}{n}\right)^n = e^{-t^2/2} e^{\epsilon}, \\
+    \liminf_{n \to \infty} \left( 1 - \frac{t^2}{2n} + o(n^{-1}) \right)^n \leq {}& \liminf_{n \to \infty} \left( 1 - \left( \frac{t^2}{2} - \epsilon \right) \frac{1}{n}\right)^n = e^{-t^2/2} e^{-\epsilon}.
+  \end{align*}
+  By the arbitrariness of $\epsilon$, we prove
+  \begin{equation*}
+    \lim_{n \to \infty} \varphi_n(t) = \varphi \left( \frac{t}{\sigma n^{1/2}} \right)^n = e^{-t^2/2},
+  \end{equation*}
+  the characteristic function of $\chi$, and finish the proof.
+\end{proof}
+
+A generalization of the central limit theorem above is the weak convergence to normal distribution for a triangular array of random variables.
+\begin{thm}[Lindeberg-Feller] \label{thm:Lindeberg-Feller}
+  For each $n$, let $X_{n, m}$ ($1 \leq m \leq n$) be independent random variables with $E X_{n, m} = 0$. Suppose
+  \begin{enumerate}[label=(\roman*)]
+  \item
+    $\displaystyle \sum^n_{m = 1} \sigma^2_{n, m} \to \sigma^2 > 0$, where $\sigma^2_{n, m} = E X^2_{n, m}$.
+  \item \label{enu:thm:Lind_Feller_2}
+    For all $\epsilon > 0$, $\displaystyle \lim_{n \to \infty} \sum^n_{m = 1} \sigma^2_{n, m}(\epsilon) = 0$, where $\sigma^2_{n, m}(\epsilon) = E\left( \lvert X_{n, m} \rvert^2; \lvert X_{n, m} \rvert > \epsilon \right)$.
+  \end{enumerate}
+  Then $S_n = X_{n, 1} + \dotsb + X_{n, n} \weakto \sigma \chi = N(0, \sigma^2)$ as $n \to \infty$.
+\end{thm}
+\begin{rmk} \label{rmk:bounded_variance}
+  Before giving the proof, we remark that Condition \ref{enu:thm:Lind_Feller_2} implies that as $n \to \infty$, all $X_{n, m}$ converge to $0$ (in distribution/probability). To be precise, we can see that given any $\epsilon$, if $n$ is large enough, then $\sigma^2_{n, m} < \epsilon$ for all $m = 1, \dotsc, n$ (Exercise). The central limit theorem is about the collective behaviour of many random variables. If any one of them is so big that it alone affects the whole in an non-negligible way, then the central limit theorem does not apply.
+\end{rmk}
+\begin{proof}
+  In the ideal case that all random variables $X_{n, m} = W_{n, m}$ which are independent and with normal distribution $N(0, \sigma^2_{n, m})$. Then it is obvious that the distribution of $W_{n, 1} + \dotsb + W_{n, n}$ converges to $N(0, \sigma^2)$ in distribution. To see it, we have that the characteristic function of $W_{n, m}$ is $\exp(-\sigma^2_{n, m} t^2/2)$, and the characteristic function of their sum is $\exp(-(\sigma^2_{n, 1} + \dotsb + \sigma^2_{n, n})t^2/2) \to \exp(-\sigma^2 t^2/2)$.
+
+  To prove the general result, our strategy is to compare the characteristic function of $X_{n, 1} + \dotsb + X_{n, n}$, which we denote as $\varphi_n(t)$, with that of $W_{n, 1} + \dotsb + W_{n, n}$, and show that the difference is small. Denote the characteristic function of $X_{n, m}$ by $\varphi_{n, m}(t)$, we have
+  \begin{equation*}
+    \begin{split}
+      & \varphi_{n, m}(t) - e^{-\sigma^2_{n, m} t^2/2} = E(e^{it X_{n, m}}) - E(e^{it W_{n, m}}) \\
+      = {}& E \left( 1 + itX_{n, m} - \frac{t^2}{2} X^2_{n, m} + R(tX_{n, m}) \right) - E \left( 1 + itW_{n, m} - \frac{t^2}{2} W^2_{n, m} + R(tW_{n, m}) \right) \\
+      = {}& \left( 1 + it E X_{n, m} - \frac{t^2}{2} E X^2_{n, m} + E(R(tX_{n, m})) \right) \\
+      & - \left( 1 + it E W_{n, m} - \frac{t^2}{2} E W^2_{n, m} + E(R(tW_{n, m})) \right) \\
+      = {}& E(R(tX_{n, m})) - E(R(tW_{n, m})),
+    \end{split}
+  \end{equation*}
+  where $R(x) = e^{ix} - (1 + ix -x^2/2)$ is the remainder of the Taylor expansion of $e^{ix}$ of degree $2$. 
+
+  Note that
+  \begin{equation*}
+    E(R(tX_{n, m})) = E(R(tX_{n, m}); \lvert X_{n, m} \rvert \leq \epsilon) + E(R(tX_{n, m}); \lvert X_{n, m} \rvert > \epsilon).
+  \end{equation*}
+  By Lemma \ref{lem:remainder_quadratic_bound}, we have
+  \begin{equation*}
+    \left\lvert E(R(tX_{n, m}); \lvert X_{n, m} \rvert \leq \epsilon) \right\rvert \leq E ((tX_{n, n})^2; \lvert X_{n, m} \rvert \leq \epsilon) = t^2 \sigma^2_{n, m}(\epsilon),
+  \end{equation*}
+  and by Lemma \ref{lem:several_bounds}\ref{enu:lem:several_bounds_a} below,
+  \begin{equation*}
+    \begin{split}
+      \left\lvert E(R(tX_{n, m}); \lvert X_{n, m} \rvert > \epsilon) \right\rvert \leq {}& E( \lvert tX_{n, m} \rvert^3; \lvert X_{n, m} \rvert > \epsilon) \leq E(t^3 \epsilon X^2_{n, m}; \lvert X_{n, m} \rvert > \epsilon) \\
+      \leq {}& t^3 \epsilon E(X^2_{n, m}) = t^3 \epsilon \sigma^2_{n, m}.
+    \end{split}
+  \end{equation*}
+  On the other hand, by Lemma \ref{lem:several_bounds}\ref{enu:lem:several_bounds_b} below,
+  \begin{equation*}
+    \lvert E(R(tW_{n, m})) \rvert = \lvert e^{-\sigma^2_{n, m} t^2/2} - (1 - \sigma^2_{n, m} t^2/2) \rvert \leq (\sigma^2_{n, m} t^2/2)^2 = \frac{t^4}{4} \sigma^4_{n, m}.
+  \end{equation*}
+
+  If $n$ is large enough, as discussed in Remark \ref{rmk:bounded_variance}, we have $\sigma^2_{n, m} < \epsilon$, and then
+  \begin{equation*}
+    \lvert \varphi_{n, m}(t) - e^{-\sigma^2_{n, m} t^2/2} \rvert < A_{n, m}, 
+  \end{equation*}
+  where
+  \begin{equation*}
+    A_{n, m} = t^2 \sigma^2_{n, m}(\epsilon) + t^3 \epsilon \sigma^2_{n, m} + \frac{t^4}{4} \sigma^4_{n, m} \leq t^2 \sigma^2_{n, m}(\epsilon) + \left( t^3 + \frac{t^4}{4} \right) \epsilon \sigma^2_{n, m}.
+  \end{equation*}
+  It is easy to see that
+  \begin{equation*}
+    \lim_{n \to \infty} \sum^n_{m = 1} A_{n, m} = \left( t^3 + \frac{t^4}{4} \right) \epsilon \sigma^2.
+  \end{equation*}
+  Then we have
+  \begin{equation*}
+    \left\lvert \frac{\varphi_{n, m}(t)}{e^{-\sigma^2_{n, m} t^2/2}} - 1 \right\rvert \leq e^{\sigma^2_{n, m} t^2/2} A_{n, m} \leq e^{\epsilon t^2/2} A_{n, m},
+  \end{equation*}
+  and with
+  \begin{multline*}
+    \sum^n_{m = 1} \log(1 - e^{\epsilon t^2/2} A_{n, m}) \leq \log \left( \frac{\varphi_n(t)}{e^{-(\sigma^2_{n, 1} + \dotsb + \sigma^2_{n, n}) t^2/2}} \right) \\
+    = \sum^n_{m = 1} \log \left( \frac{\varphi_{n, m}(t)}{ e^{-\sigma^2_{n, m} t^2/2}} \right) \geq \sum^n_{m = 1} \log(1 + e^{\epsilon t^2/2} A_{n, m}).
+  \end{multline*}
+  By Lemma \ref{lem:several_bounds}\ref{enu:lem:several_bounds_c}, for $\epsilon$ small enough, we have
+  \begin{equation*}
+    \log(1 + e^{\epsilon t^2/2} A_{n, m}) \leq e^{\epsilon t^2/2} A_{n, m}, \quad \log(1 - e^{\epsilon t^2/2} A_{n, m}) \geq -2e^{\epsilon t^2/2} A_{n, m}.
+  \end{equation*}
+  So
+  \begin{align*}
+    \limsup_{n \to \infty} \log \left( \frac{\varphi_n(t)}{e^{-(\sigma^2_{n, 1} + \dotsb + \sigma^2_{n, n}) t^2/2}} \right) \leq {}& \limsup_{n \to \infty} \sum e^{\epsilon t^2/2} A_{n, m} = e^{\epsilon t^2/2} \left( t^3 + \frac{t^4}{4} \right) \epsilon \sigma^2, \\
+    \liminf_{n \to \infty} \log \left( \frac{\varphi_n(t)}{e^{-(\sigma^2_{n, 1} + \dotsb + \sigma^2_{n, n}) t^2/2}} \right) \leq {}& \limsup_{n \to \infty} \sum e^{\epsilon t^2/2} A_{n, m} = -2e^{\epsilon t^2/2} \left( t^3 + \frac{t^4}{4} \right) \epsilon \sigma^2.
+  \end{align*}
+  Since $\epsilon$ is arbitrary, we can conclude that
+  \begin{equation*}
+    \lim_{n \to \infty} \log \left( \frac{\varphi_n(t)}{e^{-(\sigma^2_{n, 1} + \dotsb + \sigma^2_{n, n}) t^2/2}} \right) = 1,
+  \end{equation*}
+  and then conclude that $\lim_{n \to \infty} \varphi_n(t) \to e^{-\sigma^2 t^2/2}$. Thus we prove that theorem.
+\end{proof}
+
+The technical results we need in the proof of Theorem \ref{thm:Lindeberg-Feller} is collected in the following lemma.
+\begin{lem} \label{lem:several_bounds}
+  \begin{enumerate}[label=(\alph*)]
+  \item \label{enu:lem:several_bounds_a}
+    $\lvert R(y) \rvert \leq \lvert y \rvert^3$ for all $y \in \realR$, where $R(y)$ is the same as in Lemma \ref{lem:remainder_quadratic_bound}.
+  \item \label{enu:lem:several_bounds_b}
+    $\lvert e^{-x} - (1 - x) \rvert \leq x^2$ for all $x \geq 0$.
+  \item \label{enu:lem:several_bounds_c}
+    \begin{equation*}
+      \log(1 + x) 
+      \begin{cases}
+        \leq x & \text{for $x \geq 0$}, \\
+        \geq 2x & \text{for $x \in (-1/2, 0)$}.
+      \end{cases}
+    \end{equation*}
+  \end{enumerate}
+\end{lem}
+We only prove part \ref{enu:lem:several_bounds_a} The other two parts are easier and are left for exercise.
+\begin{proof}[Proof of Lemma \ref{lem:several_bounds}\ref{enu:lem:several_bounds_a}]
+  Similar to the proof of Lemma \ref{lem:remainder_quadratic_bound}, we have
+  \begin{equation*}
+    \lvert R(y) \rvert = \left\lvert \int^y_0 \frac{(e^{it})'''}{2!} (y - t)^2 dt \right\rvert \leq \pm \int^y_0 \frac{1}{2} (y - t)^2 dt = \frac{\lvert y \rvert^3}{6},
+  \end{equation*}
+  where $\pm$ is the sign of $y$. Hence we prove the lemma.
+\end{proof}
+
+\pagebreak
+
+\section{Poisson convergence}
+
+We consider a weak convergence result analogous to the central limit theorem, which is the ``law of rare events'' where we sum up many discrete random variables which are closed to $0$ individually. The weak limit of the sum is the Poisson distribution.
+\begin{defn}
+  A random variable $X$ is in \emph{Poisson distribution with mean $\lambda$} (denoted as $\Poisson(\lambda)$), if the values of $X$ are non-negative and
+  \begin{equation*}
+    P(X = k) = e^{-\lambda} \frac{\lambda^k}{k!}.
+  \end{equation*}
+\end{defn}
+It is not hard to find that the characteristic function of $X = \Poisson(\lambda)$ is $\exp(\lambda(e^{it} - 1))$.
+
+\begin{thm} \label{thm:Bernoulli_Poisson}
+  For each $n$, let $X_{n, m}$ ($1 \leq m \leq n$) be independent Bernoulli random variables with $P(X_{n, m} = 1) = p_{n, m}$ and $P(X_{n, m} = 0) = 1 - p_{n, m}$. Suppose
+  \begin{enumerate}
+  \item
+    $\displaystyle \sum^n_{m = 1} p_{n, m} \to \lambda \in (0, \infty)$.
+  \item
+    $\displaystyle \max_{1 \leq m \leq n} p_{n, m} \to 0$.
+  \end{enumerate}
+  Then the sum $S_n := X_{n, 1} + \dotsb + X_{n, n} \weakto \Poisson(\lambda)$.
+\end{thm}
+\begin{proof}
+  We only need to show that the characteristic function of $S_n$, which is
+  \begin{equation*}
+    \varphi_n(t) = \prod^n_{m = 1} \left( (1 - p_{n, m}) e^{i t \cdot 0} + p_{n, m} e^{it \cdot 1} \right) = \prod^n_{m = 1} \left( (1 - p_{n, m} (1 - e^{i t \cdot 0}) \right)
+  \end{equation*}
+  converges to $\exp(\lambda(e^{it} - 1))$ for all $t$. Since the characteristic functions are all complex, we consider the absolute value and the argument separately. We need to show that the log of the absolute value of $\varphi_n(t)$,
+  \begin{equation*}
+    \log \left(\prod^n_{m = 1} \left\lvert (1 - p_{n, m} (1 - e^{i t \cdot 0}) \right\rvert \right) = \frac{1}{2} \sum^n_{m = 1} \log \left( 1 - 2(1 - \cos t)p_{n, m}(1 - p_{n, m}) \right)
+  \end{equation*}
+  converge to $\log \lvert \exp(\lambda(e^{it} - 1)) \rvert = -\lambda(1 - \cos t)$, and the argument of $\varphi_n(t)$,
+  \begin{equation*}
+    \sum^n_{m = 1} \arctan \frac{p_{n, m} \sin t}{1 - p_{n, m}(1 - \cos t)}
+  \end{equation*}
+  converges to $\lambda \sin t$.
+
+  For the limit of absolute value, we apply the estimate
+  \begin{equation*}
+    \lvert \log(1 + x) - x \rvert \leq x^2 \quad \text{for $x \in (-1/2, 1/2)$},
+  \end{equation*}
+  a result similar to Lemma \ref{lem:several_bounds}\ref{enu:lem:several_bounds_c}. If $p_{n, m}$ are close to $0$, then
+  \begin{equation*}
+    \begin{split}
+      & \left\lvert \left( \sum^n_{m = 1} \log \left( 1 - 2(1 - \cos t)p_{n, m}(1 - p_{n, m}) \right) \right) - \left( \sum^n_{m = 1} -2(1 - \cos t)p_{n, m}(1 - p_{n, m}) \right) \right\rvert \\
+      \leq {}& \sum^n_{m = 1} 4(1 - \cos t) p^2_{n, m}(1 - p_{n, m})^2 \\
+      \leq {}& 4(1 - \cos t) \left( \max_{1 \leq m \leq n} p_{n, m} \right) \sum^n_{m = 1} p_{n, m},
+    \end{split}
+  \end{equation*}
+  and we have that it vanishes as $n \to \infty$. Thus
+  \begin{equation*}
+    \begin{split}
+      & \lim_{n \to \infty} \frac{1}{2} \sum^n_{m = 1} \log \left( 1 - 2(1 - \cos t)p_{n, m}(1 - p_{n, m}) \right) \\
+      = {}& \lim_{n \to \infty} \sum^n_{m = 1} -(1 - \cos t) p_{n, m}(1 - p_{n, m}) \\
+      = {}& -(1 - \cos t) \left( \lim_{n \to \infty} \sum p_{n, m} - \lim_{n \to \infty} \sum p^2_{n, m} \right) \\
+      = {}& -(1 - \cos t)(\lambda - 0),
+    \end{split}
+  \end{equation*}
+  and we prove the convergence of absolute values.
+
+  On the other hand, we have
+  \begin{equation*}
+    \lvert \arctan(x) - x \rvert \leq x^2 \quad \text{for all $x \in \realR$}.
+  \end{equation*}
+  So
+  \begin{equation*}
+    \begin{split}
+      & \left\lvert \left( \sum^n_{m = 1} \arctan \frac{p_{n, m} \sin t}{1 - p_{n, m}(1 - \cos t)} \right) - \left( \sum^n_{m = 1} \frac{p_{n, m} \sin t}{1 - p_{n, m}(1 - \cos t)} \right) \right\rvert \\
+      \leq {}& \sin^2 t \sum^n_{m = 1} \frac{p^2_{n, m}}{(1 - p_{n, m}(1 - \cos t))^2} \\
+      \leq {}& \sin^2 t \left( \max_{1 \leq m \leq n} p_{n, m} \right) \sum^n_{m = 1} \frac{p_{n, m}}{(1 - \left( \max_{1 \leq m \leq n} p_{n, m} \right) (1 - \cos t))^2},
+    \end{split}
+  \end{equation*}
+  and it vanishes as $n \to \infty$. We then have
+  \begin{equation*}
+    \lim_{n \to \infty} \sum^n_{m = 1} \arctan \frac{p_{n, m} \sin t}{1 - p_{n, m}(1 - \cos t)} = \lim_{n \to \infty} \sum^n_{m = 1} \frac{p_{n, m} \sin t}{1 - p_{n, m}(1 - \cos t)}.
+  \end{equation*}
+  Since
+  \begin{align*}
+    \limsup_{n \to \infty} \sum^n_{m = 1} \frac{p_{n, m} \sin t}{1 - p_{n, m}(1 - \cos t)} \leq {}& \limsup_{n \to \infty} \sum^n_{m = 1} p_{n, m} \sin t = \lambda \sin t, \\
+    \liminf_{n \to \infty} \sum^n_{m = 1} \frac{p_{n, m} \sin t}{1 - p_{n, m}(1 - \cos t)} \leq {}& \liminf_{n \to \infty} \sum^n_{m = 1} \frac{p_{n, m} \sin t}{1 - \left( \max_{1 \leq m \leq n} p_{n, m} \right) (1 - \cos t)} = \lambda \sin t, 
+  \end{align*}
+  we get the desired convergence of the argument.
+\end{proof}
+
+The basic form of Poisson convergence, which is only for Bernoulli random variables, has a direct generalization.
+\begin{thm} \label{thm:general_Poisson}
+  Let $X_{n, m}$, $1 \leq m \leq n$ be independent non-negative integer valued random variables, with $P(X_{n, m} = 1) = p_{n, m}$ and $P(X_{n, m} \geq 2) = \epsilon_{n, m}$, such that
+  \begin{enumerate}
+  \item
+    $\displaystyle \sum^n_{m = 1} p_{n, m} \to \lambda \in (0, \infty)$.
+  \item
+    $\displaystyle \max_{1 \leq m \leq n} p_{n, m} \to 0$.
+  \item
+    $\displaystyle \sum^n_{m = 1} \epsilon_{n, m} \to 0$.
+  \end{enumerate}
+  Then the sum $S_n := X_{n, 1} + \dotsb + X_{n, n} \weakto \Poisson(\lambda)$.
+\end{thm}
+\begin{proof}
+  Let $X'_{n, m} = X_{n, m} 1_{X_{n, m} = 1}$. Then Theorem \ref{thm:Bernoulli_Poisson} implies that $S'_n := X_{n, 1} + \dotsb + X_{n, n} \weakto \Poisson(\lambda)$. On the other hand, $S_n - S'_n \to 0$ in probability, since
+  \begin{equation*}
+    P(S_n \neq S'_n) \leq \sum^n_{m = 1} P(X_{n, m} \neq X'_{n, m}) = \sum^n_{m = 1} \epsilon_{n, m}.
+  \end{equation*}
+  By the ``converging together lemma'' (an exercise), we finish the proof.
+\end{proof}
+The next theorem is a corollary of the theorem above, and it shows how the Poisson distribution occurs in applications.
+\begin{thm}
+  Suppose random positive points $x_1 < x_2 < \dotsb$, which are called ``arrivals'', are placed on $(0, \infty)$, and let $N(s, t)$ be the number of arrivals in the interval $(s, t]$ if $0 \leq s < t$. Suppose the following assumptions hold:
+  \begin{enumerate}
+  \item
+    The number of arrivals in disjoint intervals are independent.
+  \item
+    The distribution of $N(s, t)$ only depends on $t - s$.
+  \item
+    $P(N(0, h) = 1) = \lambda h + o(h)$ as $h \downto 0$.
+  \item
+    $P(N(0, h) \geq 2) = o(h)$ as $h \downto 0$.
+  \end{enumerate}
+  Then $N(0, t) = \Poisson(\lambda t)$ for all $t > 0$.
+\end{thm}
+\begin{proof}
+  Note that $N(0, t) = \lim_{n \to \infty} \sum^n_{m = 1} X_{n, m}$ where $X_{n, m} = N((m - 1)/n, m/n)$, and apply Theorem \ref{thm:general_Poisson}.
+\end{proof}
+
+We can interpret the theorem by a real life example. Let $x_k$ be the time that the $k$-th customer comes to a bank after the opening time $t = 0$ (so explained the term ``arrival''), then we assume the ideal conditions:
+\begin{enumerate}
+\item
+  In non-overlapping different time intervals, the numbers of incoming customers are independent.
+\item
+  The number of incoming customers in any time interval from $s$ to $t$ depends only on $t - s$.
+\item
+  At any infinitesimal time, the rate for a customer to come is $\lambda$.
+\item
+  The case that more than one customers come together is practically impossible.
+\end{enumerate}
+Then the distribution of the number of customers in total time $t$ is $\Poisson(\lambda t)$.
+
+Inspired by the bank customer example, we define the following Poisson process.
+\begin{defn}
+  A family of random variables $N_t$, $t \geq 0$, satisfies
+  \begin{enumerate}[label=(\alph*)]
+  \item \label{enu:defn:Poisson_proc_a}
+    If $0 = t_0 < t_1 < \dotsb < t_n$, then $N(t_k) - N(t_{k - 1})$ ($1 \leq k \leq n$) are independent.
+  \item \label{enu:defn:Poisson_proc_b}
+    $N(t) - N(s) = \Poisson(\lambda(t - s))$.
+  \end{enumerate}
+  Then $\{ N_t \}$ is called a \emph{Poisson process with rate $\lambda$}.
+\end{defn}
+We claim that $N_t$ can be defined as follows. Let $\xi_1, \xi_2, \dotsc$ be \iid\ positive random variables with exponential distribution with rate $\lambda$, that is, $P(\xi_i > t) = e^{-\lambda t}$. Let $T_n = \xi_1 + \dotsb + \xi_n$ and define $N_t = \sup \{ n \mid T_n \leq t \}$. Then $\{ N_t \}$ satisfies the two requirements for a Poisson process with rate $\lambda$.
+
+Below we check the two conditions for $\{ N_t \}$ constructed above. Since this is a topic covered by MA3236, we do not give all the calculational details. First compute the density of $T_n$ as
+\begin{equation*}
+  f_{T_n}(s) = \frac{\lambda^n s^{n - 1}}{(n - 1)!} e^{-\lambda s}.
+\end{equation*}
+So
+\begin{equation*}
+  P(N_t = 0) = P(T_1 > t) = e^{-\lambda t}
+\end{equation*}
+and for $n \geq 1$
+\begin{equation*}
+  P(N_t = n) = P(T_n \leq t) - P(T_{n + 1} \leq t) = \int^t_0 f_{T_n}(s) - f_{T_{n + 1}}(s) ds = e^{-\lambda t} \frac{(\lambda t)^n}{n!}.
+\end{equation*}
+We then verify Condition \ref{enu:defn:Poisson_proc_b} with $s = 0$. Below we show Condition \ref{enu:defn:Poisson_proc_a}. After that, Condition \ref{enu:defn:Poisson_proc_b} follows. To see it, we note that if $X = N(t) - N(s)$ is independent to $Y = N(s)$, and we have $Y = \Poisson(s)$ and $X + Y = \Poisson(t)$, we can compute that $X = \Poisson(t - s)$ (exercise).
+
+To check the independence condition \ref{enu:defn:Poisson_proc_a}, we compute the conditional probability that for $u \geq t > 0$
+\begin{equation*}
+  P(T_{n + 1} > u \mid N_t = n) = \frac{P(T_{n + 1} > u, T_n \leq n)}{P(N_t = n)} = e^{-\lambda(u - t)}.
+\end{equation*}
+This computation shows that if we denote $\xi'_1 = T_{N(t) + 1} - t$, then $\xi'_1$ is independent of $N(t)$ and its distribution is the same as $\xi_i$: exponential distribution with rate $\lambda$. Similarly, if we denote $\xi'_k = T_{N(t) + k} - T_{N(t) + k - 1}$ for $k \geq 2$, we have that all the $\xi'_1, \xi'_2, \dotsc$ are \iid\ with exponential distribution with rate $\lambda$, and they are independent of $N(t)$.
+
+Since $\xi'_1, \xi'_2, \dotsc$ have the same distribution as $\xi_1, \xi_2, \dotsc$, with $t = t_1$, we have that the distributions of $N(t_2) - N(t_1)$, $N(t_3) - N(t_2)$, \dots, $N(t_n) - N(t_{n - 1})$ have the same distribution as $N(t_2 - t_1) - N(0)$, $N(t_3 - t_1) - N(t_2 - t_1)$, \dots, $N(t_n - t_1) - N(t_{n - 1} - t_1)$, and they are independent by inductive assumption. Also since all the $N(t_k) - N(t_{k - 1})$ ($k \geq 2$) are derived from $\xi'_1, \xi'_2, \dotsc$, they are independent to $N(t_1) = N(t_1) - N(t_0)$.
+
+% One Poisson process can  ``split'' into several. Let $N = \Poisson(\lambda)$, and $X_1, X_2, \dotsc$ be a sequence of \iid\ random variables taking values in $\{ 0, 1, \dotsc, k \}$, such that $P(X_i = j) = p_j$. We can show that $N_j := \text{``number of $m$ in $\{ 1, 2, \dotsc, N \}$ such that $X_m = j$''}$ ($j = 1, \dotsc, k$) are independent random variables and $N_j = \Poisson(\lambda p_j)$. This is left as an exercise.
+
+\section{Stable laws}
+
+Now we consider the complement of the central limit theorem, in the following sense: Let $X_1, X_2, \dotsc$ be \iid\ random variables with $E X^2_i = \infty$. Then the central limit theorem cannot hold, but we may ask whether a non-degenerate weak limit $(S_n = b_n)/a_n$ exists, where $S_n = X_1 + \dotsb + X_n$ as usual, and $a_n, b_n$ are properly chosen real numbers? (We say non-degenerate, because it is easy to let the weak limit to be $0$ if we let $a_n \to \infty$ fast enough.)
+
+Our first example is the sum of \iid\ random variables $X_1, X_2, \dotsc$ in \emph{Cauchy distribution}, that is,
+\begin{equation*}
+  F(x) := P(X_i \leq x) = \frac{1}{\pi} \int^x_{-\infty} \frac{dy}{1 + y^2} = \frac{\arctan x}{\pi} + 1/2.
+\end{equation*}
+We have that the characteristic function of $X_i$ is
+\begin{equation*}
+  \varphi(t) = \int^{\infty}_{-\infty} \frac{e^{ity}}{\pi(1 + y^2)} dy = \exp(-\lvert t \rvert).
+\end{equation*}
+Then the characteristic function of $S_n$ is $\exp(-n\lvert t \rvert)$, and we have that $S_n/n$ has Cauchy distribution. Hence in this example, we may take $a_n = n$ and $b_n = 0$, and the limit is the Cauchy distribution.
+
+Here we see that the Cauchy distribution has a special property that it is a \emph{stable law}.
+\begin{defn}
+  A distribution $\mu$ is called a \emph{stable law} if for any $n$ and $X_1, \dotsc, X_n$ are \iid\ random variables with distribution $\mu$, there exist $a_n$ and $b_n$ such that $(S_n - b_n)/a_n$ also has distribution $\mu$, where $S_n = X_1 + \dotsb + X_n$ and $a_n, b_n$ are properly chosen real numbers.
+\end{defn}
+
+It is clear that normal distributions are also stable laws. Actually stable laws are closely related to the central limit theorem and its infinite variance counterpart. Below we prove the following general result:
+\begin{thm} \label{thm:stable_law_conv}
+  Suppose $X_1, X_2, \dotsc$ are \iid\ random variables with a distribution that satisfies
+  \begin{enumerate}[label=(\roman*)]
+  \item
+    $\displaystyle \lim_{x \to +\infty} \frac{P(X_i > x)}{P(\lvert X_i \rvert > x)} = \theta \in [0, 1]$.
+  \item \label{enu:thm:stable_law_conv:b}
+    $\displaystyle P(\lvert X_i \rvert > x) = x^{-\alpha} L(x)$ for all $x > 0$, where $\alpha \in (0, 2)$, and $L(x)$ is a \emph{slow varying} function, such that $\displaystyle \lim_{x \to +\infty} L(tx)/L(x) \to 1$ for all $t > 0$.
+  \end{enumerate}
+  Then with $S_n = X_1 + \dotsb + X_n$, $a_n = \inf \{ x \mid P(\lvert X_i \rvert > 0) \leq n^{-1} \}$ and $b_n = n E(X_i 1_{\lvert X_i \rvert \leq a_n})$, we have that $(S_n - b_n)/a_n \weakto Y$ where $Y$ has a non-degenerate distribution.
+\end{thm}
+
+Before giving the proof, we clarify some definitions that are not very straightforward. First, the slow varying condition implies that if $L(x)$ grows, then it grows very slow, and if $L(x)$ vanishes, then it vanishes very slow, in the sense that given $\epsilon > 0$, $x^{-\epsilon} < L(x) < x^{\epsilon}$ for all large enough $x$. To see it, we assume that for all $x > M$, $L(2x)/L(x) < 2^{\epsilon/2}$. Then we take $c = \inf_{x \in (M, 2M]} L(x)$ and $C = \sup_{x \in (M, 2M]} L(x)$, and have inductively
+\begin{equation*}
+ 2^{\frac{-\epsilon}{2} k} c < \inf_{x \in (2^k M, 2^{k + 1} M]} L(x) \leq \sup_{x \in (2^k M, 2^{k + 1} M]} L(x) < 2^{\frac{\epsilon}{2} k} C.
+\end{equation*}
+Thus for large enough $x$, $x^{-\epsilon} L(x) < x^{\epsilon}$. Similarly, we can show that for any $\epsilon > 0$, there exist $M, C, c > 0$ such that for all $y > x > M$,
+\begin{equation*}
+  c \left( \frac{y}{x} \right)^{-\epsilon} < \frac{L(y)}{L(x)} < C \left( \frac{y}{x} \right)^{\epsilon}.
+\end{equation*}
+The proof is left as an exercise.
+
+The slow growth property of $L(x)$ implies that $a_n \to \infty$ faster than $\sqrt{n}$. To see it, we note that for large enough $x$, $L(x) > x^{\alpha/2 - 1}$, and then $P(\lvert X_i \rvert > x) > x^{-\alpha/2 - 1}$. We conclude that if $n$ is large enough, then $P(\lvert X_i \rvert > n^{1/(\alpha/2 + 1)} > n^{-1}$, and then $a_n \leq n^{1/(\alpha/2 + 1)}$.
+
+By the definition of $a_n$, we can derive that $P(\lvert X_i \rvert > a_n) \leq n^{-1}$, but do not have that the equal sign holds, unless the distribution function is continuous at $\pm a_n$. But we have the limiting result
+\begin{equation*}
+  n P(\lvert X_i \rvert > a_n) \to 1 \quad \text{as $n \to \infty$}.
+\end{equation*}
+To check it, we argue by contradiction, and assume that for any $\epsilon > 0$, there is a subsequence $\{ n(k) \}$ such that $P(\lvert X_i \rvert > a_{n(k)}) \leq (1 - \epsilon) n(k)^{-1}$. On the other hand, by the definition of $a_n$, we have that $P(\lvert X_i \rvert > (1 - \epsilon)^{1/(2\alpha)} a_{n(k)}) > n(k)^{-1}$. Equivalently, we have
+\begin{equation*}
+  a^{-\alpha}_{n(k)} L(a_{n(k)}) \leq (1 - \epsilon)n^{-1} \quad \text{and} \quad (1 - \epsilon)^{-1/2} a^{-\alpha}_{n(k)} L((1 - \epsilon)a_{n(k)}) > n^{-1}.
+\end{equation*}
+It implies the inequality
+\begin{equation*}
+  \frac{L((1 - \epsilon) a_{n(k)})}{L(a_{n(k)})} > (1 - \epsilon)^{-1/2}.
+\end{equation*}
+Since $a_{n(k)} \to \infty$, it contradicts the slow varying condition.
+\begin{proof}[Proof of Theorem \ref{thm:stable_law_conv}]
+  For any $\epsilon > 0$, we define the triangular arrays of random variables $\bar{X}_{n, m}(\epsilon)$ and $\hat{X}_{n, m}(\epsilon)$, where $1 \leq m \leq n$, as
+  \begin{gather*}
+    \bar{X}_{n, m}(\epsilon) = X_m 1_{\lvert X_m \rvert \leq \epsilon a_n}, \quad \hat{X}_{n, m}(\epsilon) = X_m 1_{\lvert X_m \rvert > \epsilon a_n}, \\
+    \bar{\mu}_n(\epsilon) = E \bar{X}_{n, 1}(\epsilon), \quad \hat{\mu}_n(\epsilon) = E(\hat{X}_{n, 1}(\epsilon); \lvert \hat{X}_{n, 1} \rvert \leq a_n) = E(X_m 1_{\epsilon a_n < X_m \leq a_n}),
+  \end{gather*}
+  and then let
+  \begin{equation*}
+    \bar{S}_n(\epsilon) = \sum^n_{m = 1} \bar{X}_{n, m}(\epsilon), \quad \hat{S}_n(\epsilon) = \sum^n_{m = 1} \hat{X}_{n, m}(\epsilon).
+  \end{equation*}
+  It is clear that $S_n = \bar{S}_n(\epsilon) + \hat{S}_n(\epsilon)$, and we also have
+  \begin{equation*}
+    \frac{S_n - b_n}{a_n} = \frac{\bar{S}_n(\epsilon) - n\bar{\mu}_n(\epsilon)}{a_n} + \frac{\hat{S}_n(\epsilon) - n\hat{\mu}_n(\epsilon)}{a_n}.
+  \end{equation*}
+  We will show that $(\bar{S}_n(\epsilon) - n\bar{\mu}_n(\epsilon))/a_n$ is small (comparable to $\epsilon$), and then compute the weak limit of $(\hat{S}_n(\epsilon) - n\hat{\mu}_n(\epsilon))/a_n$.
+
+  We estimate the $\var(\bar{S}_n(\epsilon)$ as follows. First,
+  \begin{equation*}
+    \var(\bar{S}_n(\epsilon)) = n\var(\bar{X}_{n, m}(\epsilon)) \leq n E(\bar{X}^2_{n, m}(\epsilon)).
+  \end{equation*}
+  Suppose $\bar{\mu}$ is the distribution of $\lvert X_i \rvert$ and $\bar{F}$ is the distribution function. Also suppose that
+  \begin{equation*}
+   \frac{L(x)}{L(y)} < C \left( \frac{x}{y} \right)^{\alpha/2 - 1}, \quad \text{or equivalently}, \quad \frac{1 - \bar{F}(x)}{1 - \bar{F}(y)} < C \left( \frac{x}{y} \right)^{-1 - \alpha/2} \quad \text{for $x > M$ and $t > 1$}.  
+  \end{equation*}
+  We have
+  \begin{equation*}
+    nE \bar{X}^2_{n, m}(\epsilon) = n\int^{\epsilon a_n}_0 x^2 \bar{\mu}(dx) = n\int^M_0 x^2 \bar{\mu}(dx) + n\int^{\epsilon a_n}_M x^2 \bar{\mu}(dx) \leq n M^2 + n\int^{\epsilon a_n}_M x^2 \bar{\mu}(dx).
+  \end{equation*}
+  On the other hand,
+  \begin{equation*}
+    \begin{split}
+      n\int^{\epsilon a_n}_M x^2 \bar{\mu}(dx) = {}& n\int^{\epsilon a_n}_M \left( \int^{\infty}_0 2t \cdot 1_{t \leq x} dt \right) \bar{\mu}(dx) \\
+      = {}& n\int^{\infty}_0 2t \left( \int^{\epsilon a_n}_M 1_{t \leq x} \bar{\mu}(dx) \right) dt \\
+      = {}& n\int^M_0 2t(\bar{F}(\epsilon a_n) - \bar{F}(C)) dt + n \int^{\epsilon a_n}_M 2t(\bar{F}(\epsilon a_n) - F(t)) dt \\
+      \leq {}& n \int^M_0 2t dt + \int^{\epsilon a_n}_M 2t n(1 - \bar{F}(t)) dt \\
+      \leq {}& n M^2 + 2 \int^{\epsilon a_n}_M n(1 - \bar{F}(a_n)) C t \left( \frac{t}{a_n} \right)^{-1 - \alpha/2} dt.
+    \end{split}
+  \end{equation*}
+  Since we have that $n(1 - F(a_n)) = n P( \lvert X_i \rvert > a_n) \to 1$ and
+  \begin{equation*}
+    \int^{\epsilon a_n}_M t \left( \frac{t}{a_n} \right)^{-1 - \alpha/2} dt \leq \int^{\epsilon a_n}_0 t \left( \frac{t}{a_n} \right)^{-1 - \alpha/2} dt = a^2_n \int^{\epsilon}_0 y^{-\alpha/2} dy = \frac{\epsilon^{1 - \alpha/2}}{1 - \alpha/2} a^2_n,
+  \end{equation*}
+  we conclude that
+  \begin{equation*}
+    \limsup_{n \to \infty} \var(\bar{S}_n(\epsilon)) \leq 2nM^2 + \frac{\epsilon^{1 - \alpha/2}}{1 - \alpha/2} a^2_n. 
+  \end{equation*}
+  Finally, since $a_n \leq n^{1/(\alpha/2 + 1)}$, we have 
+  \begin{equation*}
+   \limsup_{n \to \infty} E((\bar{S}_n(\epsilon) - \bar{\mu}_n(\epsilon))/a_n) = \limsup_{n \to \infty} \var( \bar{S}_n(\epsilon)/a_n) \leq \frac{\epsilon^{1 - \alpha/2}}{1 - \alpha/2}.
+  \end{equation*}
+   
+  Now we consider the distribution of $\hat{S}_n/a_n$. Note that since $n P(\lvert X_i \rvert > a_n) \to n$, we have that for all $t > 0$, $nP(\lvert X_i \rvert > ta_n) \to t^{-\alpha}$, by condition \ref{enu:thm:stable_law_conv:b}, and furthermore, $nP(X_i > ta_n) \to \theta t^{-\alpha}$ and $nP(X_i < -ta_n) \to (1 - \theta) t^{-\alpha}$, as $n \to \infty$.
+
+  Then for any $\hat{X}_{n, m}(\epsilon)$, we have $nP(\hat{X}_{n, m}(\epsilon) \neq 0) \to \epsilon^{-\alpha}$. So by the Poisson convergence result, we have that the number of nonzero $X_{n, m}(\epsilon)$ with $m = 1, \dotsc, n$ has the Poisson distribution with mean $\epsilon^{-\alpha}$ as the limit as $n \to \infty$. To be precise,
+  \begin{equation*}
+    p_k(n) := P(\text{$k$ out of $n$ $\hat{X}_{n, m}(\epsilon)$ are nonzero}) \to e^{-\epsilon^{-\alpha}} \frac{\epsilon^{-\alpha k}}{k!}, \quad \text{as $n \to \infty$}.
+  \end{equation*}
+  Under the condition that $k$ out of $n$ $\hat{X}_{n, m}(\epsilon)$ are nonzero, these $k$ nonzero ones are \iid, and they have the same distribution as \iid\ random variables $Y_{n, 1}(\epsilon), \dotsc, Y_{n, k}(\epsilon)$ such that
+  \begin{equation*}
+    \lim_{n \to \infty} P(Y_{n, 1}(\epsilon)/a_n > t) = \theta t^{-\alpha}/\epsilon^{-\alpha}, \quad \lim_{n \to \infty} P(Y_{n, 1}(\epsilon)/a_n < -t) = (1 - \theta) t^{-\alpha}/\epsilon^{-\alpha},
+  \end{equation*}
+  or equivalently, their limiting distribution of $Y_{n, 1}(\epsilon)/a_n)$ is given by the density function
+  \begin{equation*}
+    f(x) =
+    \begin{cases}
+      \theta \alpha \epsilon^{\alpha} t^{-\alpha - 1} & \text{if $t \geq \epsilon$}, \\
+      (1 - \theta) \alpha \epsilon^{\alpha} (-t)^{-\alpha - 1} & \text{if $t \leq -\epsilon$}, \\
+      0 & \text{otherwise}.
+    \end{cases}
+  \end{equation*}
+  So we have that the characteristic function $\varphi_n(t; \epsilon)$ of $\hat{S}_n(\epsilon)/a_n$ is expressed as
+  \begin{equation*}
+    \varphi_n(x; s) = E \left( \prod^n_{m = 1} e^{it \hat{X}_{n, m}(\epsilon)} \right) = \sum^n_{k = 1} p_k(n) E \left( e^{it Y_{n, 1}(\epsilon)} \right)^k.
+  \end{equation*}
+  By the limit of $p_k(n)$ as $n \to \infty$, and the limit
+  \begin{equation*}
+    \begin{split}
+      \lim_{n \to \infty} E\left( e^{it Y_{n, 1}(\epsilon)} \right) = {}& \int^{\infty} f(x) dx + \int^{-\epsilon}_{-\infty} f(x) dx \\
+      = {}& \alpha \epsilon^{\alpha} \int^{\infty}_{\epsilon} (\cos(tx) + i(2\theta - 1)\sin(tx)) x^{-\alpha - 1} dx,
+    \end{split}
+  \end{equation*}
+  we have that
+  \begin{equation*}
+    \begin{split}
+      \lim_{n \to \infty} \varphi_n(t; \epsilon) = {}& e^{-\epsilon^{-\alpha}} \sum^{\infty}_{k = 0} \frac{e^{-\alpha k}}{k!} \left( \alpha \epsilon^{\alpha} \int^{\infty}_{\epsilon} (\cos(tx) + i(2\theta - 1)\sin(tx)) x^{-\alpha - 1} dx \right)^k \\
+      = {}& e^{-\epsilon^{-\alpha}} \exp \left( \alpha \int^{\infty}_{\epsilon} (\cos(tx) + i(2\theta - 1)\sin(tx)) x^{-\alpha - 1} dx \right) \\
+      = {}& \exp \left( \alpha \int^{\infty}_{\epsilon} (\cos(tx) -1 + i(2\theta - 1)\sin(tx)) x^{-\alpha - 1} dx \right).
+    \end{split}
+  \end{equation*}
+
+  At last we consider the characteristic function of $(\hat{S}_n(\epsilon) - n\hat{\mu}_n(\epsilon))/a_n$. We have
+  \begin{equation*}
+    \begin{split}
+      \frac{n \hat{\mu}_n(\epsilon)}{a_n} = {}& n E \left( X_1 /a_n; \epsilon < \lvert X_1 \rvert/a_n \leq 1 \right) \\
+      = {}& n P(\lvert X_i \rvert > \epsilon a_n) E \left( Y_{n, 1}(\epsilon) /a_n; \epsilon < \lvert Y_{n, 1}(\epsilon) \rvert/a_n \leq 1 \right),
+    \end{split}
+  \end{equation*}
+  and then the limit
+  \begin{equation*}
+    \lim_{n \to \infty} \frac{n \hat{\mu}_n(\epsilon)}{a_n} = \alpha \int^1_{\epsilon} (2\theta - 1)x \cdot x^{-\alpha - 1} dx.
+  \end{equation*}
+  Although further simplification is possible, the form above is the most suitable one for our purpose, because then we have that the limit of the characteristic function of $(\hat{S}_n(\epsilon) - n\hat{\mu}_n(\epsilon))/a_n$ is
+  \begin{equation*}
+    \begin{split}
+      \lim_{n \to \infty} \varphi_n(t; \epsilon) e^{it n \hat{\mu}_n(\epsilon)/a_n} = {}& \exp \left( \alpha \int^{\infty}_{\epsilon} (\cos(tx) -1) x^{-\alpha - 1} dx \right) \\
+      & \times \exp \left( \alpha \int^{\infty}_1 i(2\theta - 1)\sin(tx)) x^{-\alpha - 1} dx \right) \\
+      & \times \exp \left( \alpha \int^1_{\epsilon} i(2\theta - 1)(\sin(tx) - tx) x^{-\alpha - 1} dx \right).
+    \end{split}
+  \end{equation*}
+  We note that all the three terms are well defined, and the first and third terms have well defined limits as $\epsilon \downto 0$. 
+
+  As $\epsilon$ becomes small, we have that $(\bar{S}_n(\epsilon) - \bar{\mu}_n(\epsilon))/a_n$ has a very small second moment as $n$ is large, and the weak limit of $(\hat{S}_n(\epsilon) - n\hat{\mu}_n(\epsilon))/a_n$ exists and has the characteristic function close to
+  \begin{multline*}
+    \varphi(t) = \exp \left( \alpha \int^{\infty}_0 (\cos(tx) -1) x^{-\alpha - 1} dx \right) \exp \left( \alpha \int^{\infty}_1 i(2\theta - 1)\sin(tx)) x^{-\alpha - 1} dx \right) \\
+    \times \exp \left( \alpha \int^1_0 i(2\theta - 1)(\sin(tx) - tx) x^{-\alpha - 1} dx \right).
+  \end{multline*}
+  It is not hard to see that by letting $\epsilon \downto 0$ the sum of them, $(S_n - b_n)/a_n$, has a weak limit whose characteristic function is $\varphi(t)$.
+\end{proof}
+
+From the proof, we see that the limiting behaviour of the sum $S_n$ is determined largely by a few large random variable $X_m$, whose values are bigger than $\epsilon a_n$. This is different from the central limit theorem where the a few largest random variables do not affect the limiting distribution. Also, Poisson distribution occurs in the argument when we deal with the rare and big random variables.
+
+You may wonder: What is the relation between the theorem and the concept ``stable laws''? Actually, the limiting distributions in Theorem \ref{thm:stable_law_conv} are stable laws, and these distributions, together with normal distributions, exhaust stable laws. But we may not have time to discuss more on it.
+
+\pagebreak
+
+\section{Convergence of random series}
+
+In this semester, we studied the laws of large numbers, central limit theorem, and some related results. All the results are in  this form: A series, or a triangular array, of random variables, converges to a limit (in some sense), and we can compute the limit. But it is normal in mathematics that the existence of a limit is already a challenge, while it is exceptional that the limit can be computed explicitly.
+
+The last topic of our module is convergence theorems of random series, while the computation of the limit is no longer our main interest.
+
+First we introduce an important and rather abstract result, Kolmogorov's 0-1 law. It depends on measure theory in a subtle way.
+
+Let $X_1, X_2, \dotsc$ be a sequence of random variables on the probability space $(\Omega, \F, P)$. Recall that $\sigma(X_i)$ is a $\sigma$-algebra on $\Omega$, consisting  of the subsets $X^{-1}_i(B)$ where $B \in \B$ is a Borel set on $\realR$. For several $X_{n_1}, X_{n_2}, \dotsc, X_{n_k}$, we define the $\sigma$-algebra $\sigma(X_{n_1}, \dotsc, X_{n_k})$ as the $\sigma$-algebra generated by all $X^{-1}_{n_i}(B)$, $B \in \B$. The definition is valid if $k = \infty$, and we denote $\F'_n = \sigma(X_n, X_{n + 1}, \dotsc)$. It is clear that $\F'_n \subseteq F'_m$ if $n > m$. Then we define 
+\begin{equation*}
+  \T = \bigcap^{\infty}_{n = 1} \F'_n.
+\end{equation*}
+To understand the meaning of $\T$, we think each $\sigma(X_n)$ as the information carried by $X_n$ and interpret $n$ as time. Then $\F'_n$ is the information related to time $\geq n$, and $\T$ is the information in remote future. To make sense of the definitions, we consider the following examples.
+\begin{expl}
+  \begin{enumerate}
+  \item
+    Let $B_n$ be a Borel set on $\realR$ for each $n$, and then $A = \{ X_n \in B_n \io \}$ is a subset of $\Omega$. We have
+    \begin{equation*}
+      \begin{split}
+        A = {}& \{ \omega \in \Omega \mid X_n(\omega) \in B_n \text{ for infinitely many $n$} \} = \bigcap^{\infty}_{n = 1} \bigcup^{\infty}_{k = n} \{ X_k \in B_k \} \\
+        = {}& \bigcap^{\infty}_{n = m} \bigcup^{\infty}_{k = n} \{ X_k \in B_k \} \quad \text{for all $m$} \\
+        \in {}&  \F'_m \quad \text{for all $m$}.
+      \end{split}
+    \end{equation*}
+    Therefore $A \in \T$.
+  \item
+    Let $S_n = X_1 + \dotsb + X_n$, and then $B = \{ \lim_{n \to \infty} S_n \text{ exists} \}$ is a subset of $\Omega$. We have
+    \begin{equation*}
+      \begin{split}
+        B = {}& \{ \omega \in \Omega \mid \sum^{\infty}_{n = 1} X_n(\omega) \text{ converges} \} \\
+        = {}& \{ \omega \in \Omega \mid \sum^{\infty}_{n = m} X_n(\omega) \text{ converges} \}  \quad \text{for all $m$} \\
+        \in {}& F'_m \quad \text{for all $m$}.
+      \end{split}
+    \end{equation*}
+    Therefore $B \in \T$.
+  \item
+    Continued from last example, let $C = \{ \limsup_{n \to  \infty} S_n > 0 \}$. $C$ is not in $\T$ in general, and even $C \notin \F'_2$ in general. (In special cases, like $X_1 = X_2 = \dotsb$, $C \in \T$.) Because even if we know the values of $X_2, X_3, \dotsc$, we still cannot tell if $\limsup_{n \to  \infty} S_n > 0$, without the knowledge of the value of $X_1$.
+ \end{enumerate}
+\end{expl}
+Now we can state Kolmogorov's 0-1 law, and it implies that $S_n = X_1 + \dotsb + X_n$ converges \as, or diverges \as.
+\begin{thm}[Kolmogorov's 0-1 law] \label{thm:0-1}
+  If $X_1, X_2, \dotsc$ are independent, and $A \in \T$, then $P(A) = 0$ or $1$.
+\end{thm}
+Before giving the proof, we review the concept of independence. We say two collections $\mathcal{A}$ and $\mathcal{B}$ of measurable sets, which may be $\sigma$-algebras or may not, are independent, if
+\begin{equation*}
+  P(A \cap B) = P(A)P(B), \quad \text{for all $A \in \mathcal{A}$ and $B \in \mathcal{B}$}.
+\end{equation*}
+If $Y_1, \dotsc, Y_m, Z_1, \dotsc, Z_n$ are independent random variables, we have $\sigma(Y_i)$ and $\sigma(Z_j)$ are independent, by definition. We also have that $\sigma(Y_1, \dotsc, Y_m)$ and $\sigma(Z_1, \dotsc, Z_n)$ are independent. To check it, we can start with the definition, but a faster way is to apply Theorem \ref{thm:pi_sys_indept}. Since $\sigma(Y_1) \cup \dotsb \cup \sigma(Y_m)$ and $\sigma(Z_1) \cup \dotsb \cup \sigma(Z_n)$ are independent, and both of them are ``$\pi$-systems'', we conclude that $\sigma(\sigma(Y_1) \cup \dotsb \cup \sigma(Y_m)) = \sigma(Y_1, \dotsc, Y_m)$ and $\sigma(\sigma(Z_1) \cup \dotsb \cup \sigma(Z_n)) = \sigma(Z_1, \dotsc, Z_n)$ are independent, by Theorem \ref{thm:pi_sys_indept}.
+\begin{proof}[Proof of Theorem \ref{thm:0-1}]
+  We show that $A$ is independent to itself. Then $P(A) = P(A \cup A) = P(A) P(A)$, and we conclude that $P(A) = 0$ or $1$.
+
+  First, we show that for any $n$, $\mathcal{H}_n = \sigma(X_1, X_2, \dotsc, X_n)$ and $F'_{n + 1} = \sigma(X_{n + 1}, X_{n + 2}, \dotsc)$ are independent. It is already known that $\mathcal{H}_n$ and $\sigma(X_{n + 1}, \dotsc, X_{n + k})$ are independent, for all $k$. Thus $\mathcal{H}_n$ and $\bigcup^{\infty}_{k = 1} \sigma(X_{n + 1}, \dotsc, X_{n + k})$ are independent. Since $\bigcup^{\infty}_{k = 1} \sigma(X_{n + 1}, \dotsc, X_{n + k})$ is a $\pi$-system, and $\sigma(\bigcup^{\infty}_{k = 1} \sigma(X_{n + 1}, \dotsc, X_{n + k})) = \F'_{n + 1}$, we get the desired result by Theorem \ref{thm:pi_sys_indept}.
+
+  Next, we show that $\F'_1 = \sigma(X_1, X_2, \dotsc)$ and $\T$ are independent. To see it, we first note that for all $n$, $\mathcal{H}_n$ and $\T$ are independent, since $T \subseteq \F'_{n + 1}$. Then $\bigcup^{\infty}_{n = 1} \mathcal{H}_n$ and $\T$ are independent. Since $\bigcup^{\infty}_{n = 1} \mathcal{H}_n$ is a $\pi$-system, and it generates $\F'_1$, we derive the result by Theorem \ref{thm:pi_sys_indept}.
+
+  Then since $A \in \F'_1$ and $A \in \T$, we prove the theorem.
+\end{proof}
+
+Below we derive some method to tell if $\{ S_n \}$ converges \as. A basic technical result is the following lemma.
+\begin{lem}[Kolmogorov's maximal inequality]
+  Suppose $X_1, X_2, \dotsc, X_n$ are independent with $E X_i = 0$ and $\var(X_i) < \infty$. If $S_k = X_1 + \dotsc + X_k$, then
+  \begin{equation*}
+    P \left( \max_{1 \leq k \leq n} \lvert S_k \rvert \geq x \right) \leq x^{-2} \var(S_n).
+  \end{equation*}
+\end{lem}
+\begin{proof}
+  We divide the event $\max_{1 \leq k \leq n} \lvert S_k \rvert \geq x$ into disjoint subevents
+  \begin{equation*}
+    A_k = \{ \lvert S_k \rvert \geq x, \text{ but $\lvert S_j \rvert < x$ for all $j < k$} \}, \quad \text{for all $k = 1, \dotsc, n$}.
+  \end{equation*}
+  Consider the inequality
+  \begin{equation*}
+    \begin{split}
+      \var(S_n) = E S^2_n \geq {}& \sum^n_{k = 1} \int_{A_k} S^2_n dP \\
+      = {}& \sum^n_{k = 1} \int_{A_k} S^2_k + 2 S_k(S_n - S_k) + (S_n - S_k)^2 dP \\
+      \geq {}& \sum^n_{k = 1} \int_{A_k} S^2_k dP + 2 \int_{A_k} S_k (S_n - S_k) dP \\
+      = {}& \left( \sum^n_{k = 1} \int_{A_k} S^2_k dP \right) + 2 \left( \sum^n_{k = 1} \int_{\Omega} S_k 1_{A_k} (S_n - S_k) dP \right).
+    \end{split}
+  \end{equation*}
+  Here $S_n - S_k$ is a random variable, and it is a function of $X_{k + 1}, \dotsc, X_n$: $S_n = X_{k + 1} + \dotsb + X_n$. On the other hand, $S_k 1_{A_k}$ is also a random variable, and it is a function of $X_1, \dotsc, X_k$:
+  \begin{equation*}
+    S_k 1_{A_k}(\omega) = (X_1(\omega) + \dotsb + X_k(\omega)) 1_{\lvert X_1(\omega) + \dotsb + X_k(\omega) \rvert \geq x \text{ but } \lvert X_1(\omega) + \dotsb + X_j(\omega) \rvert < x \text{ for all $j < k$}}.
+  \end{equation*}
+  So the random variables $S_n - S_k$ and $S_k 1_{A_k}$ are independent, and then
+  \begin{equation*}
+    \int_{\Omega} S_k 1_{A_k} (S_n - S_k) dP = E((S_k 1_{A_k}) (S_n - S_k)) = E(S_k 1_{A_k}) E(S_n - S_k) = E(S_k 1_{A_k}) \cdot 0 = 0.
+  \end{equation*}
+  Thus we conclude that
+  \begin{equation*}
+    x^2 P \left( \max_{1 \leq k \leq n} \lvert S_k \rvert \geq x \right) = \sum^n_{k = 1} x^2 P(A_k) \leq \sum^n_{k = 1} \int_{A_k} S^2_k dP \leq \var(S_n),
+  \end{equation*}
+  and prove the inequality.
+\end{proof}
+
+\begin{rmk}
+  Kolmogorov's maximal inequality can be easily extended to the infinite random variable case, that is, for $X_1, X_2, \dotsc$ with $E X_i = 0$ and $\sum^{\infty}_{i = 1} \var(X_i) = C < \infty$,
+  \begin{equation*}
+    P \left( \max^{\infty}_{k = 1} \lvert S_k \rvert \geq x \right) \leq x^{-2} C.
+  \end{equation*}
+\end{rmk}
+As an application of Kolmogorov's maximal inequality, we prove the following result:
+\begin{thm}[Kolmogorov's two-series]
+  Suppose $X_1, X_2, \dotsc$ are independent with $E X_n = 0$. If $\sum^{\infty}_{n = 1} \var(X_n) < \infty$, then with probability $1$, $\{ S_n \}$ converges, where $S_n = X_1 + \dotsb + X_n$.
+\end{thm}
+\begin{proof}
+  To show the almost sure convergence, it suffices to show that for any $\epsilon > 0$, there is a set $A$ such that $P(A) \geq 1 - \epsilon$, and there are $m_1, m_2, \dotsc$ such that for all $\omega \in A$, $\lvert S_n - S_{m_k} \rvert \leq 2^{-k}$ if $n > m_k$.
+
+  Given $\epsilon > 0$, we define $m_k$ as
+  \begin{equation*}
+    m_k = \min \{ n \in \intZ_+ \mid \sum^{\infty}_{j = n} \var(X_j) \leq 2^{-3k} \epsilon \}.
+  \end{equation*}
+  Then by the infinite extension of Kolmogorov's maximal inequality,
+  \begin{equation*}
+    P \left( \max^{\infty}_{n = m_k + 1} \lvert S_n - S_{m_k} \rvert \geq 2^{-k} \right) \leq 2^{2k} \sum^{\infty}_{j = m_k} \var(X_j) \leq 2^{-k} \epsilon.
+  \end{equation*}
+  Let the events $B_k = \{ \max^{\infty}_{n = m_k + 1} \lvert S_n - S_{m_k} \rvert \geq 2^{-k} \}$, and $A = \Omega \setminus (B_1 \cup B_2 \cup \dotsb)$. We check that this set $A$ satisfies the requirement.
+\end{proof}
+
+Next we prove a similar result, for general random variables.
+\begin{thm}[Kolmogorov's three-series]
+  Let $X_1, X_2, \dotsc$ be independent. In order that $\sum^{\infty}_{n = 1} X_n$ converges \as, it is sufficient that for some $A > 0$, all the following conditions hold, where $Y_i =  X_i 1_{\lvert X_i \rvert \leq A}$:
+  \begin{enumerate}[label=(\roman*)]
+  \item \label{enu:three_series_a}
+    $\displaystyle \sum^{\infty}_{n = 1} P(\lvert X_n \rvert > A) < \infty$.
+  \item \label{enu:three_series_b}
+    $\displaystyle \sum^{\infty}_{n = 1} E Y_n$ converges.
+  \item \label{enu:three_series_c}
+    $\displaystyle \sum^{\infty}_{n = 1} \var(Y_n) < \infty$.
+  \end{enumerate}
+  Conversely, if $\sum^{\infty}_{n = 1} X_n$ converges \as, then for all $A > 0$, the three conditions above hold.
+\end{thm}
+\begin{proof}
+  First we prove the sufficiency. Let $Z_i = Y_i - EY_i$. By Kolmogorov's two-series theorem and Condition \ref{enu:three_series_c}, $\sum^{\infty}_{n = 1} Z_n(\omega)$ converges \as. Then by Condition \ref{enu:three_series_b} $\sum^{\infty}_{n = 1} Y_n(\omega) = \sum^{\infty}_{n = 1} (Z_n(\omega) + E Y_i)$ converges wherever $\sum^{\infty}_{n = 1} Z_n(\omega)$ does. At last, Borel-Cantelli lemma and Condition \ref{enu:three_series_a} imply that $\{ X_n \neq Y_n \io \}$ is of probability $0$. Thus we prove that $\sum^{\infty}_{n = 1} X_n(\omega)$ converges \as.
+
+  Next we prove the necessity. Suppose $\sum^{\infty}_{n = 1} X_n$ converges \as. If $\sum^{\infty}_{n = 1} X_n(\omega)$ converges, then for all but finitely many $n$, $\lvert X_n(\omega) \rvert < A$ for all $A > 0$, and hence $\{ \lvert X_n \rvert > A \io \}$ has probability $0$. But if condition \ref{enu:three_series_a} does not hold for some $A > 0$, we have that $P(\{ \lvert X_n \rvert > A \io \}) = 1$ by the second Borel-Cantelli lemma, and we derive a contradiction.
+
+  Now we admit that Condition \ref{enu:three_series_a} holds, but assume that Condition \ref{enu:three_series_c} fails. Then we define the triangular array of random variables $W_{n, m}$ ($1 \leq m \leq n$)
+  \begin{equation*}
+    W_{n, m} = \frac{1}{\sqrt{C_n}} (Y_n - E Y_n), \quad \text{where} \quad C_n = \sum^n_{i = 1} \var(X_i).
+  \end{equation*}
+  Then we can check that $W_{n, m}$ satisfies the assumptions for the Lindeberg--Fellor central limit theorem, and we have that $\sum^n_{m = 1} W_{n, m} \weakto N(0, 1)$, and the characteristic function of $\sum^n_{m = 1} W_{n, m}$ converges pointwise to $e^{-t^2/2}$. Now consider $C^{-1/2}_n \sum^n_{m = 1} Y_m = (\sum^n_{m = 1} W_{n, m}) + \sum^n_{m = 1} E Y_m$. The characteristic function of his random variable is the characteristic function of $\sum^n_{m = 1} W_{n, m}$ times $\exp(it \sum^n_{m = 1} E Y_m)$, so we have that the absolute value of the characteristic function of $C^{-1/2}_n \sum^n_{m = 1} Y_m$ converges to $e^{-t^2/2}$ pointwise. But, if $\sum^n_{m = 1} X_m$ converges \as, we have that $\sum^n_m Y_m$ converges \as\ too, by the Borel-Cantelli lemma, and we call the limit $S'_{\infty}$. Since $C^{-1/2}_n \to 0$ as $n \to \infty$, we have that $C^{-1/2}_n \sum^n_{m = 1} Y_m$ converges to $0$ \as. Thus we conclude that the (absolute value of) the characteristic function of $C^{-1/2}_n \sum^n_{m = 1} Y_m$ converges to $1$ pointwise. Thus we derive a contradiction.
+
+  So we need to admit both Conditions \ref{enu:three_series_a} and \ref{enu:three_series_c}, for all $A > 0$. At last we show that if both Conditions \ref{enu:three_series_a} and \ref{enu:three_series_c} hold, then Condition \ref{enu:three_series_b} holds too. To see it, we use the result that $\sum^{\infty}_{n = 1} Y_n$ converges \as, and by Kolmogorov's two series theorem and Condition \ref{enu:three_series_c}, we have that $\sum^{\infty}_{n = 1} (Y_n - EY_n)$ converges \as. So their difference, $\sum^{\infty}_{n = 1} EY_n$ converges (\as).
+\end{proof}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+%  LocalWords:  pointwise Poisson calculational

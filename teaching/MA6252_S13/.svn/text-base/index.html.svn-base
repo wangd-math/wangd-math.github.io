@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>Topics in random matrix theory, MA6252 in the second semester of academic year 2012/2013.</title>
+  </head>
+  <body>
+    <div style="width:800px">
+      <h1>Topics in random matrix theory</h1>
+      <h2>MA6252 in the second semester of academic year 2012/2013.</h2>
+      
+      <p>
+	Please register in <a href="https://ivle.nus.edu.sg/">IVLE</a> as soon as possible. If you cannot register successfully, please email me, and I will add you as a guest student.
+      </p>
+      
+      <p>
+	Syllabus is <a href="syllabus.pdf">here</a> and homework is posted in <a href="https://ivle.nus.edu.sg/">IVLE</a>.
+      </p>
+      
+      <p>
+	The lecture notes of this module is <a href="lecture_notes_svn/RMT_notes.pdf">here</a>. The lecture notes are keep growing, and are updated regularly. All comments are welcome.
+      </p>
+      
+      <h4><a href="../../index.html">Homepage</a></h4><br>
+      
+      <hr>   
+      <address>
+	<a href="mailto:matwd@nus.edu.sg">matwd@nus.edu.sg</a>
+      </address>
+    </div>
+    
+    <p>Last modified: Fri 01 Feb 02:55:39 UTC 2013 by WANG Dong</p>
+  </body>
+</html>
+<!-- Local Variables: -->
+<!-- time-stamp-pattern: "-7/<p>Last modified:[ \t]+%3a %02d %3b %02H:%02M:%02S %Z %:y by WANG Dong</p>" -->
+<!-- time-stamp-time-zone: "UTC" -->
+<!-- End: -->
