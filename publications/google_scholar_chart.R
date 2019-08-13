@@ -1,7 +1,7 @@
 library(scholar)
 library(ggplot2)
 cit <- get_citation_history('ITdfruUAAAAJ')
-png('~/Dropbox/Public/scholar_citations_ITdfruUAAAAJ.png',width=800,height=300,res=150)
+png('scholar_citations_ITdfruUAAAAJ.png',width=800,height=300,res=150)
 ggplot(cit,aes(x=year,y=cites))+
 geom_bar(stat='identity')+
 theme_bw()+
