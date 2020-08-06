@@ -9,6 +9,15 @@
 % redistribute this file.
 
 \documentclass[12pt,a4paper]{article}
+% \documentclass[UTF8, 12pt, a4paper]{ctexart}
+% 以上两个命令似乎可以通用。
+
+% \usepackage[UTF8]{ctex} % 这个包是为了打印\XeLaTeX 的Logo。 
+% \usepackage[UTF8, fontset=fandol]{ctex} % 这个包是为了打印\XeLaTeX 的Logo。
+% 在使用 \documentclass[12pt,a4paper]{article} 时，应该使用上面两个package之一。（区别未详）
+% 上面的中文设置，把英文字体改变成中文字体附带的拉丁字符。所以适合大段中文夹杂少量英文情况。
+
+\usepackage{xeCJK} % 这个package似乎只提供了有限的中文支持。但因为本CV以英文为主，这个package保留了英文原状，更合适些。
 
 \usepackage{url, hyperref}
 \usepackage{geometry}
@@ -16,14 +25,16 @@
 \usepackage{amsmath}
 
 % Fonts
-%\usepackage[T1]{fontenc}
-%\usepackage[urw-garamond]{mathdesign}
+\usepackage[T1]{fontenc}
+% \usepackage[urw-garamond]{mathdesign}
 \usepackage{mathptmx}
+% \usepackage{fontspec} % 导入中文宋体、楷体、黑体等。但是英文变成一种字体（比如，不能指定为Times new roman）。
+% \setmainfont{CMU Serif}
 
 \hyphenation{Chang-chun}
 
 % Set your name here
-\def\name{Dong Wang}
+\def\name{Dong Wang 王东}
 
 % The following metadata will show up in the PDF properties
 \hypersetup{
@@ -74,8 +85,11 @@
  \end{list}
 }
 
-\begin{document}
+% 定义中文日期格式
+\usepackage[nodayofweek]{datetime}
+\newdateformat{Chinesedate}{\THEYEAR{年}\THEMONTH{月}\THEDAY{日}}
 
+\begin{document}
 % Place name at left
 {\huge \name}
 
@@ -89,61 +103,74 @@
   National University of Singapore \\
 %  Block S17 6-20 \\
 %  10 Lower Kent Ridge Road \\
-  Singapore, 119076
+  Singapore, 119076 \\
 \end{minipage}
 \begin{minipage}[t]{0.5\textwidth}
-  Phone: +65 6516 2746 \\
-%  Fax: +65 6779 5452 \\
-  %Office: Block S17 6-20 \\
-  Email: \href{mailto:matwd@nus.edu.sg}{matwd@nus.edu.sg} \\
-  Homepage: \href{https://www.wangd-math.xyz/}{{https://www.wangd-math.xyz/}}
+  新加坡国立大学 \\
+  数学系 \\
+  新加坡，119076 \\
 \end{minipage}
+Phone 电话： +65 6516 2746 \\
+% Fax: +65 6779 5452 \\
+% Office: Block S17 6-20 \\
+Email 电子邮件： \href{mailto:matwd@nus.edu.sg}{matwd@nus.edu.sg} \\
+Homepage 个人主页： \href{https://www.wangd-math.xyz/}{{https://www.wangd-math.xyz/}}
 
-\section*{Education}
+\section*{Education 教育经历}
 
 \begin{item_list}
-  \item Ph.D. Mathematics, Brandeis University, 2008.
+\item Ph.D. Mathematics, Brandeis University, 2008. \\
+  2008年于（美国）不兰戴斯大学获得博士学位
     % Received May 16, 2010
     \begin{item_list}
-    \item \textit{Advisor:}
+    \item \textit{Advisor 博士导师:}
       Mark Adler.
     \end{item_list}
   \item B.S. Mathematics, %\textit{Summa Cum Laude},
-    Peking University, 2003.
+    Peking University, 2003. \\
+    2003年于北京大学获得学士学位
     % Received May 14, 2004
   %\item Budapest Semesters in Mathematics, Fall 2002.
 \end{item_list}
 
-\section*{Work Experience}
+\section*{Work Experience 工作经历}
 
 \begin{item_list}
 \item
-  Associate Professor, Department of Mathematics, National University of Singapore, 2020--present.
+  Associate Professor, Department of Mathematics, National University of Singapore, 2020--present. \\
+  2020年至今：新加坡国立大学副教授
 \item
-  Assistant Professor, Department of Mathematics, National University of Singapore, 2012--2020.
+  Assistant Professor, Department of Mathematics, National University of Singapore, 2012--2020. \\
+  2012年——2020年：新加坡国立大学助理教授
 \item
   Post-Doc Assistant Professor, Department of Mathematics, University of Michigan,
-  2009--2012.
+  2009--2012. \\
+  2009年——2012年：（美国）密歇根大学博士后
 \item
-  Postdoctoral Researcher, Institut de recherche en math\'{e}matique et physique (IRMP), Universit\'{e} catholique de Louvain, 2011, March--August.
+  Postdoctoral Researcher, Institut de recherche en math\'{e}matique et physique (IRMP), Universit\'{e} catholique de Louvain, 2011, March--August. \\
+  2011年三月——八月：（比利时）鲁汶大学【法语】博士后
 \item
-  Postdoctoral Fellow, Centre de Recherches Math\'{e}matiques (CRM), Universit\'{e} de Montr\'{e}al, 2008--2009.
+  Postdoctoral Fellow, Centre de Recherches Math\'{e}matiques (CRM), Universit\'{e} de Montr\'{e}al, 2008--2009. \\
+  2008年——2009年：（加拿大）蒙特利尔大学博士后
 \item
-  Teaching Assistant, Department of Mathematics, Brandeis University, 2003--2008.
+  Teaching Assistant, Department of Mathematics, Brandeis University, 2003--2008. \\
+  2003年——2008年：（美国）不兰戴斯大学助教
 \end{item_list}
 
-\section*{Research}
+\section*{Research 科研成果}
 
 I am an analyst working on probability problems, and the proper term describing my research interest is ``integrable probability''. My research focuses on random matrix theory and interacting particle systems. I am also interested in integrable systems, multiple orthogonal polynomials and Riemann-Hilbert problems related to random matrices.
 
-\section*{In Preparation}
+我从事“可积概率”研究，致力于用分析方法解决概率问题。具体来说，我关心随机矩阵和相互作用粒子系统，以及相关的可积系统、多正交多项式、黎曼—希尔伯特问题等分析问题。
+
+\section*{In Preparation 近期计划}
 
 \begin{itemize}
 \item
   Dong Wang, The largest eigenvalue of real symmetric, Hermitian and Hermitian self-dual random matrix models with rank one external source, part II.
 \end{itemize}
 
-\section*{Papers and Preprints}
+\section*{Papers and Preprints 论文和预印本}
 
 \begin{etaremune}
 \item
@@ -196,15 +223,15 @@ I am an analyst working on probability problems, and the proper term describing 
   \href{http://arxiv.org/abs/0711.3797}{A PDE for the multi-time joint probability of the Airy process}, \href{https://doi.org/10.1016/j.physd.2009.02.007}{\textit{Phys.\ D}, 238 (2009), no.\ 8, 819--833}.
 \end{etaremune}
 
-\subsection*{Dissertation}
+\subsection*{Dissertation 博士论文}
 \begin{itemize}
 \item
   Spiked Models in Wishart Ensemble.
 \end{itemize}
 
-\section*{Teaching}
+\section*{Teaching 教学经历}
 
-\subsection*{{National University of Singapore}}
+\subsection*{National University of Singapore 新加坡国立大学}
 
 \begin{item_list}
 \item
@@ -241,7 +268,7 @@ I am an analyst working on probability problems, and the proper term describing 
   Mathematical Analysis III, \href{https://wangd-math.github.io/teaching/MA3209_F12/index.html}{MA3209}, 2012/2013 Semester 1, (and two tutorials).
 \end{item_list}
 
-\subsection*{University of Michigan}
+\subsection*{University of Michigan 密歇根大学}
 
 \begin{item_list}
 \item Multivariable Calculus, \href{http://instruct.math.lsa.umich.edu/}{Math 217}, Spring 2012,
@@ -252,7 +279,7 @@ I am an analyst working on probability problems, and the proper term describing 
 \item Differential Calculus, \href{http://www.math.lsa.umich.edu/courses/115/}{Math 115}, Fall 2009 (two sections).
 \end{item_list}
 
-\subsection*{Brandeis University}
+\subsection*{Brandeis University 不兰戴斯大学}
 
 \begin{item_list}
 \item Differential Calculus, Math 10a,
@@ -265,17 +292,17 @@ I am an analyst working on probability problems, and the proper term describing 
   Spring 2006.
 \end{item_list}
 
-\section*{Students mentored}
+\section*{Students mentored 指导学生}
 
-\subsection*{Master students}
+\subsection*{Master students 硕士生}
 
 David Waugh (NUS 2015)
 
-\subsection*{Selected undergraduate students}
+\subsection*{Selected undergraduate students 优秀本科生}
 
 Mark Ng Say-Yao (NUS Undergraduate Research Opportunities Programme in Science (UROPS), winner of 2015/16 CRISP award)
 
-\section*{Conference and Seminar Presentations}
+\section*{Conference and Seminar Presentations 会议和讨论班报告}
 
 \begin{item_list}
 \item
@@ -283,7 +310,7 @@ Mark Ng Say-Yao (NUS Undergraduate Research Opportunities Programme in Science (
 \item
   \href{http://www.ims-china.org/}{IMS-China conference}, Dalian University of Technology, Dalian, China, July 2019.
 \item
-  \href{http://ww1.math.nus.edu.sg/seminars.aspx?CatID=5}{Topology and geometry seminar}, National University of Singapore, Singapore, April 2019.
+  \href{http://www.math.nus.edu.sg/seminars.aspx?CatID=5}{Topology and geometry seminar}, National University of Singapore, Singapore, April 2019.
 \item
   \href{https://sites.google.com/view/randommatrices2019nus}{Workshop on random matrices, stochastic geometry and related topics}, Institute for Mathematical Sciences, Singapore, March 2019.
 \item
@@ -350,7 +377,7 @@ Mark Ng Say-Yao (NUS Undergraduate Research Opportunities Programme in Science (
 \item
   \href{http://www6.cityu.edu.hk/ma/maicata/}{International Conferences on Approximation Theory and Applications}, City University, Hong Kong, China, May 2013.
 \item
-  \href{http://ww1.math.nus.edu.sg/seminars.aspx?CatID=9}{Probability Seminar}, National University of Singapore, Singapore, April 2013.
+  \href{http://www.math.nus.edu.sg/seminars.aspx?CatID=9}{Probability Seminar}, National University of Singapore, Singapore, April 2013.
 \item
   Working Group in Integrable Systems, Tsinghua University, Beijing, China, December 2012.
 \item
@@ -391,30 +418,35 @@ Mark Ng Say-Yao (NUS Undergraduate Research Opportunities Programme in Science (
   \href{http://magelhaes.hzs.be/RIMMP/}{Conference on Random and Integrable Models in Mathematics and Physics} (poster), Belgian Academy of Science, Brussels, Belgium, September 2007.
 \end{item_list}
 
-\section*{Professional Activities}
+\section*{Professional Activities 专业相关活动}
 
 \begin{item_list}
-\item Reviewer for \textit{Mathematical Reviews}, referee for \textit{Acta Math.}, \textit{Ann.\ Appl.\ Probab.}, \textit{Ann.\ Inst.\ Henri Poincar\'{e}}, \textit{Ann.\ Probab.}, \textit{Constr. Approx.}, \textit{Int.\ Math.\ Res.\ Not.\ IMRN}, \textit{J.\ Stat.\ Phys.}, \textit{J.\ Multivariate Anal.}, \textit{Peking Math.\ J.}, \textit{Phys.\ D}, \textit{Punjab Univ.\ J.\ Math.}, \textit{Random Matrices Theory Appl.}, \textit{SIAM J.\ Matrix Anal.\ Appl.}, \textit{SIGMA}, and \textit{Statist.\ Probab.\ Lett.}.
-\item Co-organizer of the workshop:
+\item Reviewer for 曾为以下杂志审稿 \\
+  \textit{Mathematical Reviews}, referee for \textit{Acta Math.}, \textit{Ann.\ Appl.\ Probab.}, \textit{Ann.\ Inst.\ Henri Poincar\'{e}}, \textit{Ann.\ Probab.}, \textit{Constr. Approx.}, \textit{Int.\ Math.\ Res.\ Not.\ IMRN}, \textit{J.\ Stat.\ Phys.}, \textit{J.\ Multivariate Anal.}, \textit{Peking Math.\ J.}, \textit{Phys.\ D}, \textit{Punjab Univ.\ J.\ Math.}, \textit{Random Matrices Theory Appl.}, \textit{SIAM J.\ Matrix Anal.\ Appl.}, \textit{SIGMA}, and \textit{Statist.\ Probab.\ Lett.}.
+\item Co-organizer of the workshop （共同）组织学术研讨会 \\
   \href{https://ims.nus.edu.sg/events/2020/random/index.php}{Random Matrix EurAsia 2020}, Institute for Mathematical Sciences, Singapore, May 2020.
-\item Co-organizer of the workshop:
+\item Co-organizer of the workshop （共同）组织学术研讨会 \\
   \href{http://www2.ims.nus.edu.sg/Programs/015wrandom/index.php}{Workshop on Stochastic Processes in Random Media}, Institute for Mathematical Sciences, Singapore, May 2015.
-\item Co-organizer of the seminar:
+\item Co-organizer of the seminar （共同）组织讨论班 \\
   \href{http://www.math.lsa.umich.edu/seminars_events/events.php?eventdefid=43&dt_begin=2011-07-01&dt_end=2011-12-31}
   {Working Group in Integrable Systems and Random Matrix Theory}, University of Michigan, 2011--2012.
 \end{item_list}
 
-\section*{Grants}
+\section*{Grants 基金申请}
 
 \begin{item_list}
 \item 
-  Chinese NSFC grant 11871425.
+  Chinese NSFC grant 11871425 (participant). \\
+  中国基金委面上项目11871425（参与）
 \item
-  Singapore AcRF Tier 1 Grant, R-146-000-262-114.
+  Singapore AcRF Tier 1 Grant, R-146-000-262-114. \\
+  新加坡教育部Tier 1项目R-146-000-262-114（主持）
 \item
-  Singapore AcRF Tier 1 Grant, R-146-000-217-112.
+  Singapore AcRF Tier 1 Grant, R-146-000-217-112. \\
+  新加坡教育部Tier 1项目R-146-000-217-112（主持）
 \item
-  Start-up grant in National University of Singapore, R-146-000-164-133.
+  Start-up grant in National University of Singapore, R-146-000-164-133. \\
+  新加坡国立大学启动经费R-146-000-164-133
 \end{item_list}
 
 % \section*{Conferences and Workshops Attended}
@@ -442,7 +474,8 @@ Mark Ng Say-Yao (NUS Undergraduate Research Opportunities Programme in Science (
 % Footer
 \begin{center}
   \begin{small}
-    Last updated: \today
+    Last updated: \today \\
+    \Chinesedate\today 更新 
   \end{small}
 \end{center}
 
