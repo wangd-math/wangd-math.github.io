@@ -17,7 +17,7 @@
 % 在使用 \documentclass[12pt,a4paper]{article} 时，应该使用上面两个package之一。（区别未详）
 % 上面的中文设置，把英文字体改变成中文字体附带的拉丁字符。所以适合大段中文夹杂少量英文情况。
 
-\usepackage{xeCJK} % 这个package似乎只提供了有限的中文支持。但因为本CV以英文为主，这个package保留了英文原状，更合适些。
+% \usepackage{xeCJK} % 这个package似乎只提供了有限的中文支持。但因为本CV以英文为主，这个package保留了英文原状，更合适些。
 
 \usepackage{url, hyperref}
 \usepackage{geometry}
@@ -34,7 +34,7 @@
 \hyphenation{Chang-chun}
 
 % Set your name here
-\def\name{Dong Wang 王东}
+\def\name{Dong Wang}
 
 % The following metadata will show up in the PDF properties
 \hypersetup{
@@ -86,11 +86,11 @@
 }
 
 % 定义中文日期格式
-\usepackage[nodayofweek]{datetime}
-\newdateformat{Chinesedate}{\THEYEAR{年}\THEMONTH{月}\THEDAY{日}}
+% \usepackage[nodayofweek]{datetime}
+% \newdateformat{Chinesedate}{\THEYEAR{年}\THEMONTH{月}\THEDAY{日}}
 
-\newcommand{\cn}[1]{#1}
-\newcommand{\nocn}[1]{}
+\newcommand{\cn}[1]{}
+\newcommand{\nocn}[1]{#1}
 \begin{document}
 \input{CV_body.tex}
 \end{document}
